@@ -84,4 +84,9 @@ Build the public entry module from the repository root:
 
 ```bash
 lake build EscAnalytic.Paper
+lake env lean EscAnalytic/TrustBoundary.lean
 ```
+
+The second command fails if the public theorem's dependency closure differs
+from Lean's three foundational axioms and the nine external theorems listed
+above. A dependency on `sorryAx` therefore fails the same check.

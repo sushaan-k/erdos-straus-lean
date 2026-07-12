@@ -1,6 +1,5 @@
 import EscAnalytic.Family
 import EscAnalytic.Inputs
-import EscAnalytic.ReciprocalBV
 import EscAnalytic.MassEstimates
 import EscAnalytic.BrunSuen
 import EscAnalytic.Optimization

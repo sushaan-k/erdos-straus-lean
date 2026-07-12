@@ -22,6 +22,7 @@ The project is pinned to Lean and Mathlib `v4.14.0`.
 ```bash
 lake update
 lake build EscAnalytic.Paper
+lake env lean EscAnalytic/TrustBoundary.lean
 ```
 
 ## Source map
@@ -30,6 +31,7 @@ lake build EscAnalytic.Paper
 - `EscAnalytic/Inputs.lean` states the external theorem boundary.
 - `EscAnalytic/MainTheorem.lean` assembles the concrete family.
 - `EscAnalytic/Paper.lean` exposes the main theorem and corollaries.
+- `EscAnalytic/TrustBoundary.lean` pins the theorem's exact axiom closure.
 
 The remaining modules contain the intermediate counting, sieve, transfer, and
 optimization arguments.

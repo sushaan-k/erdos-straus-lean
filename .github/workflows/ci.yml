@@ -11,3 +11,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: leanprover/lean-action@v1
+      - name: Verify the public trust boundary
+        run: lake env lean EscAnalytic/TrustBoundary.lean

@@ -21533,16 +21533,6 @@ def LinearSieveRoughDyadicModulusOneComponentPackage : Prop :=
     LinearSieveRoughDyadicMultiplesErrorQuarterBound ∧
       LinearSieveRoughDyadicSquarefreeLossQuarterBound
 
-/-- Lower half of the explicit component package.  Kept separate so the lower
-primitive can be attacked independently from the upper route. -/
-def LinearSieveRoughDyadicModulusOneLowerComponentPackage : Prop :=
-  LinearSieveRoughDyadicModulusOneComponentPackage
-
-/-- Upper half of the explicit component package.  Kept separate so the upper
-primitive can be attacked independently from the lower route. -/
-def LinearSieveRoughDyadicModulusOneUpperComponentPackage : Prop :=
-  LinearSieveRoughDyadicModulusOneComponentPackage
-
 /-- Signed component package used by the exported no-extra-modulus route. -/
 def LinearSieveRoughDyadicModulusOneSignedComponentPackage : Prop :=
   PrimeRecipSharpMertensNatUpperBound ∧
@@ -24594,40 +24584,16 @@ theorem linear_sieve_rough_dyadic_modulus_one_bound_of_primeRecipSharpMertensNat
     ⟨roughDyadicCountModulusOneLowerBound_of_core hcore.1,
       roughDyadicCountModulusOneUpperBound_of_core hcore.2⟩
 
-/-- Drop-in lower replacement for the remaining no-extra-modulus lower count
-primitive from the explicit component package.  The positivity and interval
-hypotheses match the live primitive's signature; the component route itself
-does not need them. -/
-theorem linear_sieve_rough_dyadic_modulus_one_lower_bound_core_of_componentPackage
-    (hpack : LinearSieveRoughDyadicModulusOneLowerComponentPackage)
-    (a₀ b₀ : ℝ) (_ha₀ : 0 < a₀) (_hab : a₀ < b₀) :
-    roughDyadicCountModulusOneLowerBoundCore a₀ b₀ := by
-  rcases hpack with ⟨hmertens, hmult, hsqf⟩
-  exact
-    linear_sieve_rough_dyadic_modulus_one_lower_bound_core_of_primeRecipSharpMertensNat_and_productErrorComponents
-      hmult hsqf hmertens a₀ b₀
-
-/-- Drop-in upper replacement for the remaining no-extra-modulus upper count
-primitive from the explicit component package. -/
-theorem linear_sieve_rough_dyadic_modulus_one_upper_bound_core_of_componentPackage
-    (hpack : LinearSieveRoughDyadicModulusOneUpperComponentPackage)
-    (a₀ b₀ : ℝ) (_ha₀ : 0 < a₀) (_hab : a₀ < b₀) :
-    roughDyadicCountModulusOneUpperBoundCore a₀ b₀ := by
-  rcases hpack with ⟨hmertens, hmult, hsqf⟩
-  exact
-    linear_sieve_rough_dyadic_modulus_one_upper_bound_core_of_primeRecipSharpMertensNat_and_productErrorComponents
-      hmult hsqf hmertens a₀ b₀
-
 /-- Drop-in two-sided replacement for the remaining no-extra-modulus count
 primitive from the explicit component package. -/
 theorem linear_sieve_rough_dyadic_modulus_one_bound_core_of_componentPackage
     (hpack : LinearSieveRoughDyadicModulusOneComponentPackage)
-    (a₀ b₀ : ℝ) (ha₀ : 0 < a₀) (hab : a₀ < b₀) :
-    roughDyadicCountModulusOneBoundCore a₀ b₀ :=
-  ⟨linear_sieve_rough_dyadic_modulus_one_lower_bound_core_of_componentPackage
-      hpack a₀ b₀ ha₀ hab,
-    linear_sieve_rough_dyadic_modulus_one_upper_bound_core_of_componentPackage
-      hpack a₀ b₀ ha₀ hab⟩
+    (a₀ b₀ : ℝ) (_ha₀ : 0 < a₀) (_hab : a₀ < b₀) :
+    roughDyadicCountModulusOneBoundCore a₀ b₀ := by
+  rcases hpack with ⟨hmertens, hmult, hsqf⟩
+  exact
+    linear_sieve_rough_dyadic_modulus_one_bound_core_of_primeRecipSharpMertensNat_and_productErrorComponents
+      hmult hsqf hmertens a₀ b₀
 
 /-- Public-wrapper version of the component-package replacement for the
 modulus-one rough count primitive. -/
