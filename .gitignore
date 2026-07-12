@@ -1,0 +1,41 @@
+# Lean / Lake build artifacts
+/.lake/
+**/.lake/
+*.olean
+*.olean.hash
+*.olean.trace
+*.ilean
+*.ilean.hash
+*.trace
+
+# Worktrees
+/.worktrees/
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Compiled binaries / scratch
+/tmp/
+a.out
+*.o
+/compute_qboundary
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+
+# Harness-managed worktrees
+/.claude/
