@@ -2879,10 +2879,10 @@ theorem fixed_numerator_exceptional_sets_of_large_finite_transfer_rat_and_lift_a
 
 /-! ## Conditional growing-numerator package
 
-The manuscript's conditional appendix assumes a numerator-uniform saturation
+The manuscript's conditional appendix assumes a numerator-uniform certificate
 package before proving `thm:uniform-m`.  The declarations below give that
 conditional package and its paper-shaped conclusion an explicit Lean surface.
-They do not assert the uniform saturation package unconditionally.
+They do not assert the uniform certificate package unconditionally.
 -/
 
 /-- Denominator loss in the conditional growing-numerator exponent:
@@ -3004,10 +3004,10 @@ theorem finite_initial_uniformNumerator_bound
         mul_le_mul_of_nonneg_left hsaving hfactor_nonneg
     _ = Cinit * (N : ℝ) * uniformNumeratorSaving c B m N := by ring
 
-/-- Paper-shaped Lean carrier for `hyp:uniform-m-saturation` after the
+/-- Paper-shaped Lean carrier for `hyp:uniform-m-certificate` after the
 finite-transfer and smooth-lifting assembly steps.  For each fixed logarithmic
 range `A`, it provides constants uniform for `2 <= m <= (log N)^A`. -/
-structure UniformNumeratorSaturationInputs (A : ℝ) where
+structure UniformNumeratorCertificateInputs (A : ℝ) where
   c : ℝ
   C : ℝ
   B : ℝ
@@ -3018,19 +3018,19 @@ structure UniformNumeratorSaturationInputs (A : ℝ) where
     (fixedNumeratorExceptionalCount m N : ℝ) ≤
       C * (N : ℝ) * uniformNumeratorSaving c B m N
 
-/-- Build the fixed-log uniform-saturation package from a large-range estimate.
+/-- Build the fixed-log uniform-certificate package from a large-range estimate.
 
 This removes the finite-initial range from the hard part of
-`hyp:uniform-m-saturation`: once a uniform numerator estimate is known for
+`hyp:uniform-m-certificate`: once a uniform numerator estimate is known for
 `N >= T`, the finitely many smaller `N` are absorbed by
 `finite_initial_uniformNumerator_bound`, uniformly in `m`. -/
-noncomputable def uniformNumeratorSaturationInputs_of_eventual_bound
+noncomputable def uniformNumeratorCertificateInputs_of_eventual_bound
     {A c C B : ℝ} (hc : 0 < c) (hC : 0 < C) (hB : 0 < B) (T : ℕ)
     (hlarge : ∀ N m : ℕ, 3 ≤ N → T ≤ N → 2 ≤ m →
       (m : ℝ) ≤ (Real.log N) ^ A →
         (fixedNumeratorExceptionalCount m N : ℝ) ≤
           C * (N : ℝ) * uniformNumeratorSaving c B m N) :
-    UniformNumeratorSaturationInputs A := by
+    UniformNumeratorCertificateInputs A := by
   let hinit_exists := finite_initial_uniformNumerator_bound hc hB T
   let Cinit := Classical.choose hinit_exists
   have hCinit_spec :
@@ -3064,9 +3064,9 @@ noncomputable def uniformNumeratorSaturationInputs_of_eventual_bound
           exact le_trans (hCinit_spec.2 N m hN hNT hm)
             (mul_le_mul_of_nonneg_right hC_N hsaving_nonneg) }
 
-/-- Exact large-range hard core of `hyp:uniform-m-saturation` for one fixed
+/-- Exact large-range hard core of `hyp:uniform-m-certificate` for one fixed
 logarithmic range.  The finite initial segment is deliberately not part of this
-record: it is discharged by `uniformNumeratorSaturationInputs_of_eventual_bound`.
+record: it is discharged by `uniformNumeratorCertificateInputs_of_eventual_bound`.
 -/
 structure UniformNumeratorLargeRangeInputs (A : ℝ) where
   c : ℝ
@@ -3130,7 +3130,7 @@ noncomputable def UniformNumeratorLargeRangeInputs.of_uniform_base_saving_bound
       exact uniform_base_saving_bound_le_uniformNumeratorSaving
         hc hC hB hN hm (hlarge N m hN hTN hm hm_log) }
 
-/-- Uniform final-assembly bridge for `hyp:uniform-m-saturation`.
+/-- Uniform final-assembly bridge for `hyp:uniform-m-certificate`.
 
 This is the growing-numerator analogue of the last fixed-`m` absorption step:
 if the reduced count, smooth range, Euler loss, and lift inequalities are all
@@ -3277,7 +3277,7 @@ noncomputable def UniformNumeratorLargeRangeInputs.of_uniform_final_assembly
 This variant exposes the actual smooth-range and reduced-sum estimates used by
 the fixed-numerator lift, and proves the old `hlift` premise internally via
 `fixedNumerator_lift_of_smooth_and_reduced_sum_bounds`.  Thus the
-uniform-saturation surface no longer needs to carry the already-formalized
+uniform-certificate surface no longer needs to carry the already-formalized
 finite lifting inequality as an independent hypothesis. -/
 noncomputable def UniformNumeratorLargeRangeInputs.of_uniform_final_assembly_reduced_sum_lift
     {A Ered_c₁ Ered_C₁ smoothExp smoothC eulerC B : ℝ} (T : ℕ)
@@ -3317,18 +3317,18 @@ noncomputable def UniformNumeratorLargeRangeInputs.of_uniform_final_assembly_red
         (hreduced_sum N m hN hTN hm hm_log))
 
 /-- Convert the exact large-range uniform-numerator hard core into the global
-fixed-log saturation package by absorbing only the finite initial range. -/
-noncomputable def UniformNumeratorLargeRangeInputs.toSaturationInputs
+fixed-log certificate package by absorbing only the finite initial range. -/
+noncomputable def UniformNumeratorLargeRangeInputs.toCertificateInputs
     {A : ℝ} (H : UniformNumeratorLargeRangeInputs A) :
-    UniformNumeratorSaturationInputs A :=
-  uniformNumeratorSaturationInputs_of_eventual_bound
+    UniformNumeratorCertificateInputs A :=
+  uniformNumeratorCertificateInputs_of_eventual_bound
     H.c_pos H.C_pos H.B_pos H.T H.large_bound
 
 /-- **`thm:uniform-m` (conditional Lean form).** Given the numerator-uniform
-saturation package for every fixed logarithmic range, the paper's
+certificate package for every fixed logarithmic range, the paper's
 growing-numerator exceptional-set estimate follows with explicit constants. -/
 theorem thm_uniform_m
-    (H : ∀ A : ℝ, 0 < A → UniformNumeratorSaturationInputs A) :
+    (H : ∀ A : ℝ, 0 < A → UniformNumeratorCertificateInputs A) :
     ∀ A : ℝ, 0 < A →
       ∃ c > (0 : ℝ), ∃ C > (0 : ℝ), ∃ B > (0 : ℝ),
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
@@ -3348,7 +3348,7 @@ theorem thm_uniform_m_of_largeRangeInputs
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m (fun A hA => (H A hA).toSaturationInputs)
+  thm_uniform_m (fun A hA => (H A hA).toCertificateInputs)
 
 /-- Exponential saving with a general logarithmic power, used for the
 `in particular` clause of the Elliott-Halberstam conditional variant. -/
@@ -3443,7 +3443,7 @@ theorem weightedBVSameCarrier_of_reciprocalElliottHalberstamInput
   exact H P θ A Cw hθ hA hCw
 
 /-- Paper-shaped Lean carrier for the combined reciprocal-Elliott-Halberstam
-and uniform-saturation hypotheses in `thm:EH-uniform-m`. -/
+and uniform-certificate hypotheses in `thm:EH-uniform-m`. -/
 structure EHUniformNumeratorInputs where
   κ : ℝ
   c : ℝ
@@ -3713,15 +3713,15 @@ theorem thm_uniform_m_of_EHUniformNumeratorInputs
       (mul_le_mul_of_nonneg_right hC_N hsaving_nonneg)
 
 /-- The EH numerator package constructs the older fixed-logarithmic
-uniform-saturation record for every fixed range.
+uniform-certificate record for every fixed range.
 
 This is the structure-level bridge behind
 `thm_uniform_m_of_EHUniformNumeratorInputs`: any downstream theorem that still
-expects `UniformNumeratorSaturationInputs` can receive it directly from the EH
+expects `UniformNumeratorCertificateInputs` can receive it directly from the EH
 carrier, with the finite initial range already absorbed. -/
-noncomputable def uniformNumeratorSaturationInputs_of_EHUniformNumeratorInputs
+noncomputable def uniformNumeratorCertificateInputs_of_EHUniformNumeratorInputs
     (H : EHUniformNumeratorInputs) (A : ℝ) (hA : 0 < A) :
-    UniformNumeratorSaturationInputs A :=
+    UniformNumeratorCertificateInputs A :=
   let h0 := thm_uniform_m_of_EHUniformNumeratorInputs H A hA
   let c := Classical.choose h0
   let h1 := Classical.choose_spec h0
@@ -3762,8 +3762,8 @@ theorem thm_EH_uniform_m (H : EHUniformNumeratorInputs) :
 /-- Paper-shaped combined hypotheses for `thm:EH-uniform-m`.
 
 The first field is exactly the reciprocal-prime EH distribution hypothesis.  The
-second field is the assembled exponential-range numerator-saturation estimate
-produced after the uniform saturation, dependency, finite-transfer, and lifting
+second field is the assembled exponential-range numerator-certificate estimate
+produced after the uniform certificate, dependency, finite-transfer, and lifting
 steps have been run in that EH range. -/
 structure EHUniformNumeratorHypotheses where
   reciprocal_EH : ReciprocalElliottHalberstamInput
@@ -3813,9 +3813,9 @@ noncomputable def EHUniformNumeratorHypotheses.of_reciprocalEH_uniform_base_savi
       EHUniformNumeratorInputs.of_uniform_base_saving_bound T hκ hc hC hB
         hlarge }
 
-/-- `hyp:reciprocal-EH` plus the assembled uniform-saturation package gives the
+/-- `hyp:reciprocal-EH` plus the assembled uniform-certificate package gives the
 EH growing-numerator theorem in the exact theorem shape consumed downstream. -/
-theorem thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+theorem thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (H : EHUniformNumeratorHypotheses) :
     (∃ κ > (0 : ℝ), ∃ c > (0 : ℝ), ∃ C > (0 : ℝ), ∃ B > (0 : ℝ),
       (∀ N m : ℕ, 3 ≤ N → 2 ≤ m →
@@ -3833,7 +3833,7 @@ theorem thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
 /-- The same paper-hypothesis package also supplies the fixed-logarithmic
 uniform theorem, by restricting the EH numerator range and absorbing the finite
 initial segment. -/
-theorem thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+theorem thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (H : EHUniformNumeratorHypotheses) :
     ∀ A : ℝ, 0 < A →
       ∃ c > (0 : ℝ), ∃ C > (0 : ℝ), ∃ B > (0 : ℝ),
@@ -3863,7 +3863,7 @@ theorem thm_EH_uniform_m_of_reciprocalEH_and_eventual_bound
           uniformNumeratorDenominator B m ≤ (Real.log N) ^ ((3 : ℝ) / 4 - η) →
             (fixedNumeratorExceptionalCount m N : ℝ) ≤
               Cη * (N : ℝ) * logPowerSaving cη η N)) :=
-  thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_reciprocalEH_eventual_bound hEH T
       hκ hc hC hB hlarge)
 
@@ -3882,7 +3882,7 @@ theorem thm_uniform_m_of_reciprocalEH_and_eventual_bound
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_reciprocalEH_eventual_bound hEH T
       hκ hc hC hB hlarge)
 
@@ -3908,7 +3908,7 @@ theorem thm_EH_uniform_m_of_reciprocalEH_and_uniform_base_saving_bound
           uniformNumeratorDenominator B m ≤ (Real.log N) ^ ((3 : ℝ) / 4 - η) →
             (fixedNumeratorExceptionalCount m N : ℝ) ≤
               Cη * (N : ℝ) * logPowerSaving cη η N)) :=
-  thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_reciprocalEH_uniform_base_saving_bound hEH T
       hκ hc hC hB hlarge)
 
@@ -3929,7 +3929,7 @@ theorem thm_uniform_m_of_reciprocalEH_and_uniform_base_saving_bound
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_reciprocalEH_uniform_base_saving_bound hEH T
       hκ hc hC hB hlarge)
 
@@ -4357,7 +4357,7 @@ theorem quartic_smooth_euler_absorb
     _ = (Cs + Ce) * ((N : ℝ) * quarticSaving c N) := by ring
     _ = (Cs + Ce) * (N : ℝ) * quarticSaving c N := by ring
 
-/-- Paper-shaped Lean carrier for the speculative quartic EH saturated packet.
+/-- Paper-shaped Lean carrier for the speculative quartic EH certificate packet.
 This is an explicit conditional package; no quartic packet is constructed here. -/
 structure QuarticEHFanInputs where
   c₄ : ℝ
@@ -4638,14 +4638,14 @@ theorem thm_EH_quartic_of_quartic_certificate_family
 noncomputable def pomeranceWeingartnerExponent (m N : ℕ) : ℝ :=
   (((Real.log N) ^ (2 : ℕ)) / (Nat.totient m : ℝ)) ^ ((1 : ℝ) / 3)
 
-/-- Exponent in the conditional saturated-fan bound of `thm:uniform-m`. -/
+/-- Exponent in the conditional certificate-fan bound of `thm:uniform-m`. -/
 noncomputable def uniformNumeratorExponent (B : ℝ) (m N : ℕ) : ℝ :=
   (Real.log N) ^ ((3 : ℝ) / 4) / uniformNumeratorDenominator B m
 
 /-- Product-form comparison implies the displayed exponent comparison.
 
 The remaining arithmetic work in `cor:PW-comparison` is to prove the product
-inequality.  Once that is available, the passage to the saturated-fan exponent
+inequality.  Once that is available, the passage to the certificate-fan exponent
 is only division by the positive denominator
 `phi(m) * (m / phi(m))^B`. -/
 theorem pomeranceWeingartnerExponent_le_uniformNumeratorExponent_of_product_le
@@ -4661,11 +4661,11 @@ theorem pomeranceWeingartnerExponent_le_uniformNumeratorExponent_of_product_le
     simpa [mul_comm, mul_left_comm, mul_assoc] using hprod)
 
 /-- Paper-shaped carrier for `cor:PW-comparison`: for the logarithmic numerator
-range and the displayed small-totient subfamily, the saturated-fan exponent
+range and the displayed small-totient subfamily, the certificate-fan exponent
 eventually dominates the Pomerance-Weingartner/Vaughan-type exponent.
 
 The input is kept in product form: the caller supplies the arithmetic comparison
-which says that the saturated-fan denominator times the Vaughan-type exponent is
+which says that the certificate-fan denominator times the Vaughan-type exponent is
 at most `(log N)^(3/4)`.  The public corollary below proves the final division
 step internally. -/
 structure PWComparisonInputs where
@@ -4958,7 +4958,7 @@ noncomputable def PWComparisonInputs.of_checked_tauSquareSubpower
     (PWComparisonTotientRatioSubpowerInputs.unconditional B₂ hB₂)
 
 /-- Conditional comparison form. Given the arithmetic
-comparison package for `m / phi(m)`, the uniform-saturation exponent is
+comparison package for `m / phi(m)`, the uniform-certificate exponent is
 eventually at least as large as the Pomerance-Weingartner/Vaughan-type exponent
 throughout the paper's displayed growing numerator range. -/
 theorem cor_PW_comparison_of_inputs (H : PWComparisonInputs) :
@@ -5030,7 +5030,7 @@ the logarithmic uniform-numerator theorem, the Pomerance-Weingartner comparison,
 and the two EH-conditional endpoint templates.  The fixed-logarithmic
 uniform-numerator component is now derived from the same EH carrier used for
 `thm:EH-uniform-m`, so this bundled endpoint no longer carries a separate
-uniform-saturation package. -/
+uniform-certificate package. -/
 theorem geometric_uniform_paper_outputs
     (Hmain : MainInputs)
     (Hpw : PWComparisonInputs)
@@ -5063,7 +5063,7 @@ theorem geometric_uniform_paper_outputs
       (∃ c₄ > (0 : ℝ), ∃ C₄ > (0 : ℝ), ∀ N : ℕ, 3 ≤ N →
         (exceptionalCount N : ℝ) ≤ C₄ * (N : ℝ) * quarticSaving c₄ N)) := by
   exact ⟨cor_geometric_main Hmain, cor_geometric_main_density_zero Hmain,
-    thm_uniform_m (uniformNumeratorSaturationInputs_of_EHUniformNumeratorInputs Heh),
+    thm_uniform_m (uniformNumeratorCertificateInputs_of_EHUniformNumeratorInputs Heh),
     cor_PW_comparison_of_inputs Hpw, thm_EH_uniform_m Heh,
     thm_EH_quartic Hquartic⟩
 
@@ -5284,7 +5284,7 @@ This specializes
 `UniformNumeratorLargeRangeInputs.of_uniform_final_assembly_reduced_sum_lift` to
 the manuscript cutoff `zNatScale`, the Rankin-ready `smoothPsi` smooth carrier,
 and the reduced-class uniform-envelope summation.  It removes two more finite
-bookkeeping premises from the uniform-saturation surface: the smooth-count
+bookkeeping premises from the uniform-certificate surface: the smooth-count
 bound is obtained from `fixedNumeratorSmoothRangeCount_le_sum_smoothPsi`, and
 the reduced-sum bound is obtained directly from the finite reduced-class
 summation lemma. -/
@@ -18837,7 +18837,7 @@ theorem fixedNumeratorPaperReducedClassEnvelopeInputs_red_class_uniform_sum_larg
 /-- Uniform final assembly from a paper-facing reduced-envelope family.
 
 This is the uniform-in-`m` bridge from the fixed-numerator reduced-envelope
-record to the large-range saturation carrier.  The raw reduced-class membership,
+record to the large-range certificate carrier.  The raw reduced-class membership,
 fiber-cardinality, and class-summed envelope hypotheses are no longer separate
 caller-supplied assumptions: they are read from
 `FixedNumeratorPaperReducedClassEnvelopeInputs` for each numerator.  The only

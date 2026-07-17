@@ -38,7 +38,7 @@ in `esc.tex`:
   formal probability-space model of the CRT events.
 * The *paper's own* upstream results that other files establish — the mass law
   `μ_b ≍ (log X)³` (`prop:mu`), the event-tensor bounds (`prop:event-tensor`), the
-  appendage bound `ε_X(K) = o_K(1)` (`lem:appendage`), and the raw rough residual
+  increment bound `ε_X(K) = o_K(1)` (`lem:increment`), and the raw rough residual
   squarefree tail — appear as explicit hypotheses of the theorems, never as
   axioms. Each theorem below records the resulting conditional deduction.
 * Asymptotics are rendered via `Filter.atTop` on `ℝ` (the manuscript variable `X`).
@@ -108,15 +108,15 @@ theorem brun_envelope_of_factorial_bound_up_to
 
 /-! ## Part 1. `thm:Brun` — the Brun envelope. -/
 
-/-- **Appendage error from a vanishing Euler-product exponent** (`lem:appendage`,
+/-- **Increment error from a vanishing Euler-product exponent** (`lem:increment`,
 asymptotic conversion).
 
 The manuscript bounds the one-step increment error by an Euler-product factor
-`exp(tail X)-1`, where the exponent is the prime-by-prime appendage tail.  This
+`exp(tail X)-1`, where the exponent is the prime-by-prime increment tail.  This
 lemma isolates the real-analysis part: once that exponent tends to zero, the
-appendage error tends to zero.  The arithmetic estimate for the exponent is
+increment error tends to zero.  The arithmetic estimate for the exponent is
 kept as an explicit hypothesis. -/
-theorem appendage_error_tendsto_zero_of_exp_tail
+theorem increment_error_tendsto_zero_of_exp_tail
     (ε tail : ℝ → ℝ)
     (hε_nonneg : ∀ᶠ X in atTop, 0 ≤ ε X)
     (hε_le : ∀ᶠ X in atTop, ε X ≤ Real.exp (tail X) - 1)
@@ -130,13 +130,13 @@ theorem appendage_error_tendsto_zero_of_exp_tail
     simpa [Real.exp_zero] using hexp.sub hone
   exact squeeze_zero' hε_nonneg hε_le hupper
 
-/-- **Appendage error from the mass/medium-prime scale** (`lem:appendage`,
+/-- **Increment error from the mass/medium-prime scale** (`lem:increment`,
 paper-scale form).
 
-After the combinatorial appendage count gives an eventual bound of the shape
+After the combinatorial increment count gives an eventual bound of the shape
 `ε_X(K) ≤ C_K · μ_b(X) · medScale(X)`, the scale estimate
 `μ_b medScale → 0` proves `ε_X(K)=o_K(1)`. -/
-theorem appendage_error_tendsto_zero_of_mass_medScale
+theorem increment_error_tendsto_zero_of_mass_medScale
     (ε μ medScale : ℝ → ℝ) (C : ℝ)
     (hε_nonneg : ∀ᶠ X in atTop, 0 ≤ ε X)
     (hε_le : ∀ᶠ X in atTop, ε X ≤ C * (μ X * medScale X))
@@ -245,8 +245,8 @@ theorem brun_envelope_factorial
 The exponent `μ(1+ε)` of `brun_envelope_factorial` is exactly the manuscript's
 `exp{(1+o_K(1))μ}` once `ε = ε_X(K) = o_K(1)`.  Here we record the clean
 restatement: for `ε ≥ 0` the envelope is
-`∑_{r ≤ 2R} X^r F_r ≤ X^{2R} exp((1 + ε) μ)`, and as `ε → 0` (the appendage
-bound `lem:appendage`) the factor is `exp{(1+o(1))μ}`. -/
+`∑_{r ≤ 2R} X^r F_r ≤ X^{2R} exp((1 + ε) μ)`, and as `ε → 0` (the increment
+bound `lem:increment`) the factor is `exp{(1+o(1))μ}`. -/
 theorem brun_envelope_one_plus_eps
     (F : ℕ → ℝ) (μ ε X : ℝ) (R : ℕ)
     (hμ : 0 ≤ μ) (hε : 0 ≤ ε) (hX : 1 ≤ X)
@@ -1378,7 +1378,7 @@ theorem crt_nohit_of_suen_with_range_and_nonneg_defect_eventually_nonneg
 
 /-- Combined real-variable package for the Brun/Suen part of the manuscript.
 
-This theorem checks the paper's composition step from the appendage bound,
+This theorem checks the paper's composition step from the increment bound,
 mass/dependency logarithmic scale envelopes, dependency inequalities, a
 large-prime-neighbour power saving, and the cited Suen carrier theorem to the
 downstream no-hit envelope.  The only standard input used by this package is the
@@ -1397,7 +1397,7 @@ theorem brun_suen_real_variable_package_from_log_power_bounds
     (hmedNonneg : ∀ᶠ X in atTop, 0 ≤ medScale X)
     (htailNonneg : ∀ᶠ X in atTop, 0 ≤ depTail X)
     (hlarge_nonneg : ∀ᶠ X in atTop, 0 ≤ largePrime X)
-    (happendage_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
+    (hincrement_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
     (hmass : ∀ᶠ X in atTop, μ X ≤ Cμ * (Real.log X) ^ 3)
     (hmedUpper : ∀ᶠ X in atTop,
       (Real.log X) ^ 3 * medScale X ≤ Cmed * (Real.log X) ^ (-ηmed))
@@ -1421,9 +1421,9 @@ theorem brun_suen_real_variable_package_from_log_power_bounds
   have hscale := mass_dependency_scale_from_log_power_bounds
     μ depTail medScale Cμ Cmed Ctail ηmed ηtail hηmed hηtail
     hμ_nonneg_all hmass hmedNonneg htailNonneg hmedUpper htailUpper hCμ
-  have happendage : Tendsto ε atTop (𝓝 0) :=
-    appendage_error_tendsto_zero_of_mass_medScale
-      ε μ medScale Cε hε_nonneg happendage_le hscale.1
+  have hincrement : Tendsto ε atTop (𝓝 0) :=
+    increment_error_tendsto_zero_of_mass_medScale
+      ε μ medScale Cε hε_nonneg hincrement_le hscale.1
   have hdeps :
       Tendsto δb atTop (𝓝 0)
         ∧ Tendsto (fun X => Δb X / μ X) atTop (𝓝 0) :=
@@ -1442,7 +1442,7 @@ theorem brun_suen_real_variable_package_from_log_power_bounds
     crt_nohit_of_suen_with_range_and_nonneg_defect_eventually_nonneg
       μ δb Δb (Eventually.of_forall hμ_nonneg_all) hδ_nonneg hΔ_nonneg
       hdeps.1 hdeps.2 hμ_top
-  exact ⟨happendage, hscale.1, hscale.2.1, hscale.2.2, hdeps.1, hdeps.2, hnohit⟩
+  exact ⟨hincrement, hscale.1, hscale.2.1, hscale.2.2, hdeps.1, hdeps.2, hnohit⟩
 
 /-- Eventual-nonnegativity version of
 `brun_suen_real_variable_package_from_log_power_bounds`.
@@ -1462,7 +1462,7 @@ theorem brun_suen_real_variable_package_from_log_power_bounds_eventually_nonneg
     (hmedNonneg : ∀ᶠ X in atTop, 0 ≤ medScale X)
     (htailNonneg : ∀ᶠ X in atTop, 0 ≤ depTail X)
     (hlarge_nonneg : ∀ᶠ X in atTop, 0 ≤ largePrime X)
-    (happendage_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
+    (hincrement_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
     (hmass : ∀ᶠ X in atTop, μ X ≤ Cμ * (Real.log X) ^ 3)
     (hmedUpper : ∀ᶠ X in atTop,
       (Real.log X) ^ 3 * medScale X ≤ Cmed * (Real.log X) ^ (-ηmed))
@@ -1486,9 +1486,9 @@ theorem brun_suen_real_variable_package_from_log_power_bounds_eventually_nonneg
   have hscale := mass_dependency_scale_from_log_power_bounds_eventually_nonneg
     μ depTail medScale Cμ Cmed Ctail ηmed ηtail hηmed hηtail
     hμ_nonneg hmass hmedNonneg htailNonneg hmedUpper htailUpper hCμ
-  have happendage : Tendsto ε atTop (𝓝 0) :=
-    appendage_error_tendsto_zero_of_mass_medScale
-      ε μ medScale Cε hε_nonneg happendage_le hscale.1
+  have hincrement : Tendsto ε atTop (𝓝 0) :=
+    increment_error_tendsto_zero_of_mass_medScale
+      ε μ medScale Cε hε_nonneg hincrement_le hscale.1
   have hdeps :
       Tendsto δb atTop (𝓝 0)
         ∧ Tendsto (fun X => Δb X / μ X) atTop (𝓝 0) :=
@@ -1506,14 +1506,14 @@ theorem brun_suen_real_variable_package_from_log_power_bounds_eventually_nonneg
             Inputs.suenProb (μ X) (δb X) (Δb X) ≤ Real.exp (-(1 - εb X) * μ X)) :=
     crt_nohit_of_suen_with_range_and_nonneg_defect_eventually_nonneg
       μ δb Δb hμ_nonneg hδ_nonneg hΔ_nonneg hdeps.1 hdeps.2 hμ_top
-  exact ⟨happendage, hscale.1, hscale.2.1, hscale.2.2, hdeps.1, hdeps.2, hnohit⟩
+  exact ⟨hincrement, hscale.1, hscale.2.1, hscale.2.2, hdeps.1, hdeps.2, hnohit⟩
 
 /-- Paper-local Brun/Suen output bundle.
 
 This packages the finite elementary-symmetric Brun envelope together with the
-real-variable appendage, large-prime-neighbour, mass/dependency, dependency
+real-variable increment, large-prime-neighbour, mass/dependency, dependency
 parameter, and Suen no-hit outputs.  It is a theorem-level composition of the
-local ingredients used in the manuscript around `lem:appendage`, `thm:Brun`,
+local ingredients used in the manuscript around `lem:increment`, `thm:Brun`,
 `prop:mass-dependency-scale`, `lem:large-prime-neighbour`, `lem:delta-Delta`,
 and `thm:CRT-nohit`; the only cited analytic input in the dependency closure is
 the standard Suen carrier theorem. -/
@@ -1533,7 +1533,7 @@ theorem brun_suen_paper_local_outputs_from_log_power_bounds
     (hmedNonneg : ∀ᶠ X in atTop, 0 ≤ medScale X)
     (htailNonneg : ∀ᶠ X in atTop, 0 ≤ depTail X)
     (hlarge_nonneg : ∀ᶠ X in atTop, 0 ≤ largePrime X)
-    (happendage_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
+    (hincrement_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
     (hmass : ∀ᶠ X in atTop, μ X ≤ Cμ * (Real.log X) ^ 3)
     (hmedUpper : ∀ᶠ X in atTop,
       (Real.log X) ^ 3 * medScale X ≤ Cmed * (Real.log X) ^ (-ηmed))
@@ -1570,7 +1570,7 @@ theorem brun_suen_paper_local_outputs_from_log_power_bounds
       Cε Cμ Cmed Ctail C₁ C₂ Clarge ηmed ηtail ηlarge
       hηmed hηtail hηlarge hCμ hC₁ hC₂ hμ_nonneg_all
       hε_nonneg hδ_nonneg hΔ_nonneg hmedNonneg htailNonneg hlarge_nonneg
-      happendage_le hmass hmedUpper htailUpper hδ_le hΔ_le hlarge_le hμ_top
+      hincrement_le hmass hmedUpper htailUpper hδ_le hΔ_le hlarge_le hμ_top
   exact
     ⟨hbrun, hpkg.1, hlarge0, hpkg.2.1, hpkg.2.2.1, hpkg.2.2.2.1,
       hpkg.2.2.2.2.1, hpkg.2.2.2.2.2.1, hpkg.2.2.2.2.2.2⟩
@@ -1580,7 +1580,7 @@ theorem brun_suen_paper_local_outputs_from_log_power_bounds
 
 This is the paper-facing bundle with the finite-initial-range mass sign
 condition removed.  The remaining hypotheses are the displayed log-power,
-large-prime, appendage, and Suen-carrier inputs. -/
+large-prime, increment, and Suen-carrier inputs. -/
 theorem brun_suen_paper_local_outputs_from_log_power_bounds_eventually_nonneg
     (weights : List ℚ) (M Xq : ℚ) (R : ℕ)
     (ε μ δb Δb medScale depTail largePrime : ℝ → ℝ)
@@ -1597,7 +1597,7 @@ theorem brun_suen_paper_local_outputs_from_log_power_bounds_eventually_nonneg
     (hmedNonneg : ∀ᶠ X in atTop, 0 ≤ medScale X)
     (htailNonneg : ∀ᶠ X in atTop, 0 ≤ depTail X)
     (hlarge_nonneg : ∀ᶠ X in atTop, 0 ≤ largePrime X)
-    (happendage_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
+    (hincrement_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
     (hmass : ∀ᶠ X in atTop, μ X ≤ Cμ * (Real.log X) ^ 3)
     (hmedUpper : ∀ᶠ X in atTop,
       (Real.log X) ^ 3 * medScale X ≤ Cmed * (Real.log X) ^ (-ηmed))
@@ -1634,7 +1634,7 @@ theorem brun_suen_paper_local_outputs_from_log_power_bounds_eventually_nonneg
       Cε Cμ Cmed Ctail C₁ C₂ Clarge ηmed ηtail ηlarge
       hηmed hηtail hηlarge hCμ hC₁ hC₂ hμ_nonneg
       hε_nonneg hδ_nonneg hΔ_nonneg hmedNonneg htailNonneg hlarge_nonneg
-      happendage_le hmass hmedUpper htailUpper hδ_le hΔ_le hlarge_le hμ_top
+      hincrement_le hmass hmedUpper htailUpper hδ_le hΔ_le hlarge_le hμ_top
   exact
     ⟨hbrun, hpkg.1, hlarge0, hpkg.2.1, hpkg.2.2.1, hpkg.2.2.2.1,
       hpkg.2.2.2.2.1, hpkg.2.2.2.2.2.1, hpkg.2.2.2.2.2.2⟩
@@ -1651,7 +1651,7 @@ theorem brun_suen_paper_local_brun_envelope_from_log_power_bounds
       ≤ (Xq : ℝ) ^ (2 * R) * Real.exp (M : ℝ) := by
   exact brun_envelope_elemSymm_rational_weights weights M Xq R hnn hmassQ hXq
 
-/-- Paper-local projection of the appendage, large-prime-neighbour,
+/-- Paper-local projection of the increment, large-prime-neighbour,
 mass/dependency-scale, and dependency-parameter asymptotics.
 
 This is the Suen-free part of the local Brun/Suen package: the no-hit estimate
@@ -1670,7 +1670,7 @@ theorem brun_suen_paper_local_asymptotic_outputs_from_log_power_bounds
     (hmedNonneg : ∀ᶠ X in atTop, 0 ≤ medScale X)
     (htailNonneg : ∀ᶠ X in atTop, 0 ≤ depTail X)
     (hlarge_nonneg : ∀ᶠ X in atTop, 0 ≤ largePrime X)
-    (happendage_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
+    (hincrement_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
     (hmass : ∀ᶠ X in atTop, μ X ≤ Cμ * (Real.log X) ^ 3)
     (hmedUpper : ∀ᶠ X in atTop,
       (Real.log X) ^ 3 * medScale X ≤ Cmed * (Real.log X) ^ (-ηmed))
@@ -1689,9 +1689,9 @@ theorem brun_suen_paper_local_asymptotic_outputs_from_log_power_bounds
   have hscale := mass_dependency_scale_from_log_power_bounds
     μ depTail medScale Cμ Cmed Ctail ηmed ηtail hηmed hηtail
     hμ_nonneg_all hmass hmedNonneg htailNonneg hmedUpper htailUpper hCμ
-  have happendage : Tendsto ε atTop (𝓝 0) :=
-    appendage_error_tendsto_zero_of_mass_medScale
-      ε μ medScale Cε hε_nonneg happendage_le hscale.1
+  have hincrement : Tendsto ε atTop (𝓝 0) :=
+    increment_error_tendsto_zero_of_mass_medScale
+      ε μ medScale Cε hε_nonneg hincrement_le hscale.1
   have hlarge0 :
       Tendsto largePrime atTop (𝓝 0) :=
     large_prime_neighbour_power_saving_tendsto_zero_eventually_nonneg
@@ -1706,7 +1706,7 @@ theorem brun_suen_paper_local_asymptotic_outputs_from_log_power_bounds
       hδ_nonneg hΔ_nonneg hmedNonneg htailNonneg hlarge_nonneg hmass
       hmedUpper htailUpper hδ_le hΔ_le hlarge_le
   exact
-    ⟨happendage, hlarge0, hscale.1, hscale.2.1, hscale.2.2, hdeps.1,
+    ⟨hincrement, hlarge0, hscale.1, hscale.2.1, hscale.2.2, hdeps.1,
       hdeps.2⟩
 
 /-- Eventual-nonnegativity version of
@@ -1723,7 +1723,7 @@ theorem brun_suen_paper_local_asymptotic_outputs_from_log_power_bounds_eventuall
     (hmedNonneg : ∀ᶠ X in atTop, 0 ≤ medScale X)
     (htailNonneg : ∀ᶠ X in atTop, 0 ≤ depTail X)
     (hlarge_nonneg : ∀ᶠ X in atTop, 0 ≤ largePrime X)
-    (happendage_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
+    (hincrement_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * medScale X))
     (hmass : ∀ᶠ X in atTop, μ X ≤ Cμ * (Real.log X) ^ 3)
     (hmedUpper : ∀ᶠ X in atTop,
       (Real.log X) ^ 3 * medScale X ≤ Cmed * (Real.log X) ^ (-ηmed))
@@ -1742,9 +1742,9 @@ theorem brun_suen_paper_local_asymptotic_outputs_from_log_power_bounds_eventuall
   have hscale := mass_dependency_scale_from_log_power_bounds_eventually_nonneg
     μ depTail medScale Cμ Cmed Ctail ηmed ηtail hηmed hηtail
     hμ_nonneg hmass hmedNonneg htailNonneg hmedUpper htailUpper hCμ
-  have happendage : Tendsto ε atTop (𝓝 0) :=
-    appendage_error_tendsto_zero_of_mass_medScale
-      ε μ medScale Cε hε_nonneg happendage_le hscale.1
+  have hincrement : Tendsto ε atTop (𝓝 0) :=
+    increment_error_tendsto_zero_of_mass_medScale
+      ε μ medScale Cε hε_nonneg hincrement_le hscale.1
   have hlarge0 :
       Tendsto largePrime atTop (𝓝 0) :=
     large_prime_neighbour_power_saving_tendsto_zero_eventually_nonneg
@@ -1759,7 +1759,7 @@ theorem brun_suen_paper_local_asymptotic_outputs_from_log_power_bounds_eventuall
       hδ_nonneg hΔ_nonneg hmedNonneg htailNonneg hlarge_nonneg hmass
       hmedUpper htailUpper hδ_le hΔ_le hlarge_le
   exact
-    ⟨happendage, hlarge0, hscale.1, hscale.2.1, hscale.2.2, hdeps.1,
+    ⟨hincrement, hlarge0, hscale.1, hscale.2.1, hscale.2.2, hdeps.1,
       hdeps.2⟩
 
 /-- Paper-local asymptotic outputs with the medium-prime scale fixed to the
@@ -1783,7 +1783,7 @@ theorem
     (hΔ_nonneg : ∀ᶠ X in atTop, 0 ≤ Δb X)
     (htailNonneg : ∀ᶠ X in atTop, 0 ≤ depTail X)
     (hlarge_nonneg : ∀ᶠ X in atTop, 0 ≤ largePrime X)
-    (happendage_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * paperMediumScale P X))
+    (hincrement_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * paperMediumScale P X))
     (hmass : ∀ᶠ X in atTop, μ X ≤ Cμ * (Real.log X) ^ 3)
     (htailUpper : ∀ᶠ X in atTop,
       (Real.log X) ^ 3 * depTail X ≤ Ctail * (Real.log X) ^ (-ηtail))
@@ -1802,9 +1802,9 @@ theorem
     mass_dependency_scale_from_paper_medium_and_log_power_tail_eventually_nonneg
       P μ depTail Cμ Ctail ηtail hηtail hμ_nonneg hmass htailNonneg
       htailUpper hCμ
-  have happendage : Tendsto ε atTop (𝓝 0) :=
-    appendage_error_tendsto_zero_of_mass_medScale
-      ε μ (paperMediumScale P) Cε hε_nonneg happendage_le hscale.1
+  have hincrement : Tendsto ε atTop (𝓝 0) :=
+    increment_error_tendsto_zero_of_mass_medScale
+      ε μ (paperMediumScale P) Cε hε_nonneg hincrement_le hscale.1
   have hlarge0 : Tendsto largePrime atTop (𝓝 0) :=
     large_prime_neighbour_power_saving_tendsto_zero_eventually_nonneg
       largePrime Clarge ηlarge hηlarge hlarge_nonneg hlarge_le
@@ -1816,7 +1816,7 @@ theorem
       hC₁ hC₂ hηlarge hδ_nonneg hΔ_nonneg hμ_nonneg
       hlarge_nonneg hδ_le hΔ_le hlarge_le hscale.1 hscale.2.2
   exact
-    ⟨happendage, hlarge0, hscale.1, hscale.2.1, hscale.2.2, hdeps.1,
+    ⟨hincrement, hlarge0, hscale.1, hscale.2.1, hscale.2.2, hdeps.1,
       hdeps.2⟩
 
 /-- Paper-local projection of the Suen no-hit estimate (`thm:CRT-nohit`).
@@ -1824,7 +1824,7 @@ theorem
 This is the Suen-bearing part of the local Brun/Suen package.  It derives the
 dependency parameter limits from the displayed log-power hypotheses, then calls
 the cited Suen carrier.  In particular, it does not require the finite Brun
-coefficient carrier or the appendage estimate. -/
+coefficient carrier or the increment estimate. -/
 theorem brun_suen_paper_local_nohit_output_from_log_power_bounds
     (μ δb Δb medScale depTail largePrime : ℝ → ℝ)
     (Cμ Cmed Ctail C₁ C₂ Clarge ηmed ηtail ηlarge : ℝ)
@@ -1977,7 +1977,7 @@ theorem brun_suen_paper_local_outputs_from_paper_medium_and_tail_log_power_event
     (hΔ_nonneg : ∀ᶠ X in atTop, 0 ≤ Δb X)
     (htailNonneg : ∀ᶠ X in atTop, 0 ≤ depTail X)
     (hlarge_nonneg : ∀ᶠ X in atTop, 0 ≤ largePrime X)
-    (happendage_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * paperMediumScale P X))
+    (hincrement_le : ∀ᶠ X in atTop, ε X ≤ Cε * (μ X * paperMediumScale P X))
     (hmass : ∀ᶠ X in atTop, μ X ≤ Cμ * (Real.log X) ^ 3)
     (htailUpper : ∀ᶠ X in atTop,
       (Real.log X) ^ 3 * depTail X ≤ Ctail * (Real.log X) ^ (-ηtail))
@@ -2007,7 +2007,7 @@ theorem brun_suen_paper_local_outputs_from_paper_medium_and_tail_log_power_event
     brun_suen_paper_local_asymptotic_outputs_from_paper_medium_and_tail_log_power_eventually_nonneg
       P ε μ δb Δb depTail largePrime Cε Cμ Ctail C₁ C₂ Clarge ηtail
       ηlarge hηtail hηlarge hCμ hC₁ hC₂ hμ_nonneg hε_nonneg
-      hδ_nonneg hΔ_nonneg htailNonneg hlarge_nonneg happendage_le hmass
+      hδ_nonneg hΔ_nonneg htailNonneg hlarge_nonneg hincrement_le hmass
       htailUpper hδ_le hΔ_le hlarge_le
   have hnohit :=
     brun_suen_paper_local_nohit_output_from_paper_medium_and_tail_log_power_eventually_nonneg

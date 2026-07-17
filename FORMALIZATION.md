@@ -84,7 +84,7 @@ Build the public entry module from the repository root:
 
 ```bash
 lake build EscAnalytic.Paper
-lake env lean EscAnalytic/TrustBoundary.lean
+lake build EscAnalytic.TrustBoundary
 ```
 
 The second command fails if the public theorem's dependency closure differs

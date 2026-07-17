@@ -33,11 +33,11 @@ open scoped BigOperators
 
 /-! ## Event-mass factor asymptotics
 
-The prop:mu proof (tex 1606–1628) factors the saturated mass through three
+The prop:mu proof (tex 1606–1628) factors the certificate mass through three
 nested sums whose individual asymptotics are quoted from the cited inputs:
 
 * the small-prime medium factor (the `d₋`-sum folded with the `1/φ(4ρ(e))`
-  exact-divisor mass), `Σ_b ≍ (log X)² · log z`  (`lem:small-saturation-average`,
+  exact-divisor mass), `Σ_b ≍ (log X)² · log z`  (`lem:small-certificate-average`,
   tex 1542–1578);
 * the rough cofactor reciprocal `d₊`-sum, `≍ (log X)/(log z)`
   (`lem:rough-initial` / `eq:rough-recip-uniform`, tex 1617–1623);
@@ -140,18 +140,18 @@ noncomputable def of_eventual_const_comparable {f f' g : ℝ → ℝ}
 
 end FactorAsymp
 
-/-! ## The saturated mass `μ_b`, encoded as the factored product.
+/-! ## The certificate mass `μ_b`, encoded as the factored product.
 
-Following `eq:saturated-mass-main` (tex 1606–1615) and the closing display
-(tex 1626–1627), the saturated mass at scale `X` is, up to absolute constants,
-the product of the small-prime saturation average `Σ_b` (the folded `d₋`/exact
+Following `eq:certificate-mass-main` (tex 1606–1615) and the closing display
+(tex 1626–1627), the certificate mass at scale `X` is, up to absolute constants,
+the product of the small-prime certificate average `Σ_b` (the folded `d₋`/exact
 divisor mass, `≍ (log X)² log z`) and the rough `d₊`-reciprocal factor
 (`≍ (log X)/(log z)`).  We record `μ_b` as exactly this product of the two
 constituent functions. -/
 
-/-- The saturated mass `μ_b` (tex `eq:mub-def`, line 766; factored form
-`eq:saturated-mass-main`, tex 1606–1615).  Encoded as the product of the
-small-prime saturation average `sigmaSmall` (`Σ_b`, `lem:small-saturation-average`)
+/-- The certificate mass `μ_b` (tex `eq:mub-def`, line 766; factored form
+`eq:certificate-mass-main`, tex 1606–1615).  Encoded as the product of the
+small-prime certificate average `sigmaSmall` (`Σ_b`, `lem:small-certificate-average`)
 and the rough `d₊`-reciprocal factor `roughFactor`.  The base class `b` and the
 modulus `P(z)` are carried as parameters but the manuscript's asymptotic is
 uniform in `b`, so they only fix which constituent functions are used. -/
@@ -165,8 +165,8 @@ noncomputable def logCube (X : ℝ) : ℝ := (Real.log X) ^ 3
 /-- The reference shape `(log X)²`. -/
 noncomputable def logSq (X : ℝ) : ℝ := (Real.log X) ^ 2
 
-/-- The reference shape `(log X)² · log z` of the small-prime saturation average
-`Σ_b` (`lem:small-saturation-average`, tex 1549).  Here `z = zScale X`. -/
+/-- The reference shape `(log X)² · log z` of the small-prime certificate average
+`Σ_b` (`lem:small-certificate-average`, tex 1549).  Here `z = zScale X`. -/
 noncomputable def sigmaShape (X : ℝ) : ℝ := (Real.log X) ^ 2 * Real.log (zScale X)
 
 /-- The reference shape `(log X)/(log z)` of the rough `d₊`-reciprocal factor
@@ -190,20 +190,20 @@ theorem sigmaShape_mul_roughShape (X : ℝ) (hz : Real.log (zScale X) ≠ 0) :
 /-! ## `prop:mu`: the event-mass law `μ_b ≍ (log X)³`
 
 From the two constituent factor-asymptotics
-`Σ_b ≍ (log X)² log z` (`lem:small-saturation-average`) and
+`Σ_b ≍ (log X)² log z` (`lem:small-certificate-average`) and
 `d₊-factor ≍ (log X)/(log z)` (`eq:rough-recip-uniform`), the product
 `μ_b = Σ_b · (d₊-factor) ≍ (log X)³` by the cancellation above. -/
 
-/-- **Saturated cubic event mass** (`prop:mu`, tex 1580–1629).
+/-- **Certificate cubic event mass** (`prop:mu`, tex 1580–1629).
 
 Given:
-* the small-prime saturation average `Σ_b = sigmaSmall ≍ (log X)² log z`
-  (`lem:small-saturation-average`, tex 1542–1578), and
+* the small-prime certificate average `Σ_b = sigmaSmall ≍ (log X)² log z`
+  (`lem:small-certificate-average`, tex 1542–1578), and
 * the rough `d₊`-reciprocal factor `roughFactor ≍ (log X)/(log z)`
-  (the inner `d₊`-sum of `eq:saturated-mass-main`, asymptotically evaluated via
+  (the inner `d₊`-sum of `eq:certificate-mass-main`, asymptotically evaluated via
   `lem:rough-initial`/`eq:rough-recip-uniform`, tex 1617–1623),
 
-the saturated mass `μ_b = Σ_b · roughFactor` satisfies `μ_b ≍ (log X)³`:
+the certificate mass `μ_b = Σ_b · roughFactor` satisfies `μ_b ≍ (log X)³`:
 there are `c₁, c₂ > 0` and a threshold `X₀` with
 `c₁ (log X)³ ≤ μ_b ≤ c₂ (log X)³` for all `X ≥ X₀`.
 
@@ -292,7 +292,7 @@ theorem muB_upper_from_factor_bounds
           rw [← hcancel]
           ring
 
-/-- Two-sided saturated mass law, assembled from the one-sided factor bounds. -/
+/-- Two-sided certificate mass law, assembled from the one-sided factor bounds. -/
 theorem mass_law (P : Params) (b : ℕ) (sigmaSmall roughFactor : ℝ → ℝ)
     (hSig : FactorAsymp sigmaSmall sigmaShape)
     (hR : FactorAsymp roughFactor roughShape) :
@@ -306,7 +306,7 @@ theorem mass_law (P : Params) (b : ℕ) (sigmaSmall roughFactor : ℝ → ℝ)
     muB_upper_from_factor_bounds P b sigmaSmall roughFactor hSig hR X hX⟩
 
 /-- Fixed finite modifications of both constituent factors preserve the
-saturated cubic mass law.
+certificate cubic mass law.
 
 This is the mass-law form of the fixed-`m` finite-Euler-factor deletion
 argument in `prop:fixed-m-transfer`: once the modified small-side carrier and
@@ -890,7 +890,7 @@ by the endpoint-safe tensor-fiber summation bounds culminating in
 `exactDivisorTensorPaperOutputs`.  This file consumes those results only through
 the explicit assembled log-cube bounds used by `prop:event-tensor`. -/
 
-/-! ## `prop:event-tensor` — saturated event-level tensorisation.
+/-! ## `prop:event-tensor` — certificate event-level tensorisation.
 
 For squarefree `D ≤ Y` with `(D,P(z))=1` and `(c,D)=1`,
 `B^{(b)}_{D,c} ≪ μ_b/D²` and `∑_{D∣d₊} w ≪ μ_b/D` (tex 1631–1668).
@@ -909,7 +909,7 @@ the full event-level bound and a single `D` in the variant.  We encode the bound
 as a real-algebra theorem in the assembled constants, threading the upstream
 `thm:tensor-e`/`lem:BT-recip` packaging plus the mass law as hypotheses. -/
 
-/-- **Saturated event-level tensorisation** (`prop:event-tensor`, tex 1631–1668).
+/-- **Certificate event-level tensorisation** (`prop:event-tensor`, tex 1631–1668).
 
 Let `μ_b ≍ (log X)³` (`mass_law`, recorded as the two constants `cμ, Cμ` and a
 threshold) and let `B` (resp. `Bsingle`) be the event-mass restricted by
@@ -977,7 +977,7 @@ theorem event_tensor_single_from_logCube_bound
         gcongr
     _ = (Kassemb / cμ) * (μb X / (D : ℝ)) := by ring
 
-/-- **Saturated event-level tensorisation** (`prop:event-tensor`, tex 1631–1668).
+/-- **Certificate event-level tensorisation** (`prop:event-tensor`, tex 1631–1668).
 
 Bundled form of the one-sided `D²` and `D` tensor bounds. -/
 theorem event_tensor

@@ -108,7 +108,7 @@ noncomputable def EHUniformNumeratorHypotheses.of_standard_reciprocalEH_uniform_
 /-- Build the paper EH package from the named cited reciprocal-EH input and an
 exact reduced-count estimate over the exponential numerator range.
 
-This opens the uniform-saturation side one step further than
+This opens the uniform-certificate side one step further than
 `of_standard_reciprocalEH_uniform_base_saving_bound`: the smooth envelope,
 Euler loss, finite lift, denominator-loss conversion, and finite initial range
 are all internal.  The remaining nonstandard input is the exact reduced
@@ -1729,7 +1729,7 @@ theorem thm_EH_uniform_m_of_standard_reciprocalEH_and_eventual_bound
           uniformNumeratorDenominator B m ≤ (Real.log N) ^ ((3 : ℝ) / 4 - η) →
             (fixedNumeratorExceptionalCount m N : ℝ) ≤
               Cη * (N : ℝ) * logPowerSaving cη η N)) :=
-  thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_eventual_bound
       T hκ hc hC hB hlarge)
 
@@ -1747,7 +1747,7 @@ theorem thm_uniform_m_of_standard_reciprocalEH_and_eventual_bound
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_eventual_bound
       T hκ hc hC hB hlarge)
 
@@ -1771,7 +1771,7 @@ theorem thm_EH_uniform_m_of_standard_reciprocalEH_and_uniform_base_saving_bound
           uniformNumeratorDenominator B m ≤ (Real.log N) ^ ((3 : ℝ) / 4 - η) →
             (fixedNumeratorExceptionalCount m N : ℝ) ≤
               Cη * (N : ℝ) * logPowerSaving cη η N)) :=
-  thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_uniform_base_saving_bound
       T hκ hc hC hlarge)
 
@@ -1789,7 +1789,7 @@ theorem thm_uniform_m_of_standard_reciprocalEH_and_uniform_base_saving_bound
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_uniform_base_saving_bound
       T hκ hc hC hlarge)
 
@@ -1813,7 +1813,7 @@ theorem thm_EH_uniform_m_of_standard_reciprocalEH_and_rankin_smoothPsi_exact_red
           uniformNumeratorDenominator B m ≤ (Real.log N) ^ ((3 : ℝ) / 4 - η) →
             (fixedNumeratorExceptionalCount m N : ℝ) ≤
               Cη * (N : ℝ) * logPowerSaving cη η N)) :=
-  thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_rankin_smoothPsi_exact_reduced_sum_count
       T hκ hEred_c₁ hEred_C₁ hEred)
 
@@ -1831,7 +1831,7 @@ theorem thm_uniform_m_of_standard_reciprocalEH_and_rankin_smoothPsi_exact_reduce
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_rankin_smoothPsi_exact_reduced_sum_count
       T hκ hEred_c₁ hEred_C₁ hEred)
 
@@ -1854,7 +1854,7 @@ theorem thm_EH_uniform_m_of_standard_reciprocalEH_and_uniform_paper_suen_analyti
           uniformNumeratorDenominator B m ≤ (Real.log N) ^ ((3 : ℝ) / 4 - η) →
             (fixedNumeratorExceptionalCount m N : ℝ) ≤
               Cη * (N : ℝ) * logPowerSaving cη η N)) :=
-  thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_uniform_paper_suen_analytic_core_optimization_exact_direct_rankin_smoothPsi
       (T := T) (κ := κ) (c := c) (B := B)
       hκ hc hB H hc_exact hT_exact)
@@ -1872,7 +1872,7 @@ theorem thm_uniform_m_of_standard_reciprocalEH_and_uniform_paper_suen_analytic_c
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_uniform_paper_suen_analytic_core_optimization_exact_direct_rankin_smoothPsi
       (T := T) (κ := κ) (c := c) (B := B)
       hκ hc hB H hc_exact hT_exact)
@@ -1896,7 +1896,7 @@ theorem thm_EH_uniform_m_of_standard_reciprocalEH_and_uniform_paper_suen_analyti
           uniformNumeratorDenominator B m ≤ (Real.log N) ^ ((3 : ℝ) / 4 - η) →
             (fixedNumeratorExceptionalCount m N : ℝ) ≤
               Cη * (N : ℝ) * logPowerSaving cη η N)) :=
-  thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_uniform_paper_suen_analytic_core_optimization_exact_concrete_alpha_rankin_smoothPsi
       (T := T) (κ := κ) (c := c) (B := B)
       hκ hc hB H hc_exact hT_exact)
@@ -1914,7 +1914,7 @@ theorem thm_uniform_m_of_standard_reciprocalEH_and_uniform_paper_suen_analytic_c
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_uniform_paper_suen_analytic_core_optimization_exact_concrete_alpha_rankin_smoothPsi
       (T := T) (κ := κ) (c := c) (B := B)
       hκ hc hB H hc_exact hT_exact)
@@ -2003,7 +2003,7 @@ theorem thm_EH_uniform_m_of_standard_reciprocalEH_sigma_canonical_nn_rat_weights
           uniformNumeratorDenominator B m ≤ (Real.log N) ^ ((3 : ℝ) / 4 - η) →
             (fixedNumeratorExceptionalCount m N : ℝ) ≤
               Cη * (N : ℝ) * logPowerSaving cη η N)) :=
-  thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_sigma_canonical_nn_rat_weights_nn_defects_two_mu_tail_direct_decomp_uniform_defect_logcube_mass_lower_exact_concrete_alpha_rankin_smoothPsi
       (κeh := κeh) (B := B) T Tdef Cp cμ η hκ hB cμ_pos eta_lt_one
       classOfRed μ εb δb Δb weights R hweights_sum_le_two_mu mertens_Pz
@@ -2087,7 +2087,7 @@ theorem thm_uniform_m_of_standard_reciprocalEH_sigma_canonical_nn_rat_weights_nn
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_sigma_canonical_nn_rat_weights_nn_defects_two_mu_tail_direct_decomp_uniform_defect_logcube_mass_lower_exact_concrete_alpha_rankin_smoothPsi
       (κeh := κeh) (B := B) T Tdef Cp cμ η hκ hB cμ_pos eta_lt_one
       classOfRed μ εb δb Δb weights R hweights_sum_le_two_mu mertens_Pz
@@ -2176,7 +2176,7 @@ theorem thm_EH_uniform_m_of_standard_reciprocalEH_sigma_canonical_nn_rat_weights
           uniformNumeratorDenominator B m ≤ (Real.log N) ^ ((3 : ℝ) / 4 - η) →
             (fixedNumeratorExceptionalCount m N : ℝ) ≤
               Cη * (N : ℝ) * logPowerSaving cη η N)) :=
-  thm_EH_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_EH_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_sigma_canonical_nn_rat_weights_nn_defects_rank_tail_direct_decomp_uniform_defect_logcube_mass_lower_exact_concrete_alpha_rankin_smoothPsi
       (κeh := κeh) (B := B) T Tdef Cp cμ η hκ hB cμ_pos eta_lt_one
       classOfRed μ εb δb Δb weights R hweights_sum_le_two_mu mertens_Pz
@@ -2259,7 +2259,7 @@ theorem thm_uniform_m_of_standard_reciprocalEH_sigma_canonical_nn_rat_weights_nn
         ∀ N m : ℕ, 3 ≤ N → 2 ≤ m → (m : ℝ) ≤ (Real.log N) ^ A →
           (fixedNumeratorExceptionalCount m N : ℝ) ≤
             C * (N : ℝ) * uniformNumeratorSaving c B m N :=
-  thm_uniform_m_of_reciprocalEH_and_uniformSaturation
+  thm_uniform_m_of_reciprocalEH_and_uniformCertificate
     (EHUniformNumeratorHypotheses.of_standard_reciprocalEH_sigma_canonical_nn_rat_weights_nn_defects_rank_tail_direct_decomp_uniform_defect_logcube_mass_lower_exact_concrete_alpha_rankin_smoothPsi
       (κeh := κeh) (B := B) T Tdef Cp cμ η hκ hB cμ_pos eta_lt_one
       classOfRed μ εb δb Δb weights R hweights_sum_le_two_mu mertens_Pz

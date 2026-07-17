@@ -7,7 +7,7 @@ import EscAnalytic.Optimization
 /-!
 # Increment and roughness estimates
 
-This file specializes the elementary appendage bounds in `Family` to the
+This file specializes the elementary increment bounds in `Family` to the
 manuscript's actual rough modulus `P(z)`.  No analytic estimate is assumed:
 the only ingredients are the explicit finite prime product, family
 coprimality, and elementary logarithmic bounds for prime factors.
@@ -260,7 +260,7 @@ theorem actualPaperFamily_familyDminusValues_card_le
 
 /-! ## Prime-independent support of the complete paper family -/
 
-/-- A paper-family coordinate before the prime in its saturation progression
+/-- A paper-family coordinate before the prime in its certificate progression
 is chosen.  This support must be independent of whether that progression
 already contains a prime in the prescribed window. -/
 structure FamilyPrePrimeIndex where
@@ -380,7 +380,7 @@ theorem familyPrePrimeSet_finite
     Nat.le_floor hmem.dminus_le_U, Nat.le_floor hdp_real⟩
 
 /-- The complete finite support of paper-family coordinates before the prime
-in the saturation progression is chosen. -/
+in the certificate progression is chosen. -/
 noncomputable def familyPrePrimeFinset
     (P : Params) (X : ℝ) (Pz b : ℕ) : Finset FamilyPrePrimeIndex :=
   if hX : 0 < X then (familyPrePrimeSet_finite P X Pz b hX).toFinset else ∅
@@ -392,7 +392,7 @@ theorem mem_familyPrePrimeFinset_iff
     j ∈ familyPrePrimeFinset P X Pz b ↔ FamilyPrePrimeMem P X Pz b j := by
   simp [familyPrePrimeFinset, hX, familyPrePrimeSet_finite]
 
-/-- The canonical reduced residue of the prime that solves the saturation
+/-- The canonical reduced residue of the prime that solves the certificate
 congruence attached to a pre-prime coordinate. -/
 noncomputable def familyPrePrimeResidue
     (j : FamilyPrePrimeIndex)
@@ -400,7 +400,7 @@ noncomputable def familyPrePrimeResidue
   ((-(ZMod.unitOfCoprime (j.dminus * j.dplus) hcop)⁻¹ :
       (ZMod (4 * j.E.rho))ˣ) : ZMod (4 * j.E.rho)).val
 
-/-- The canonical saturation residue is reduced modulo `4*rho`. -/
+/-- The canonical certificate residue is reduced modulo `4*rho`. -/
 theorem familyPrePrimeResidue_coprime
     (j : FamilyPrePrimeIndex)
     (hcop : Nat.Coprime (j.dminus * j.dplus) (4 * j.E.rho)) :
@@ -416,7 +416,7 @@ noncomputable def familyPrePrimeResidueTotal (j : FamilyPrePrimeIndex) : ℕ :=
     familyPrePrimeResidue j hcop
   else 1
 
-/-- The canonical residue solves the prime saturation congruence exactly. -/
+/-- The canonical residue solves the prime certificate congruence exactly. -/
 theorem familyPrePrimeResidue_sat
     (j : FamilyPrePrimeIndex)
     (hcop : Nat.Coprime (j.dminus * j.dplus) (4 * j.E.rho))
@@ -433,7 +433,7 @@ theorem familyPrePrimeResidue_sat
   rw [← Units.val_mul]
   simp
 
-/-- Prime candidates in the paper window and in the canonical saturation
+/-- Prime candidates in the paper window and in the canonical certificate
 class attached to a pre-prime coordinate. -/
 noncomputable def familyPrePrimePrimeValues
     (P : Params) (X : ℝ) (j : FamilyPrePrimeIndex)
@@ -547,7 +547,7 @@ noncomputable def familyPrePrimePrimeValuesTotal
   else ∅
 
 /-- Finite pairs consisting of a pre-prime coordinate and a prime in its
-canonical saturation progression. -/
+canonical certificate progression. -/
 noncomputable def familyPrePrimePairs
     (P : Params) (X : ℝ) (Pz b : ℕ) :
     Finset (Sigma fun _j : FamilyPrePrimeIndex => ℕ) :=
@@ -696,7 +696,7 @@ noncomputable def actualPaperPrePrimeMassMainCarrier
         Inputs.btRecip P X 1 0)
 
 /-- The purely structural coefficient in the complete-family prime main term,
-corresponding exactly to the finite sum in `eq:saturated-mass-main`. -/
+corresponding exactly to the finite sum in `eq:certificate-mass-main`. -/
 noncomputable def actualPaperPrePrimeStructuralMass
     (P : Params) (X : ℝ) (Pz b : ℕ) : ℝ :=
   ∑ j ∈ familyPrePrimeFinset P X Pz b,
@@ -985,7 +985,7 @@ theorem familyPrePrimeSmall_modulus_range_eventually_of_theta_lt
       congr 1
       ring
 
-/-- The exact finite small-saturation coefficient left after removing the
+/-- The exact finite small-certificate coefficient left after removing the
 rough `dplus` factor from the structural mass. -/
 noncomputable def actualPaperPrePrimeSmallMass
     (P : Params) (X : ℝ) (b : ℕ) : ℝ :=
@@ -1048,9 +1048,9 @@ noncomputable def familySmallBaseResidueTotal (b d s : ℕ) : ℕ :=
     familySmallBaseResidue b d s h.1 h.2
   else 1
 
-/-- The finite small-saturation model obtained by summing the exact
+/-- The finite small-certificate model obtained by summing the exact
 reciprocal-totient progression carrier over `s` and `dminus`. -/
-noncomputable def actualPaperSmallSaturationModel
+noncomputable def actualPaperSmallCertificateModel
     (P : Params) (X : ℝ) (b : ℕ) : ℝ :=
   ∑ s ∈ exactDivisorSRange P X,
     (1 / (Nat.totient s : ℝ)) *
@@ -1059,13 +1059,13 @@ noncomputable def actualPaperSmallSaturationModel
         phiProgressionAverage P X d (familySmallBaseResidueTotal b d s) s
 
 /-- The exact phi-progression theorem and deterministic slanted-length bound
-give the manuscript's lower estimate for the finite small-saturation model. -/
-theorem actualPaperSmallSaturationModel_ge_log_mul_smallDivisorAverage
+give the manuscript's lower estimate for the finite small-certificate model. -/
+theorem actualPaperSmallCertificateModel_ge_log_mul_smallDivisorAverage
     (P : Params) :
     ∃ c X₀ : ℝ, 0 < c ∧ ∀ X : ℝ, X₀ ≤ X → 1 < X → ∀ b : ℕ,
       Nat.Coprime b (Inputs.roughModulus X) →
         c * Real.log X * Inputs.smallDivisorAverage P X ≤
-          actualPaperSmallSaturationModel P X b := by
+          actualPaperSmallCertificateModel P X b := by
   rcases PhiProgressionBareLower_of_sqfRecipLower
       (PhiProgressionSqfRecipLower_of_standard_ordinarySquarefree P) with
     ⟨cφ, Xφ, hcφ, hφ⟩
@@ -1075,7 +1075,7 @@ theorem actualPaperSmallSaturationModel_ge_log_mul_smallDivisorAverage
   intro X hX hXgt b hbP
   have hXφ : Xφ ≤ X := le_trans (le_max_left _ _) hX
   have hXL : XL ≤ X := le_trans (le_max_right _ _) hX
-  unfold actualPaperSmallSaturationModel Inputs.smallDivisorAverage
+  unfold actualPaperSmallCertificateModel Inputs.smallDivisorAverage
   rw [Finset.mul_sum]
   apply Finset.sum_le_sum
   intro s hs
@@ -1165,7 +1165,7 @@ theorem actualPaperSmallSaturationModel_ge_log_mul_smallDivisorAverage
           (familySmallBaseResidueTotal b d s) s :=
       mul_le_mul_of_nonneg_left hφsd hscale_nonneg
 
-/-- Every point of the finite small-saturation progression model gives an
+/-- Every point of the finite small-certificate progression model gives an
 actual `(E,dminus)` coordinate of the prime-independent paper family. -/
 theorem phiProgressionSupport_to_familyPrePrimeSmallValues
     (P : Params) (X : ℝ) (b s d r : ℕ) (hX : 1 < X)
@@ -1331,19 +1331,19 @@ noncomputable def familySmallDivisorValues (X : ℝ) (s : ℕ) : Finset ℕ :=
   (Finset.Icc (1 : ℕ) ⌊UScale X⌋₊).filter
     (fun d => d ∣ Inputs.roughModulus X ∧ Odd d ∧ Nat.Coprime d s)
 
-/-- Triples `(s,dminus,r)` in the exact finite small-saturation model. -/
-noncomputable def actualPaperSmallSaturationTriples
+/-- Triples `(s,dminus,r)` in the exact finite small-certificate model. -/
+noncomputable def actualPaperSmallCertificateTriples
     (P : Params) (X : ℝ) (b : ℕ) :
     Finset (Sigma fun _s : ℕ => Sigma fun _d : ℕ => ℕ) :=
   (exactDivisorSRange P X).sigma (fun s =>
     (familySmallDivisorValues X s).sigma (fun d =>
       phiProgressionSupport P X d (familySmallBaseResidueTotal b d s) s))
 
-/-- Forgetful map from a small-saturation model triple to its actual
+/-- Forgetful map from a small-certificate model triple to its actual
 `(E,dminus)` structural coordinate. -/
-def actualPaperSmallSaturationTripleToSmall
+def actualPaperSmallCertificateTripleToSmall
     (P : Params) (X : ℝ) (b : ℕ)
-    (x : {x // x ∈ actualPaperSmallSaturationTriples P X b}) :
+    (x : {x // x ∈ actualPaperSmallCertificateTriples P X b}) :
     FamilyPrePrimeSmallIndex where
   E :=
     { r := x.1.2.2
@@ -1365,9 +1365,9 @@ def actualPaperSmallSaturationTripleToSmall
   dminus := x.1.2.1
 
 /-- Distinct model triples give distinct small structural coordinates. -/
-theorem actualPaperSmallSaturationTripleToSmall_injective
+theorem actualPaperSmallCertificateTripleToSmall_injective
     (P : Params) (X : ℝ) (b : ℕ) :
-    Function.Injective (actualPaperSmallSaturationTripleToSmall P X b) := by
+    Function.Injective (actualPaperSmallCertificateTripleToSmall P X b) := by
   intro x y hxy
   cases x with
   | mk xv hx =>
@@ -1381,7 +1381,7 @@ theorem actualPaperSmallSaturationTripleToSmall_injective
           | mk sy dy =>
             cases dy with
             | mk dy ry =>
-              simp only [actualPaperSmallSaturationTripleToSmall] at hxy
+              simp only [actualPaperSmallCertificateTripleToSmall] at hxy
               injection hxy with hE hd
               injection hE with hr hs
               subst sy
@@ -1389,16 +1389,16 @@ theorem actualPaperSmallSaturationTripleToSmall_injective
               subst ry
               rfl
 
-/-- Exact flattening of the nested small-saturation model into its triple
+/-- Exact flattening of the nested small-certificate model into its triple
 support. -/
-theorem actualPaperSmallSaturationModel_eq_triple_sum
+theorem actualPaperSmallCertificateModel_eq_triple_sum
     (P : Params) (X : ℝ) (b : ℕ) :
-    actualPaperSmallSaturationModel P X b =
-      ∑ x ∈ actualPaperSmallSaturationTriples P X b,
+    actualPaperSmallCertificateModel P X b =
+      ∑ x ∈ actualPaperSmallCertificateTriples P X b,
         ((1 : ℝ) / (Nat.totient x.1 : ℝ)) *
           ((1 : ℝ) / (Nat.totient x.2.2 : ℝ)) := by
-  unfold actualPaperSmallSaturationModel
-    actualPaperSmallSaturationTriples familySmallDivisorValues
+  unfold actualPaperSmallCertificateModel
+    actualPaperSmallCertificateTriples familySmallDivisorValues
     phiProgressionAverage phiProgressionSupport
   rw [Finset.sum_sigma]
   apply Finset.sum_congr rfl
@@ -1409,14 +1409,14 @@ theorem actualPaperSmallSaturationModel_eq_triple_sum
   intro d hd
   rw [Finset.mul_sum]
 
-/-- Every small-saturation model triple maps into the actual small structural
+/-- Every small-certificate model triple maps into the actual small structural
 support once the polylogarithmic cutoff lies below `Y`. -/
-theorem actualPaperSmallSaturationTriples_image_subset_smallValues
+theorem actualPaperSmallCertificateTriples_image_subset_smallValues
     (P : Params) (X : ℝ) (b : ℕ) (hX : 1 < X)
     (hbP : Nat.Coprime b (Inputs.roughModulus X))
     (hUY : UScale X ≤ YScale P X) :
-    (actualPaperSmallSaturationTriples P X b).attach.image
-        (actualPaperSmallSaturationTripleToSmall P X b) ⊆
+    (actualPaperSmallCertificateTriples P X b).attach.image
+        (actualPaperSmallCertificateTripleToSmall P X b) ⊆
       familyPrePrimeSmallValues P X (Inputs.roughModulus X) b := by
   intro k hk
   rcases Finset.mem_image.mp hk with ⟨x, hx, rfl⟩
@@ -1428,17 +1428,17 @@ theorem actualPaperSmallSaturationTriples_image_subset_smallValues
   exact phiProgressionSupport_to_familyPrePrimeSmallValues
     P X b x.1.1 x.1.2.1 x.1.2.2 hX hbP hUY hs hd hr
 
-/-- The finite saturation model injects into the actual small structural
+/-- The finite certificate model injects into the actual small structural
 support, with only the absolute totient loss caused by the fixed factor `4`. -/
-theorem actualPaperSmallSaturationModel_le_eight_mul_smallMass
+theorem actualPaperSmallCertificateModel_le_eight_mul_smallMass
     (P : Params) (X : ℝ) (b : ℕ) (hX : 1 < X)
     (hbP : Nat.Coprime b (Inputs.roughModulus X))
     (hUY : UScale X ≤ YScale P X) :
-    actualPaperSmallSaturationModel P X b ≤
+    actualPaperSmallCertificateModel P X b ≤
       8 * actualPaperPrePrimeSmallMass P X b := by
-  rw [actualPaperSmallSaturationModel_eq_triple_sum]
-  let T := actualPaperSmallSaturationTriples P X b
-  let F := actualPaperSmallSaturationTripleToSmall P X b
+  rw [actualPaperSmallCertificateModel_eq_triple_sum]
+  let T := actualPaperSmallCertificateTriples P X b
+  let F := actualPaperSmallCertificateTripleToSmall P X b
   calc
     (∑ x ∈ T,
         ((1 : ℝ) / (Nat.totient x.1 : ℝ)) *
@@ -1453,7 +1453,7 @@ theorem actualPaperSmallSaturationModel_le_eight_mul_smallMass
         8 * ((1 : ℝ) / (Nat.totient (4 * (F x).E.rho) : ℝ)) := by
       apply Finset.sum_le_sum
       intro x hx
-      have hxmem : x.1 ∈ actualPaperSmallSaturationTriples P X b := by
+      have hxmem : x.1 ∈ actualPaperSmallCertificateTriples P X b := by
         simpa [T] using x.2
       have hxData := Finset.mem_sigma.mp hxmem
       have hsIcc := (Finset.mem_filter.mp hxData.1).1
@@ -1465,7 +1465,7 @@ theorem actualPaperSmallSaturationModel_le_eight_mul_smallMass
         (lt_of_lt_of_le Nat.zero_lt_one (Finset.mem_Icc.mp hsIcc).1)
         (lt_of_lt_of_le Nat.zero_lt_one (Finset.mem_Icc.mp hrIcc).1)
         (Finset.mem_filter.mp hrData).2.2.1.symm
-      simpa [F, actualPaperSmallSaturationTripleToSmall, ExactDivisor.rho,
+      simpa [F, actualPaperSmallCertificateTripleToSmall, ExactDivisor.rho,
         Nat.mul_comm]
         using htot
     _ = ∑ k ∈ T.attach.image F,
@@ -1473,12 +1473,12 @@ theorem actualPaperSmallSaturationModel_le_eight_mul_smallMass
       symm
       apply Finset.sum_image
       intro x hx y hy hxy
-      exact actualPaperSmallSaturationTripleToSmall_injective P X b hxy
+      exact actualPaperSmallCertificateTripleToSmall_injective P X b hxy
     _ ≤ ∑ k ∈ familyPrePrimeSmallValues
           P X (Inputs.roughModulus X) b,
         8 * ((1 : ℝ) / (Nat.totient (4 * k.E.rho) : ℝ)) := by
       apply Finset.sum_le_sum_of_subset_of_nonneg
-      · exact actualPaperSmallSaturationTriples_image_subset_smallValues
+      · exact actualPaperSmallCertificateTriples_image_subset_smallValues
           P X b hX hbP hUY
       · intro k hk hnot
         positivity
@@ -1495,7 +1495,7 @@ theorem actualPaperPrePrimeSmallMass_ge_log_product
       Nat.Coprime b (Inputs.roughModulus X) →
         c * Real.log X * Real.log (SScale P X) * Real.log (zScale X) ≤
           actualPaperPrePrimeSmallMass P X b := by
-  rcases actualPaperSmallSaturationModel_ge_log_mul_smallDivisorAverage P with
+  rcases actualPaperSmallCertificateModel_ge_log_mul_smallDivisorAverage P with
     ⟨cφ, Xφ, hcφ, hφ⟩
   rcases Inputs.smallDivisorAverage_lower_from_standard_inputs P with
     ⟨cA, XA, hcA, hA⟩
@@ -1510,12 +1510,12 @@ theorem actualPaperPrePrimeSmallMass_ge_log_product
   have hlogX : 0 ≤ Real.log X := Real.log_nonneg hXgt.le
   have hA' := hA X hXA
   have hφ' := hφ X hXφ hXgt b hbP
-  have hupper := actualPaperSmallSaturationModel_le_eight_mul_smallMass
+  have hupper := actualPaperSmallCertificateModel_le_eight_mul_smallMass
     P X b hXgt hbP (hY X hXY hXgt)
   have havg : 0 ≤ Inputs.smallDivisorAverage P X :=
     Inputs.smallDivisorAverage_nonneg P X
   have hmain : cφ * cA * Real.log X * Real.log (SScale P X) *
-      Real.log (zScale X) ≤ actualPaperSmallSaturationModel P X b := by
+      Real.log (zScale X) ≤ actualPaperSmallCertificateModel P X b := by
     calc
       cφ * cA * Real.log X * Real.log (SScale P X) *
           Real.log (zScale X) =
@@ -1523,13 +1523,13 @@ theorem actualPaperPrePrimeSmallMass_ge_log_product
           (cA * Real.log (SScale P X) * Real.log (zScale X)) := by ring
       _ ≤ (cφ * Real.log X) * Inputs.smallDivisorAverage P X :=
         mul_le_mul_of_nonneg_left hA' (mul_nonneg hcφ.le hlogX)
-      _ ≤ actualPaperSmallSaturationModel P X b := hφ'
+      _ ≤ actualPaperSmallCertificateModel P X b := hφ'
   calc
     (cφ * cA / 8) * Real.log X * Real.log (SScale P X) *
           Real.log (zScale X) =
         (cφ * cA * Real.log X * Real.log (SScale P X) *
           Real.log (zScale X)) / 8 := by ring
-    _ ≤ actualPaperSmallSaturationModel P X b / 8 :=
+    _ ≤ actualPaperSmallCertificateModel P X b / 8 :=
       div_le_div_of_nonneg_right hmain (by norm_num)
     _ ≤ actualPaperPrePrimeSmallMass P X b := by
       linarith
@@ -4642,22 +4642,22 @@ theorem actualPaperFamily_residueMassRat_le_indexMassRat_div_square
         · positivity
   exact_mod_cast hscaled
 
-/-- Any represented appendage residue class of the complete paper family
+/-- Any represented increment residue class of the complete paper family
 automatically lies on the supported tensor moduli. -/
-theorem actualPaperFamily_appendageResidueClass_modulus_data
+theorem actualPaperFamily_incrementResidueClass_modulus_data
     (P : Params) (X : ℝ) (b D c : ℕ) (hX : 1 < X)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ Family.familyEvents
       (Family.familyIndexFinset P X (Inputs.roughModulus X) b))
-    (hc : c ∈ Family.familyAppendageResidueClasses
+    (hc : c ∈ Family.familyIncrementResidueClasses
       (Family.familyIndexFinset P X (Inputs.roughModulus X) b) old D) :
     1 ≤ D ∧ Squarefree D ∧ Odd D ∧
       Nat.Coprime D (Inputs.roughModulus X) ∧
       (D : ℝ) ≤ YScale P X := by
   let indices := Family.familyIndexFinset P X (Inputs.roughModulus X) b
-  rw [Family.familyAppendageResidueClasses] at hc
+  rw [Family.familyIncrementResidueClasses] at hc
   rcases Finset.mem_image.mp hc with ⟨event, heventD, rfl⟩
-  rw [Family.familyAppendageDivisorEvents] at heventD
+  rw [Family.familyIncrementDivisorEvents] at heventD
   rcases Finset.mem_filter.mp heventD with ⟨hext, hDg⟩
   have hext' := hext
   rw [Family.familyCompatibleExtensions] at hext
@@ -4665,7 +4665,7 @@ theorem actualPaperFamily_appendageResidueClass_modulus_data
     (Finset.mem_filter.mp hext).1
   have hDdiv : D ∣ event.dPlus :=
     hDg.trans (by
-      simpa [Family.familyAppendageG] using
+      simpa [Family.familyIncrementG] using
         Family.familyCompatibleExtension_gcd_dvd_dPlus
           P X (Inputs.roughModulus X) b indices hX
           (fun i hi => (Family.mem_familyIndexFinset_iff P X
@@ -4687,7 +4687,7 @@ theorem actualPaperFamily_appendageResidueClass_modulus_data
       _ ≤ YScale P X := by simpa [Nat.cast_mul] using himem.dd_le_Y
 
 /-- The complete actual family satisfies the exact factorial Brun bound once
-only the explicit appendage Euler tail is supplied.  The residue-tensor field
+only the explicit increment Euler tail is supplied.  The residue-tensor field
 is discharged by the proved `D^-2` theorem above. -/
 theorem actualPaperFamily_compatibleLcmMassRat_le_mass_one_add_pow
     (P : Params) [Fact (PhiProgressionGammaQuotientUpperYU P)] :
@@ -4698,7 +4698,7 @@ theorem actualPaperFamily_compatibleLcmMassRat_le_mass_one_add_pow
         ∀ old ∈ Family.familyCompatibleSubsetsOfCard
           (Family.familyIndexFinset P X (Inputs.roughModulus X) b) (r - 1),
           (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-            (K * Family.familyAppendageClassProductRat old D) / (D : ℚ)) ≤ ε) →
+            (K * Family.familyIncrementClassProductRat old D) / (D : ℚ)) ≤ ε) →
       ∀ r : ℕ,
         Family.familyCompatibleLcmMassRat
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b) r ≤
@@ -4721,7 +4721,7 @@ theorem actualPaperFamily_compatibleLcmMassRat_le_mass_one_add_pow
     have hsub : old ⊆ Family.familyEvents indices := by
       rw [Family.familyCompatibleSubsetsOfCard] at hold
       exact (Finset.mem_powersetCard.mp (Finset.mem_of_mem_filter old hold)).1
-    have hdata := actualPaperFamily_appendageResidueClass_modulus_data
+    have hdata := actualPaperFamily_incrementResidueClass_modulus_data
       P X b D c hXgt old hsub hc
     exact htensor X hX hXgt b hbcop D c hdata.1 hdata.2.1 hdata.2.2.1
       hdata.2.2.2.1 hdata.2.2.2.2
@@ -4793,9 +4793,9 @@ theorem actualRoughFamily_oldPrimeClass_exponent_le
     exact prime_dvd_roughModulus_of_lt_succ_floor hp hlt
   · exact hsub
 
-/-- Fully elementary Euler-product estimate for the appendage class factor of
+/-- Fully elementary Euler-product estimate for the increment class factor of
 an old subset of the actual paper family. -/
-theorem actualRoughFamily_appendageClassProduct_real_sum_le_exp_card
+theorem actualRoughFamily_incrementClassProduct_real_sum_le_exp_card
     (P : Params) (X : ℝ) (b B : ℕ)
     (indices : Finset Family.FamilyIndex)
     (hX : Real.exp 1 ≤ X)
@@ -4804,17 +4804,17 @@ theorem actualRoughFamily_appendageClassProduct_real_sum_le_exp_card
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ Family.familyEvents indices) (hB : 1 ≤ B) :
     (1 : ℝ) + (∑ D ∈ Finset.Icc 2 B,
-      (Family.familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) ≤
+      (Family.familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) ≤
       Real.exp ((old.card : ℝ) *
         ((Real.log (YScale P X) /
             Real.log ((⌊EscAnalytic.zScale X⌋₊ + 1 : ℕ) : ℝ)) /
           ((⌊EscAnalytic.zScale X⌋₊ + 1 : ℕ) : ℝ))) := by
   calc
     (1 : ℝ) + (∑ D ∈ Finset.Icc 2 B,
-        (Family.familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) ≤
+        (Family.familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) ≤
       Real.exp (∑ p ∈ EscLeanChecks.primeFinsetUpTo B,
         ((Family.familyOldPrimeResidueClasses old p).card : ℝ) / (p : ℝ)) :=
-      Family.familyAppendageClassProduct_real_sum_le_exp old B hB
+      Family.familyIncrementClassProduct_real_sum_le_exp old B hB
     _ ≤ Real.exp ((old.card : ℝ) *
         ((Real.log (YScale P X) /
             Real.log ((⌊EscAnalytic.zScale X⌋₊ + 1 : ℕ) : ℝ)) /
@@ -4843,37 +4843,37 @@ theorem actualPaperFamily_oldPrimeClass_exponent_le
         (lt_of_lt_of_le (Real.exp_pos 1) hX)).mp hi)
     old hsub
 
-/-- Complete-paper-family form of the elementary appendage Euler-product
+/-- Complete-paper-family form of the elementary increment Euler-product
 bound. -/
-theorem actualPaperFamily_appendageClassProduct_real_sum_le_exp_card
+theorem actualPaperFamily_incrementClassProduct_real_sum_le_exp_card
     (P : Params) (X : ℝ) (b B : ℕ) (hX : Real.exp 1 ≤ X)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ Family.familyEvents
       (Family.familyIndexFinset P X (Inputs.roughModulus X) b))
     (hB : 1 ≤ B) :
     (1 : ℝ) + (∑ D ∈ Finset.Icc 2 B,
-      (Family.familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) ≤
+      (Family.familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) ≤
       Real.exp ((old.card : ℝ) *
         ((Real.log (YScale P X) /
             Real.log ((⌊EscAnalytic.zScale X⌋₊ + 1 : ℕ) : ℝ)) /
           ((⌊EscAnalytic.zScale X⌋₊ + 1 : ℕ) : ℝ))) := by
-  exact actualRoughFamily_appendageClassProduct_real_sum_le_exp_card P X b B
+  exact actualRoughFamily_incrementClassProduct_real_sum_le_exp_card P X b B
     (Family.familyIndexFinset P X (Inputs.roughModulus X) b) hX
     (fun i hi =>
       (Family.mem_familyIndexFinset_iff P X (Inputs.roughModulus X) b i
         (lt_of_lt_of_le (Real.exp_pos 1) hX)).mp hi)
     old hsub hB
 
-/-- Rank-sensitive form of the complete-family appendage Euler tail.  This is
+/-- Rank-sensitive form of the complete-family increment Euler tail.  This is
 the precise loss used in the truncated Brun/Suen iteration. -/
-theorem actualPaperFamily_appendageTail_real_le
+theorem actualPaperFamily_incrementTail_real_le
     (P : Params) (X : ℝ) (b : ℕ) (hX : Real.exp 1 ≤ X)
     (K : ℝ) (hK : 0 ≤ K)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ Family.familyEvents
       (Family.familyIndexFinset P X (Inputs.roughModulus X) b)) :
     (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      K * (Family.familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) ≤
+      K * (Family.familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) ≤
       K * (Real.exp ((old.card : ℝ) *
         ((Real.log (YScale P X) /
             Real.log ((⌊zScale X⌋₊ + 1 : ℕ) : ℝ)) /
@@ -4882,10 +4882,10 @@ theorem actualPaperFamily_appendageTail_real_le
     have : (1 : ℝ) ≤ Real.exp 1 := Real.one_le_exp (by norm_num)
     exact this) hX
   have hfloor : 1 ≤ ⌊X⌋₊ := Nat.le_floor (by simpa using hXone)
-  have hbase := actualPaperFamily_appendageClassProduct_real_sum_le_exp_card
+  have hbase := actualPaperFamily_incrementClassProduct_real_sum_le_exp_card
     P X b ⌊X⌋₊ hX old hsub hfloor
   have hsum : (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      (Family.familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) ≤
+      (Family.familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) ≤
       Real.exp ((old.card : ℝ) *
         ((Real.log (YScale P X) /
             Real.log ((⌊zScale X⌋₊ + 1 : ℕ) : ℝ)) /
@@ -4893,9 +4893,9 @@ theorem actualPaperFamily_appendageTail_real_le
     linarith
   calc
     (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-        K * (Family.familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) =
+        K * (Family.familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) =
       K * (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-        (Family.familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) := by
+        (Family.familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) := by
       rw [Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro D hD
@@ -4906,19 +4906,19 @@ theorem actualPaperFamily_appendageTail_real_le
           ((⌊zScale X⌋₊ + 1 : ℕ) : ℝ))) - 1) :=
       mul_le_mul_of_nonneg_left hsum hK
 
-/-! ## Truncated-rank appendage scale -/
+/-! ## Truncated-rank increment scale -/
 
 /-- The exact floor-based scale produced by the finite Euler product. -/
-noncomputable def paperAppendageFloorScale (P : Params) (X : ℝ) : ℝ :=
+noncomputable def paperIncrementFloorScale (P : Params) (X : ℝ) : ℝ :=
   (Real.log (YScale P X) /
       Real.log (((⌊zScale X⌋₊ + 1 : ℕ) : ℝ))) /
     (((⌊zScale X⌋₊ + 1 : ℕ) : ℝ))
 
-/-- The exact floor-based appendage scale is no larger than the manuscript's
+/-- The exact floor-based increment scale is no larger than the manuscript's
 medium-prime scale once `X ≥ exp 2`. -/
-theorem paperAppendageFloorScale_le_paperMediumScale
+theorem paperIncrementFloorScale_le_paperMediumScale
     (P : Params) {X : ℝ} (hX : Real.exp 2 ≤ X) :
-    paperAppendageFloorScale P X ≤ paperMediumScale P X := by
+    paperIncrementFloorScale P X ≤ paperMediumScale P X := by
   have hXexp1 : Real.exp 1 ≤ X :=
     le_trans (Real.exp_le_exp.mpr (by norm_num : (1 : ℝ) ≤ 2)) hX
   have hXpos : 0 < X := lt_of_lt_of_le (Real.exp_pos 2) hX
@@ -4947,15 +4947,15 @@ theorem paperAppendageFloorScale_le_paperMediumScale
         Real.log (YScale P X) / (zScale X * Real.log (zScale X)) := by
     exact div_le_div_of_nonneg_left hlogY_nonneg
       (mul_pos hz_pos hlogz_pos) hden
-  unfold paperAppendageFloorScale paperMediumScale
+  unfold paperIncrementFloorScale paperMediumScale
   change Real.log (YScale P X) / Real.log q / q ≤ _
   rw [div_div]
   simpa [mul_comm] using hdiv
 
 /-- The floor-based scale is nonnegative on the same large range. -/
-theorem paperAppendageFloorScale_nonneg
+theorem paperIncrementFloorScale_nonneg
     (P : Params) {X : ℝ} (hX : Real.exp 2 ≤ X) :
-    0 ≤ paperAppendageFloorScale P X := by
+    0 ≤ paperIncrementFloorScale P X := by
   have hXexp1 : Real.exp 1 ≤ X :=
     le_trans (Real.exp_le_exp.mpr (by norm_num : (1 : ℝ) ≤ 2)) hX
   have hXpos : 0 < X := lt_of_lt_of_le (Real.exp_pos 2) hX
@@ -4969,44 +4969,44 @@ theorem paperAppendageFloorScale_nonneg
     unfold YScale
     rw [Real.log_rpow hXpos]
     exact mul_nonneg P.σ_pos.le (Real.log_nonneg hXone)
-  unfold paperAppendageFloorScale
+  unfold paperIncrementFloorScale
   positivity
 
-/-- At the manuscript's cubic rank scale, the exact floor-based appendage
+/-- At the manuscript's cubic rank scale, the exact floor-based increment
 loss tends to zero. -/
-theorem paperAppendageFloorScale_logCube_tendsto_zero (P : Params) :
+theorem paperIncrementFloorScale_logCube_tendsto_zero (P : Params) :
     Filter.Tendsto
-      (fun X : ℝ => (Real.log X) ^ 3 * paperAppendageFloorScale P X)
+      (fun X : ℝ => (Real.log X) ^ 3 * paperIncrementFloorScale P X)
       Filter.atTop (nhds 0) := by
   apply squeeze_zero'
   · filter_upwards [Filter.eventually_ge_atTop (Real.exp 2)] with X hX
     exact mul_nonneg (pow_nonneg (Real.log_nonneg
       (le_trans (Real.one_le_exp (by norm_num)) hX)) 3)
-      (paperAppendageFloorScale_nonneg P hX)
+      (paperIncrementFloorScale_nonneg P hX)
   · filter_upwards [Filter.eventually_ge_atTop (Real.exp 2)] with X hX
     exact mul_le_mul_of_nonneg_left
-      (paperAppendageFloorScale_le_paperMediumScale P hX)
+      (paperIncrementFloorScale_le_paperMediumScale P hX)
       (pow_nonneg (Real.log_nonneg
         (le_trans (Real.one_le_exp (by norm_num)) hX)) 3)
   · exact paperMediumScale_logCube_tendsto_zero P
 
-/-- A fixed cubic-log rank envelope makes the complete appendage Euler loss
+/-- A fixed cubic-log rank envelope makes the complete increment Euler loss
 vanish. -/
-theorem paperAppendageCubicRankError_tendsto_zero
+theorem paperIncrementCubicRankError_tendsto_zero
     (P : Params) (K C : ℝ) :
     Filter.Tendsto
       (fun X : ℝ => K *
-        (Real.exp (C * ((Real.log X) ^ 3 * paperAppendageFloorScale P X)) - 1))
+        (Real.exp (C * ((Real.log X) ^ 3 * paperIncrementFloorScale P X)) - 1))
       Filter.atTop (nhds 0) := by
   have htail : Filter.Tendsto
       (fun X : ℝ => C *
-        ((Real.log X) ^ 3 * paperAppendageFloorScale P X))
+        ((Real.log X) ^ 3 * paperIncrementFloorScale P X))
       Filter.atTop (nhds 0) := by
     simpa using
-      (paperAppendageFloorScale_logCube_tendsto_zero P).const_mul C
+      (paperIncrementFloorScale_logCube_tendsto_zero P).const_mul C
   have hexp : Filter.Tendsto
       (fun X : ℝ =>
-        Real.exp (C * ((Real.log X) ^ 3 * paperAppendageFloorScale P X)) - 1)
+        Real.exp (C * ((Real.log X) ^ 3 * paperIncrementFloorScale P X)) - 1)
       Filter.atTop (nhds 0) := by
     simpa using ((Real.continuous_exp.tendsto 0).comp htail).sub
       (tendsto_const_nhds : Filter.Tendsto (fun _ : ℝ => (1 : ℝ))
@@ -5015,15 +5015,15 @@ theorem paperAppendageCubicRankError_tendsto_zero
 
 /-- A pointwise rank below `C(log X)^3` is dominated by the vanishing cubic
 rank envelope. -/
-theorem paperAppendageRankError_le_cubicRankError
+theorem paperIncrementRankError_le_cubicRankError
     (P : Params) {X K C : ℝ} {R : ℕ}
     (hX : Real.exp 2 ≤ X) (hK : 0 ≤ K) (_hC : 0 ≤ C)
     (hR : (R : ℝ) ≤ C * (Real.log X) ^ 3) :
-    K * (Real.exp ((R : ℝ) * paperAppendageFloorScale P X) - 1) ≤
+    K * (Real.exp ((R : ℝ) * paperIncrementFloorScale P X) - 1) ≤
       K * (Real.exp
-        (C * ((Real.log X) ^ 3 * paperAppendageFloorScale P X)) - 1) := by
-  have hscale : 0 ≤ paperAppendageFloorScale P X :=
-    paperAppendageFloorScale_nonneg P hX
+        (C * ((Real.log X) ^ 3 * paperIncrementFloorScale P X)) - 1) := by
+  have hscale : 0 ≤ paperIncrementFloorScale P X :=
+    paperIncrementFloorScale_nonneg P hX
   apply mul_le_mul_of_nonneg_left _ hK
   apply sub_le_sub_right
   apply Real.exp_le_exp.mpr
@@ -5037,9 +5037,9 @@ theorem brunFloorRank_le_thirteen_mul {μ : ℝ} (hμ : 1 ≤ μ) :
   norm_num at hfloor ⊢
   linarith
 
-/-- If the event mass is at most cubic-logarithmic, the appendage loss at the
+/-- If the event mass is at most cubic-logarithmic, the increment loss at the
 canonical Brun rank tends to zero. -/
-theorem paperAppendageBrunFloorRankError_tendsto_zero_of_mass_logCube_upper
+theorem paperIncrementBrunFloorRankError_tendsto_zero_of_mass_logCube_upper
     (P : Params) (μ : ℝ → ℝ) (K C : ℝ) (hK : 0 ≤ K) (hC : 0 ≤ C)
     (hμ_one : ∀ᶠ X in Filter.atTop, 1 ≤ μ X)
     (hμ_upper : ∀ᶠ X in Filter.atTop,
@@ -5048,25 +5048,25 @@ theorem paperAppendageBrunFloorRankError_tendsto_zero_of_mass_logCube_upper
       (fun X : ℝ => K *
         (Real.exp
           ((((⌊12 * μ X⌋₊ + 1 : ℕ) : ℝ)) *
-            paperAppendageFloorScale P X) - 1))
+            paperIncrementFloorScale P X) - 1))
       Filter.atTop (nhds 0) := by
   have hXlarge : ∀ᶠ X in Filter.atTop, Real.exp 2 ≤ X :=
     Filter.eventually_ge_atTop (Real.exp 2)
   have hnonneg : ∀ᶠ X in Filter.atTop,
       0 ≤ K * (Real.exp
         ((((⌊12 * μ X⌋₊ + 1 : ℕ) : ℝ)) *
-          paperAppendageFloorScale P X) - 1) := by
+          paperIncrementFloorScale P X) - 1) := by
     filter_upwards [hXlarge] with X hX
-    have hscale := paperAppendageFloorScale_nonneg P hX
+    have hscale := paperIncrementFloorScale_nonneg P hX
     exact mul_nonneg hK (sub_nonneg.mpr
       (Real.one_le_exp (mul_nonneg (Nat.cast_nonneg _) hscale)))
   have hupper : ∀ᶠ X in Filter.atTop,
       K * (Real.exp
         ((((⌊12 * μ X⌋₊ + 1 : ℕ) : ℝ)) *
-          paperAppendageFloorScale P X) - 1) ≤
+          paperIncrementFloorScale P X) - 1) ≤
       K * (Real.exp
         ((13 * C) * ((Real.log X) ^ 3 *
-          paperAppendageFloorScale P X)) - 1) := by
+          paperIncrementFloorScale P X)) - 1) := by
     filter_upwards [hXlarge, hμ_one, hμ_upper] with X hX hμ1 hμup
     have hrank : (((⌊12 * μ X⌋₊ + 1 : ℕ) : ℝ)) ≤
         (13 * C) * (Real.log X) ^ 3 := by
@@ -5076,12 +5076,12 @@ theorem paperAppendageBrunFloorRankError_tendsto_zero_of_mass_logCube_upper
         _ ≤ 13 * (C * (Real.log X) ^ 3) :=
           mul_le_mul_of_nonneg_left hμup (by norm_num)
         _ = (13 * C) * (Real.log X) ^ 3 := by ring
-    exact paperAppendageRankError_le_cubicRankError P hX hK
+    exact paperIncrementRankError_le_cubicRankError P hX hK
       (mul_nonneg (by norm_num) hC) hrank
   exact squeeze_zero' hnonneg hupper
-    (paperAppendageCubicRankError_tendsto_zero P K (13 * C))
+    (paperIncrementCubicRankError_tendsto_zero P K (13 * C))
 
-/-- Brun iteration needs the appendage estimate only through the truncation
+/-- Brun iteration needs the increment estimate only through the truncation
 rank.  This bounded-rank form avoids imposing a false all-rank uniformity. -/
 theorem familyCompatibleLcmMassRat_le_pow_div_factorial_of_increment_le_up_to
     (P : Params) (X : ℝ) (Pz b : ℕ)
@@ -5090,7 +5090,7 @@ theorem familyCompatibleLcmMassRat_le_pow_div_factorial_of_increment_le_up_to
     (M : ℚ) (hM : 0 ≤ M) (R : ℕ)
     (hinc : ∀ r : ℕ, 1 ≤ r → r ≤ R →
       ∀ old ∈ Family.familyCompatibleSubsetsOfCard indices (r - 1),
-        Family.familyAppendageIncrementRat indices old ≤ M) :
+        Family.familyIncrementRat indices old ≤ M) :
     ∀ r : ℕ, r ≤ R →
       Family.familyCompatibleLcmMassRat indices r ≤
         M ^ r / (Nat.factorial r : ℚ) := by
@@ -5139,13 +5139,13 @@ theorem familyCompatibleLcmMassRat_le_mass_one_add_pow_of_residueTensor_up_to
     (htensor : ∀ r : ℕ, 1 ≤ r → r ≤ R →
       ∀ old ∈ Family.familyCompatibleSubsetsOfCard indices (r - 1),
       ∀ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      ∀ c ∈ Family.familyAppendageResidueClasses indices old D,
+      ∀ c ∈ Family.familyIncrementResidueClasses indices old D,
         Family.familyResidueMassRat indices D c ≤
           K * Family.familyIndexMassRat indices / (D : ℚ) ^ 2)
     (htail : ∀ r : ℕ, 1 ≤ r → r ≤ R →
       ∀ old ∈ Family.familyCompatibleSubsetsOfCard indices (r - 1),
         (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-          (K * Family.familyAppendageClassProductRat old D) / (D : ℚ)) ≤ ε) :
+          (K * Family.familyIncrementClassProductRat old D) / (D : ℚ)) ≤ ε) :
     ∀ r : ℕ, r ≤ R →
       Family.familyCompatibleLcmMassRat indices r ≤
         (Family.familyIndexMassRat indices * (1 + ε)) ^ r /
@@ -5165,29 +5165,29 @@ theorem familyCompatibleLcmMassRat_le_mass_one_add_pow_of_residueTensor_up_to
   rw [Family.familyCompatibleSubsetsOfCard] at hold
   have hsub : old ⊆ Family.familyEvents indices :=
     (Finset.mem_powersetCard.mp (Finset.mem_of_mem_filter old hold)).1
-  have happendage :=
-    Family.familyAppendageIncrementRat_le_of_familyResidueMass_classProduct
+  have hincrement :=
+    Family.familyIncrementRat_le_of_familyResidueMass_classProduct
       P X Pz b indices hX hmem old hsub K hK
         (htensor r hr hrR old (by
           rw [Family.familyCompatibleSubsetsOfCard]
           exact hold))
-  exact happendage.trans (mul_le_mul_of_nonneg_left
+  exact hincrement.trans (mul_le_mul_of_nonneg_left
     (add_le_add_left (htail r hr hrR old (by
       rw [Family.familyCompatibleSubsetsOfCard]
       exact hold)) 1) hmassNonneg)
 
 /-- The actual finite Euler tail at any rank up to `R` is reduced to one
 scalar exponential inequality. -/
-theorem actualPaperFamily_appendageTailRat_le_of_rank_scale
+theorem actualPaperFamily_incrementTailRat_le_of_rank_scale
     (P : Params) (X : ℝ) (b r R : ℕ) (K ε : ℚ)
     (hX : Real.exp 2 ≤ X) (hK : 0 ≤ K) (hr : 1 ≤ r) (hrR : r ≤ R)
     (old : Finset EscLeanChecks.SatEvent)
     (hold : old ∈ Family.familyCompatibleSubsetsOfCard
       (Family.familyIndexFinset P X (Inputs.roughModulus X) b) (r - 1))
     (hscalar : (K : ℝ) *
-      (Real.exp ((R : ℝ) * paperAppendageFloorScale P X) - 1) ≤ (ε : ℝ)) :
+      (Real.exp ((R : ℝ) * paperIncrementFloorScale P X) - 1) ≤ (ε : ℝ)) :
     (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      (K * Family.familyAppendageClassProductRat old D) / (D : ℚ)) ≤ ε := by
+      (K * Family.familyIncrementClassProductRat old D) / (D : ℚ)) ≤ ε := by
   let indices := Family.familyIndexFinset P X (Inputs.roughModulus X) b
   have hold' := hold
   rw [Family.familyCompatibleSubsetsOfCard] at hold'
@@ -5198,28 +5198,28 @@ theorem actualPaperFamily_appendageTailRat_le_of_rank_scale
   have hcard : old.card = r - 1 :=
     (Finset.mem_powersetCard.mp hpowerset).2
   have hcardR : old.card ≤ R := by omega
-  have hscale_nonneg : 0 ≤ paperAppendageFloorScale P X :=
-    paperAppendageFloorScale_nonneg P hX
+  have hscale_nonneg : 0 ≤ paperIncrementFloorScale P X :=
+    paperIncrementFloorScale_nonneg P hX
   have hexponent :
-      (old.card : ℝ) * paperAppendageFloorScale P X ≤
-        (R : ℝ) * paperAppendageFloorScale P X := by
+      (old.card : ℝ) * paperIncrementFloorScale P X ≤
+        (R : ℝ) * paperIncrementFloorScale P X := by
     exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcardR) hscale_nonneg
-  have htail := actualPaperFamily_appendageTail_real_le P X b
+  have htail := actualPaperFamily_incrementTail_real_le P X b
     (le_trans (Real.exp_le_exp.mpr (by norm_num : (1 : ℝ) ≤ 2)) hX)
     (K : ℝ) (by exact_mod_cast hK) old hsub
   have hreal :
       (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-        ((K * Family.familyAppendageClassProductRat old D) / (D : ℚ) : ℝ)) ≤
+        ((K * Family.familyIncrementClassProductRat old D) / (D : ℚ) : ℝ)) ≤
         (ε : ℝ) := by
     calc
       _ = (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-          (K : ℝ) * (Family.familyAppendageClassProductRat old D : ℝ) /
+          (K : ℝ) * (Family.familyIncrementClassProductRat old D : ℝ) /
             (D : ℝ)) := by norm_num
       _ ≤ (K : ℝ) *
-          (Real.exp ((old.card : ℝ) * paperAppendageFloorScale P X) - 1) := by
-        simpa [paperAppendageFloorScale] using htail
+          (Real.exp ((old.card : ℝ) * paperIncrementFloorScale P X) - 1) := by
+        simpa [paperIncrementFloorScale] using htail
       _ ≤ (K : ℝ) *
-          (Real.exp ((R : ℝ) * paperAppendageFloorScale P X) - 1) := by
+          (Real.exp ((R : ℝ) * paperIncrementFloorScale P X) - 1) := by
         apply mul_le_mul_of_nonneg_left _ (by exact_mod_cast hK)
         linarith [Real.exp_le_exp.mpr hexponent]
       _ ≤ (ε : ℝ) := hscalar
@@ -5235,7 +5235,7 @@ theorem actualPaperFamily_compatibleLcmMassRat_le_up_to_of_rank_scale
       ∀ b : ℕ, Nat.Coprime b (Inputs.roughModulus X) →
       ∀ ε : ℚ, 0 ≤ ε → ∀ R : ℕ,
       (K : ℝ) *
-        (Real.exp ((R : ℝ) * paperAppendageFloorScale P X) - 1) ≤ (ε : ℝ) →
+        (Real.exp ((R : ℝ) * paperIncrementFloorScale P X) - 1) ≤ (ε : ℝ) →
       ∀ r : ℕ, r ≤ R →
         Family.familyCompatibleLcmMassRat
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b) r ≤
@@ -5262,17 +5262,17 @@ theorem actualPaperFamily_compatibleLcmMassRat_le_up_to_of_rank_scale
       rw [Family.familyCompatibleSubsetsOfCard] at hold
       exact (Finset.mem_powersetCard.mp
         (Finset.mem_of_mem_filter old hold)).1
-    have hdata := actualPaperFamily_appendageResidueClass_modulus_data
+    have hdata := actualPaperFamily_incrementResidueClass_modulus_data
       P X b D c hXgt old hsub hc
     exact htensor X hX hXgt b hbcop D c hdata.1 hdata.2.1 hdata.2.2.1
       hdata.2.2.2.1 hdata.2.2.2.2
   · intro rank hrank hrankR old hold
-    exact actualPaperFamily_appendageTailRat_le_of_rank_scale
+    exact actualPaperFamily_incrementTailRat_le_of_rank_scale
       P X b rank R K ε hXexp hK.le hrank hrankR old hold hscalar
 
 /-! ## Exact modular-event carrier for the cited Suen step -/
 
-/-- The concrete modular event represented by one saturated-family event.  The
+/-- The concrete modular event represented by one certificate-family event.  The
 tag retains the full family datum, while the modulus and residue are exactly
 the congruence `n = -4e (mod dPlus*p)` used in the paper. -/
 def familyModularEvent (event : EscLeanChecks.SatEvent) :
@@ -5521,7 +5521,7 @@ theorem modularPairMass_familyModularEvent
 /-! ## Exact dependency-neighborhood decomposition -/
 
 /-- Neighborhood mass pulled back from the modular image to the actual
-saturated-event carrier. -/
+certificate-event carrier. -/
 noncomputable def familyDependentNeighbourMass
     (indices : Finset Family.FamilyIndex)
     (event : EscLeanChecks.SatEvent) : ℝ :=
@@ -5839,7 +5839,7 @@ theorem actualRoughFamily_mediumNeighbourMass_le_floorScale
       (Family.familyResidueMassRat indices ell c : ℝ) ≤
         K * mass / (ell : ℝ) ^ 2) :
     familyMediumNeighbourMass indices event ≤
-      K * mass * paperAppendageFloorScale P X := by
+      K * mass * paperIncrementFloorScale P X := by
   have hX : 1 < X :=
     lt_of_lt_of_le (Real.one_lt_exp_iff.mpr (by norm_num)) hXexp
   have hprimeSum :
@@ -5858,7 +5858,7 @@ theorem actualRoughFamily_mediumNeighbourMass_le_floorScale
           ∑ ell ∈ event.dPlus.primeFactors, (1 : ℝ) / (ell : ℝ) :=
       familyMediumNeighbourMass_le_mass_mul_primeRecipSum
         P X (Inputs.roughModulus X) b indices hmem event hevent K mass hresidue
-    _ ≤ K * mass * paperAppendageFloorScale P X := by
+    _ ≤ K * mass * paperIncrementFloorScale P X := by
       exact mul_le_mul_of_nonneg_left hprimeSum (mul_nonneg hK hmass)
 
 /-- Complete actual-family medium-neighbor estimate, with the residue tensor
@@ -5874,7 +5874,7 @@ theorem actualPaperFamily_mediumNeighbourMass_le_floorScale
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b) event ≤
           K * (Family.familyIndexMassRat
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b) : ℝ) *
-              paperAppendageFloorScale P X := by
+              paperIncrementFloorScale P X := by
   rcases actualPaperFamily_residueMassRat_le_indexMassRat_div_square P with
     ⟨Kq, X₀, hKq, htensor⟩
   refine ⟨(Kq : ℝ), X₀, by exact_mod_cast hKq, ?_⟩
@@ -5930,7 +5930,7 @@ theorem actualPaperFamily_modularDelta_le_largePrime_add_floorScale
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b) +
           K * (Family.familyIndexMassRat
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b) : ℝ) *
-              paperAppendageFloorScale P X := by
+              paperIncrementFloorScale P X := by
   rcases actualPaperFamily_mediumNeighbourMass_le_floorScale P with
     ⟨K, X₀, hK, hmedium⟩
   refine ⟨K, X₀, hK, ?_⟩
@@ -5948,10 +5948,10 @@ theorem actualPaperFamily_modularDelta_le_largePrime_add_floorScale
   apply modularDelta_familyModularEvents_le P X (Inputs.roughModulus X) b
     indices hXgt hmem (familyLargePrimeDelta indices)
       (K * (Family.familyIndexMassRat indices : ℝ) *
-        paperAppendageFloorScale P X)
+        paperIncrementFloorScale P X)
   · exact familyLargePrimeDelta_nonneg indices
-  · have hmediumScale : 0 ≤ paperAppendageFloorScale P X :=
-      paperAppendageFloorScale_nonneg P hXexp
+  · have hmediumScale : 0 ≤ paperIncrementFloorScale P X :=
+      paperIncrementFloorScale_nonneg P hXexp
     have hmassQ : 0 ≤ Family.familyIndexMassRat indices := by
       unfold Family.familyIndexMassRat
       apply Finset.sum_nonneg
@@ -5976,7 +5976,7 @@ noncomputable def familyCompatibleMediumPairMass
         ¬ Nat.Coprime event.dPlus other.dPlus),
       (Family.familySubsetLcmRecipRat {event, other} : ℝ)
 
-/-- Pull the modular ordered dependency sum back to the actual saturated-event
+/-- Pull the modular ordered dependency sum back to the actual certificate-event
 carrier. -/
 theorem modularDependencyMass_familyModularEvents
     (indices : Finset Family.FamilyIndex) :
@@ -6081,7 +6081,7 @@ theorem familySubsetLcmRecipRat_singleton
   unfold Family.familySubsetLcmRecipRat Family.familyEventWeightRat
   rw [familySingletonCongruenceLcm event]
 
-/-- Exact two-event reciprocal-LCM factorization through the appendage gcd. -/
+/-- Exact two-event reciprocal-LCM factorization through the increment gcd. -/
 theorem familyPairLcmRecipRat_eq_weights_mul_gcd
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset Family.FamilyIndex)
     (hmem : ∀ i ∈ indices, Family.FamilyStaticMem P X Pz b i)
@@ -6091,7 +6091,7 @@ theorem familyPairLcmRecipRat_eq_weights_mul_gcd
     Family.familySubsetLcmRecipRat {event, other} =
       Family.familyEventWeightRat event *
         Family.familyEventWeightRat other *
-          (Family.familyAppendageG {event} other : ℚ) := by
+          (Family.familyIncrementG {event} other : ℚ) := by
   have hratio := Family.familyExtensionRatio_eq_weight_mul_gcd
     P X Pz b indices hmem {event}
       (by
@@ -6176,7 +6176,7 @@ theorem weighted_gcd_gt_one_le_two_totient_tail
   exact hfull_le_two_tailV.trans (mul_le_mul_of_nonneg_left htailMono (by norm_num))
 
 /-- For one fixed actual event, the compatible dependent pair mass is bounded
-by twice its event weight times the complete singleton appendage tail. -/
+by twice its event weight times the complete singleton increment tail. -/
 theorem familyCompatibleMediumPairMass_fixed_le_two_weight_mul_tail
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset Family.FamilyIndex)
     (hX : 1 < X)
@@ -6188,7 +6188,7 @@ theorem familyCompatibleMediumPairMass_fixed_le_two_weight_mul_tail
         ¬ Nat.Coprime event.dPlus other.dPlus),
       Family.familySubsetLcmRecipRat {event, other}) ≤
       2 * Family.familyEventWeightRat event *
-        Family.familyAppendageTailRat indices {event} ⌊X⌋₊ := by
+        Family.familyIncrementTailRat indices {event} ⌊X⌋₊ := by
   classical
   let U := (Family.familyEvents indices).filter (fun other =>
     other ≠ event ∧ EscLeanChecks.satEventCompatible event other ∧
@@ -6214,14 +6214,14 @@ theorem familyCompatibleMediumPairMass_fixed_le_two_weight_mul_tail
       · exact hcompat
       · exact (hxy rfl).elim
   have hgpos : ∀ other ∈ U,
-      0 < Family.familyAppendageG {event} other := by
+      0 < Family.familyIncrementG {event} other := by
     intro other hother
     apply Nat.gcd_pos_of_pos_right
     rcases Finset.mem_filter.mp hother with ⟨hotherFamily, _⟩
     exact Family.familyEvents_residualModulus_pos
       P X Pz b indices hmem other hotherFamily
   have hggt : ∀ other ∈ U,
-      1 < Family.familyAppendageG {event} other := by
+      1 < Family.familyIncrementG {event} other := by
     intro other hother
     rcases Finset.mem_filter.mp hother with
       ⟨hotherFamily, hne, hcompat, hmedium⟩
@@ -6234,17 +6234,17 @@ theorem familyCompatibleMediumPairMass_fixed_le_two_weight_mul_tail
         (dvd_mul_right other.dPlus other.p)
         (Nat.Coprime.coprime_dvd_left
           (dvd_mul_right event.dPlus event.p) hcop)
-    have hgNe : Family.familyAppendageG {event} other ≠ 1 := by
+    have hgNe : Family.familyIncrementG {event} other ≠ 1 := by
       intro hg
       apply hnotCoprimeQ
       rw [Nat.coprime_iff_gcd_eq_one]
-      unfold Family.familyAppendageG at hg
+      unfold Family.familyIncrementG at hg
       rw [familySingletonCongruenceLcm event, Nat.gcd_comm] at hg
       simpa [Nat.gcd_comm] using hg
     have hgPositive := hgpos other hother
     omega
   have hgle : ∀ other ∈ U,
-      Family.familyAppendageG {event} other ≤ ⌊X⌋₊ := by
+      Family.familyIncrementG {event} other ≤ ⌊X⌋₊ := by
     intro other hother
     have hdiv := Family.familyCompatibleExtension_gcd_dvd_dPlus
       P X Pz b indices hX hmem {event} hsub other (hUext hother)
@@ -6254,22 +6254,22 @@ theorem familyCompatibleMediumPairMass_fixed_le_two_weight_mul_tail
       ((hmem i hi).dplus_le_floor_X hX)
   have hB : 1 ≤ ⌊X⌋₊ := Nat.floor_pos.mpr hX.le
   have hweighted := weighted_gcd_gt_one_le_two_totient_tail
-    U Family.familyEventWeightRat (Family.familyAppendageG {event}) ⌊X⌋₊ hB
+    U Family.familyEventWeightRat (Family.familyIncrementG {event}) ⌊X⌋₊ hB
       (fun other hother => Family.familyEventWeightRat_nonneg other)
       hgpos hgle
   have hfilter : U.filter (fun other =>
-      1 < Family.familyAppendageG {event} other) = U := by
+      1 < Family.familyIncrementG {event} other) = U := by
     apply Finset.filter_eq_self.mpr
     exact hggt
   rw [hfilter] at hweighted
   have htailMono :
       (∑ D ∈ Finset.Icc 2 ⌊X⌋₊, (Nat.totient D : ℚ) *
         ∑ other ∈ U.filter (fun other =>
-          D ∣ Family.familyAppendageG {event} other),
+          D ∣ Family.familyIncrementG {event} other),
           Family.familyEventWeightRat other) ≤
-        Family.familyAppendageTailRat indices {event} ⌊X⌋₊ := by
-    unfold Family.familyAppendageTailRat Family.familyAppendageDivisorMassRat
-      Family.familyAppendageDivisorEvents
+        Family.familyIncrementTailRat indices {event} ⌊X⌋₊ := by
+    unfold Family.familyIncrementTailRat Family.familyIncrementDivisorMassRat
+      Family.familyIncrementDivisorEvents
     apply Finset.sum_le_sum
     intro D hD
     apply mul_le_mul_of_nonneg_left
@@ -6284,7 +6284,7 @@ theorem familyCompatibleMediumPairMass_fixed_le_two_weight_mul_tail
       (∑ other ∈ U, Family.familySubsetLcmRecipRat {event, other}) =
         Family.familyEventWeightRat event *
           ∑ other ∈ U, Family.familyEventWeightRat other *
-            (Family.familyAppendageG {event} other : ℚ) := by
+            (Family.familyIncrementG {event} other : ℚ) := by
     rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro other hother
@@ -6298,24 +6298,24 @@ theorem familyCompatibleMediumPairMass_fixed_le_two_weight_mul_tail
   calc
     Family.familyEventWeightRat event *
         (∑ other ∈ U, Family.familyEventWeightRat other *
-          (Family.familyAppendageG {event} other : ℚ)) ≤
+          (Family.familyIncrementG {event} other : ℚ)) ≤
       Family.familyEventWeightRat event *
         (2 * ∑ D ∈ Finset.Icc 2 ⌊X⌋₊, (Nat.totient D : ℚ) *
           ∑ other ∈ U.filter (fun other =>
-            D ∣ Family.familyAppendageG {event} other),
+            D ∣ Family.familyIncrementG {event} other),
             Family.familyEventWeightRat other) :=
       mul_le_mul_of_nonneg_left hweighted hweightNonneg
     _ ≤ Family.familyEventWeightRat event *
-        (2 * Family.familyAppendageTailRat indices {event} ⌊X⌋₊) :=
+        (2 * Family.familyIncrementTailRat indices {event} ⌊X⌋₊) :=
       mul_le_mul_of_nonneg_left
         (mul_le_mul_of_nonneg_left htailMono (by norm_num)) hweightNonneg
     _ = 2 * Family.familyEventWeightRat event *
-        Family.familyAppendageTailRat indices {event} ⌊X⌋₊ := by ring
+        Family.familyIncrementTailRat indices {event} ⌊X⌋₊ := by ring
 
-/-- Direct tensor bound for the complete appendage tail.  This isolates the
+/-- Direct tensor bound for the complete increment tail.  This isolates the
 `D>=2` part itself, rather than bounding it indirectly through the full
 one-step increment. -/
-theorem familyAppendageTailRat_le_indexMass_mul_classTail_of_residueTensor
+theorem familyIncrementTailRat_le_indexMass_mul_classTail_of_residueTensor
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset Family.FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, Family.FamilyStaticMem P X Pz b i)
@@ -6323,66 +6323,66 @@ theorem familyAppendageTailRat_le_indexMass_mul_classTail_of_residueTensor
     (hsub : old ⊆ Family.familyEvents indices)
     (K : ℚ) (hK : 0 ≤ K)
     (htensor : ∀ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      ∀ c ∈ Family.familyAppendageResidueClasses indices old D,
+      ∀ c ∈ Family.familyIncrementResidueClasses indices old D,
         Family.familyResidueMassRat indices D c ≤
           K * Family.familyIndexMassRat indices / (D : ℚ) ^ 2) :
-    Family.familyAppendageTailRat indices old ⌊X⌋₊ ≤
+    Family.familyIncrementTailRat indices old ⌊X⌋₊ ≤
       Family.familyIndexMassRat indices *
         ∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-          (K * Family.familyAppendageClassProductRat old D) / (D : ℚ) := by
+          (K * Family.familyIncrementClassProductRat old D) / (D : ℚ) := by
   have hmassNonneg : 0 ≤ Family.familyIndexMassRat indices := by
     unfold Family.familyIndexMassRat
     apply Finset.sum_nonneg
     intro i hi
     unfold Family.FamilyIndex.wRat
     positivity
-  apply Family.familyAppendageTailRat_le_mass_mul_classTail
+  apply Family.familyIncrementTailRat_le_mass_mul_classTail
     indices old ⌊X⌋₊ (Family.familyIndexMassRat indices)
-      (fun D => K * Family.familyAppendageClassProductRat old D)
+      (fun D => K * Family.familyIncrementClassProductRat old D)
       hmassNonneg
   · intro D hD
     apply mul_nonneg hK
-    unfold Family.familyAppendageClassProductRat
+    unfold Family.familyIncrementClassProductRat
     split_ifs <;> positivity
   · intro D hD
     have hdivisor :=
-      Family.familyAppendageDivisorMassRat_le_card_mul_of_residueMass_le
+      Family.familyIncrementDivisorMassRat_le_card_mul_of_residueMass_le
         indices old D
           (K * Family.familyIndexMassRat indices / (D : ℚ) ^ 2)
           (fun c hc =>
-            (Family.familyAppendageResidueMassRat_le_familyResidueMassRat
+            (Family.familyIncrementResidueMassRat_le_familyResidueMassRat
               P X Pz b indices hX hmem old hsub D c).trans
                 (htensor D hD c hc))
-    have hclass := Family.familyAppendageResidueClasses_card_le_classProductRat
+    have hclass := Family.familyIncrementResidueClasses_card_le_classProductRat
       P X Pz b indices hX hmem old hsub D
     have hMnonneg : 0 ≤
         K * Family.familyIndexMassRat indices / (D : ℚ) ^ 2 := by
       positivity
     calc
-      Family.familyAppendageDivisorMassRat indices old D ≤
-          ((Family.familyAppendageResidueClasses indices old D).card : ℚ) *
+      Family.familyIncrementDivisorMassRat indices old D ≤
+          ((Family.familyIncrementResidueClasses indices old D).card : ℚ) *
             (K * Family.familyIndexMassRat indices / (D : ℚ) ^ 2) :=
         hdivisor
-      _ ≤ Family.familyAppendageClassProductRat old D *
+      _ ≤ Family.familyIncrementClassProductRat old D *
             (K * Family.familyIndexMassRat indices / (D : ℚ) ^ 2) :=
         mul_le_mul_of_nonneg_right hclass hMnonneg
       _ = Family.familyIndexMassRat indices *
-          (K * Family.familyAppendageClassProductRat old D) / (D : ℚ) ^ 2 := by
+          (K * Family.familyIncrementClassProductRat old D) / (D : ℚ) ^ 2 := by
         ring
 
-/-- Concrete singleton appendage-tail bound for the actual family.  The only
+/-- Concrete singleton increment-tail bound for the actual family.  The only
 remaining scalar is the explicit finite Euler loss at rank two. -/
-theorem actualPaperFamily_singletonAppendageTail_le_of_scalar
+theorem actualPaperFamily_singletonIncrementTail_le_of_scalar
     (P : Params) [Fact (PhiProgressionGammaQuotientUpperYU P)] :
     ∃ K : ℚ, ∃ X₀ : ℝ, 0 < K ∧ ∀ X : ℝ,
       X₀ ≤ X → Real.exp 2 ≤ X →
       ∀ b : ℕ, Nat.Coprime b (Inputs.roughModulus X) →
       ∀ ε : ℚ, 0 ≤ ε →
       (K : ℝ) *
-        (Real.exp (2 * paperAppendageFloorScale P X) - 1) ≤ (ε : ℝ) →
+        (Real.exp (2 * paperIncrementFloorScale P X) - 1) ≤ (ε : ℝ) →
       ∀ event ∈ Family.familyEvents
         (Family.familyIndexFinset P X (Inputs.roughModulus X) b),
-        Family.familyAppendageTailRat
+        Family.familyIncrementTailRat
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b)
             {event} ⌊X⌋₊ ≤
           Family.familyIndexMassRat
@@ -6406,11 +6406,11 @@ theorem actualPaperFamily_singletonAppendageTail_le_of_scalar
     have hxeq : x = event := Finset.mem_singleton.mp hx
     subst x
     exact hevent
-  have htail := familyAppendageTailRat_le_indexMass_mul_classTail_of_residueTensor
+  have htail := familyIncrementTailRat_le_indexMass_mul_classTail_of_residueTensor
     P X (Inputs.roughModulus X) b indices hXgt hmem {event} hsub K hK.le
       (by
         intro D hD c hc
-        have hdata := actualPaperFamily_appendageResidueClass_modulus_data
+        have hdata := actualPaperFamily_incrementResidueClass_modulus_data
           P X b D c hXgt {event} hsub hc
         exact htensor X hX hXgt b hbcop D c hdata.1 hdata.2.1
           hdata.2.2.1 hdata.2.2.2.1 hdata.2.2.2.2)
@@ -6425,7 +6425,7 @@ theorem actualPaperFamily_singletonAppendageTail_le_of_scalar
       subst x
       subst y
       exact (hxy rfl).elim
-  have hclassTail := actualPaperFamily_appendageTailRat_le_of_rank_scale
+  have hclassTail := actualPaperFamily_incrementTailRat_le_of_rank_scale
     P X b 2 2 K ε hXexp hK.le (by norm_num) (by norm_num)
       {event} (by simpa using hold) (by simpa using hscalar)
   exact htail.trans (mul_le_mul_of_nonneg_left hclassTail (by
@@ -6445,14 +6445,14 @@ theorem actualPaperFamily_modularDependencyMass_le_of_scalar
       ∀ b : ℕ, Nat.Coprime b (Inputs.roughModulus X) →
       ∀ ε : ℚ, 0 ≤ ε →
       (K : ℝ) *
-        (Real.exp (2 * paperAppendageFloorScale P X) - 1) ≤ (ε : ℝ) →
+        (Real.exp (2 * paperIncrementFloorScale P X) - 1) ≤ (ε : ℝ) →
       Inputs.modularDependencyMass
           (familyModularEvents
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b)) ≤
         2 * (Family.familyIndexMassRat
           (Family.familyIndexFinset P X (Inputs.roughModulus X) b) : ℝ) ^ 2 *
             (ε : ℝ) := by
-  rcases actualPaperFamily_singletonAppendageTail_le_of_scalar P with
+  rcases actualPaperFamily_singletonIncrementTail_le_of_scalar P with
     ⟨K, X₀, hK, hsingleton⟩
   refine ⟨K, X₀, hK, ?_⟩
   intro X hX hXexp b hbcop ε hε hscalar
@@ -6490,7 +6490,7 @@ theorem actualPaperFamily_modularDependencyMass_le_of_scalar
             2 * Family.familyEventWeightRat event * μq * ε := by
         calc
           _ ≤ 2 * Family.familyEventWeightRat event *
-              Family.familyAppendageTailRat indices {event} ⌊X⌋₊ := hfixedQ
+              Family.familyIncrementTailRat indices {event} ⌊X⌋₊ := hfixedQ
           _ ≤ 2 * Family.familyEventWeightRat event * (μq * ε) := by
             exact mul_le_mul_of_nonneg_left htailQ
               (mul_nonneg (by norm_num) (Family.familyEventWeightRat_nonneg event))
@@ -6517,19 +6517,19 @@ theorem actualPaperFamily_modularDependencyMass_le_of_scalar
 
 /-- Direct real-valued singleton tail estimate, with no rational majorant
 parameter. -/
-theorem actualPaperFamily_singletonAppendageTail_real_le
+theorem actualPaperFamily_singletonIncrementTail_real_le
     (P : Params) [Fact (PhiProgressionGammaQuotientUpperYU P)] :
     ∃ K : ℝ, ∃ X₀ : ℝ, 0 < K ∧ ∀ X : ℝ,
       X₀ ≤ X → Real.exp 2 ≤ X →
       ∀ b : ℕ, Nat.Coprime b (Inputs.roughModulus X) →
       ∀ event ∈ Family.familyEvents
         (Family.familyIndexFinset P X (Inputs.roughModulus X) b),
-        (Family.familyAppendageTailRat
+        (Family.familyIncrementTailRat
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b)
             {event} ⌊X⌋₊ : ℝ) ≤
           (Family.familyIndexMassRat
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b) : ℝ) *
-            K * (Real.exp (paperAppendageFloorScale P X) - 1) := by
+            K * (Real.exp (paperIncrementFloorScale P X) - 1) := by
   rcases actualPaperFamily_residueMassRat_le_indexMassRat_div_square P with
     ⟨Kq, X₀, hKq, htensor⟩
   refine ⟨(Kq : ℝ), X₀, by exact_mod_cast hKq, ?_⟩
@@ -6550,33 +6550,33 @@ theorem actualPaperFamily_singletonAppendageTail_real_le
     have hxeq : x = event := Finset.mem_singleton.mp hx
     subst x
     exact hevent
-  have htailQ := familyAppendageTailRat_le_indexMass_mul_classTail_of_residueTensor
+  have htailQ := familyIncrementTailRat_le_indexMass_mul_classTail_of_residueTensor
     P X (Inputs.roughModulus X) b indices hXgt hmem {event} hsub Kq hKq.le
       (by
         intro D hD c hc
-        have hdata := actualPaperFamily_appendageResidueClass_modulus_data
+        have hdata := actualPaperFamily_incrementResidueClass_modulus_data
           P X b D c hXgt {event} hsub hc
         exact htensor X hX hXgt b hbcop D c hdata.1 hdata.2.1
           hdata.2.2.1 hdata.2.2.2.1 hdata.2.2.2.2)
-  have htailR : (Family.familyAppendageTailRat indices {event} ⌊X⌋₊ : ℝ) ≤
+  have htailR : (Family.familyIncrementTailRat indices {event} ⌊X⌋₊ : ℝ) ≤
       (Family.familyIndexMassRat indices : ℝ) *
         ∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-          (Kq : ℝ) * (Family.familyAppendageClassProductRat {event} D : ℝ) /
+          (Kq : ℝ) * (Family.familyIncrementClassProductRat {event} D : ℝ) /
             (D : ℝ) := by
     exact_mod_cast htailQ
-  have hclass := actualPaperFamily_appendageTail_real_le P X b hXexp1
+  have hclass := actualPaperFamily_incrementTail_real_le P X b hXexp1
     (Kq : ℝ) (by exact_mod_cast hKq.le) {event} hsub
   calc
-    (Family.familyAppendageTailRat indices {event} ⌊X⌋₊ : ℝ) ≤
+    (Family.familyIncrementTailRat indices {event} ⌊X⌋₊ : ℝ) ≤
         (Family.familyIndexMassRat indices : ℝ) *
           ∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-            (Kq : ℝ) * (Family.familyAppendageClassProductRat {event} D : ℝ) /
+            (Kq : ℝ) * (Family.familyIncrementClassProductRat {event} D : ℝ) /
               (D : ℝ) := htailR
     _ ≤ (Family.familyIndexMassRat indices : ℝ) *
         ((Kq : ℝ) *
-          (Real.exp (paperAppendageFloorScale P X) - 1)) := by
+          (Real.exp (paperIncrementFloorScale P X) - 1)) := by
       apply mul_le_mul_of_nonneg_left
-      · simpa [paperAppendageFloorScale] using hclass
+      · simpa [paperIncrementFloorScale] using hclass
       · exact_mod_cast (show 0 ≤ Family.familyIndexMassRat indices by
           unfold Family.familyIndexMassRat
           apply Finset.sum_nonneg
@@ -6584,7 +6584,7 @@ theorem actualPaperFamily_singletonAppendageTail_real_le
           unfold Family.FamilyIndex.wRat
           positivity)
     _ = (Family.familyIndexMassRat indices : ℝ) * (Kq : ℝ) *
-        (Real.exp (paperAppendageFloorScale P X) - 1) := by ring
+        (Real.exp (paperIncrementFloorScale P X) - 1) := by ring
 
 /-- Direct paper-shaped bound for the actual ordered Suen pair parameter. -/
 theorem actualPaperFamily_modularDependencyMass_real_le
@@ -6597,8 +6597,8 @@ theorem actualPaperFamily_modularDependencyMass_real_le
             (Family.familyIndexFinset P X (Inputs.roughModulus X) b)) ≤
         2 * (Family.familyIndexMassRat
           (Family.familyIndexFinset P X (Inputs.roughModulus X) b) : ℝ) ^ 2 *
-          K * (Real.exp (paperAppendageFloorScale P X) - 1) := by
-  rcases actualPaperFamily_singletonAppendageTail_real_le P with
+          K * (Real.exp (paperIncrementFloorScale P X) - 1) := by
+  rcases actualPaperFamily_singletonIncrementTail_real_le P with
     ⟨K, X₀, hK, hsingleton⟩
   refine ⟨K, X₀, hK, ?_⟩
   intro X hX hXexp b hbcop
@@ -6623,7 +6623,7 @@ theorem actualPaperFamily_modularDependencyMass_real_le
         (Family.familySubsetLcmRecipRat {event, other} : ℝ)) ≤
       ∑ event ∈ Family.familyEvents indices,
         2 * (Family.familyEventWeightRat event : ℝ) * (μq : ℝ) * K *
-          (Real.exp (paperAppendageFloorScale P X) - 1) := by
+          (Real.exp (paperIncrementFloorScale P X) - 1) := by
       apply Finset.sum_le_sum
       intro event hevent
       have hfixedQ := familyCompatibleMediumPairMass_fixed_le_two_weight_mul_tail
@@ -6634,22 +6634,22 @@ theorem actualPaperFamily_modularDependencyMass_real_le
               ¬ Nat.Coprime event.dPlus other.dPlus),
             (Family.familySubsetLcmRecipRat {event, other} : ℝ)) ≤
           2 * (Family.familyEventWeightRat event : ℝ) *
-            (Family.familyAppendageTailRat indices {event} ⌊X⌋₊ : ℝ) := by
+            (Family.familyIncrementTailRat indices {event} ⌊X⌋₊ : ℝ) := by
         exact_mod_cast hfixedQ
       calc
         _ ≤ 2 * (Family.familyEventWeightRat event : ℝ) *
-            (Family.familyAppendageTailRat indices {event} ⌊X⌋₊ : ℝ) := hfixedR
+            (Family.familyIncrementTailRat indices {event} ⌊X⌋₊ : ℝ) := hfixedR
         _ ≤ 2 * (Family.familyEventWeightRat event : ℝ) *
             ((μq : ℝ) * K *
-              (Real.exp (paperAppendageFloorScale P X) - 1)) := by
+              (Real.exp (paperIncrementFloorScale P X) - 1)) := by
           exact mul_le_mul_of_nonneg_left
             (hsingleton X hX hXexp b hbcop event hevent)
             (mul_nonneg (by norm_num) (by
               exact_mod_cast Family.familyEventWeightRat_nonneg event))
         _ = 2 * (Family.familyEventWeightRat event : ℝ) * (μq : ℝ) * K *
-            (Real.exp (paperAppendageFloorScale P X) - 1) := by ring
+            (Real.exp (paperIncrementFloorScale P X) - 1) := by ring
     _ = 2 * (μq : ℝ) ^ 2 * K *
-        (Real.exp (paperAppendageFloorScale P X) - 1) := by
+        (Real.exp (paperIncrementFloorScale P X) - 1) := by
       have hsum := Family.actualPaperFamily_eventWeights_sum_eq_indexMass
         P X (Inputs.roughModulus X) b hXgt
       rw [Family.familyEventWeightsRat_sum_eq] at hsum
@@ -6659,9 +6659,9 @@ theorem actualPaperFamily_modularDependencyMass_real_le
       calc
         (∑ event ∈ Family.familyEvents indices,
           2 * (Family.familyEventWeightRat event : ℝ) * (μq : ℝ) * K *
-            (Real.exp (paperAppendageFloorScale P X) - 1)) =
+            (Real.exp (paperIncrementFloorScale P X) - 1)) =
           (2 * (μq : ℝ) * K *
-            (Real.exp (paperAppendageFloorScale P X) - 1)) *
+            (Real.exp (paperIncrementFloorScale P X) - 1)) *
               ∑ event ∈ Family.familyEvents indices,
                 (Family.familyEventWeightRat event : ℝ) := by
             rw [Finset.mul_sum]
@@ -6679,26 +6679,26 @@ theorem singletonEulerMassError_tendsto_zero
       mass X ≤ C * (Real.log X) ^ 3) :
     Filter.Tendsto
       (fun X => mass X * K *
-        (Real.exp (paperAppendageFloorScale P X) - 1))
+        (Real.exp (paperIncrementFloorScale P X) - 1))
       Filter.atTop (nhds 0) := by
   have hmassScale : Filter.Tendsto
-      (fun X => mass X * paperAppendageFloorScale P X)
+      (fun X => mass X * paperIncrementFloorScale P X)
       Filter.atTop (nhds 0) := by
     refine squeeze_zero' ?_ ?_
       (by simpa using
-        (paperAppendageFloorScale_logCube_tendsto_zero P).const_mul C)
+        (paperIncrementFloorScale_logCube_tendsto_zero P).const_mul C)
     · filter_upwards [hmass_nonneg,
         Filter.eventually_ge_atTop (Real.exp 2)] with X hm hX
-      exact mul_nonneg hm (paperAppendageFloorScale_nonneg P hX)
+      exact mul_nonneg hm (paperIncrementFloorScale_nonneg P hX)
     · filter_upwards [hmass_upper,
         Filter.eventually_ge_atTop (Real.exp 2)] with X hm hX
-      have hs := paperAppendageFloorScale_nonneg P hX
+      have hs := paperIncrementFloorScale_nonneg P hX
       calc
-        mass X * paperAppendageFloorScale P X ≤
-            (C * (Real.log X) ^ 3) * paperAppendageFloorScale P X :=
+        mass X * paperIncrementFloorScale P X ≤
+            (C * (Real.log X) ^ 3) * paperIncrementFloorScale P X :=
           mul_le_mul_of_nonneg_right hm hs
-        _ = C * ((Real.log X) ^ 3 * paperAppendageFloorScale P X) := by ring
-  have hscale0 : Filter.Tendsto (paperAppendageFloorScale P)
+        _ = C * ((Real.log X) ^ 3 * paperIncrementFloorScale P X) := by ring
+  have hscale0 : Filter.Tendsto (paperIncrementFloorScale P)
       Filter.atTop (nhds 0) := by
     have hlogCubeLower : ∀ᶠ X in Filter.atTop,
         1 ≤ (Real.log X) ^ 3 := by
@@ -6708,32 +6708,32 @@ theorem singletonEulerMassError_tendsto_zero
         exact Real.log_le_log (Real.exp_pos 1) hX
       nlinarith [pow_le_pow_left₀ (by norm_num : (0 : ℝ) ≤ 1) hlog 3]
     refine squeeze_zero' ?_ ?_
-      (paperAppendageFloorScale_logCube_tendsto_zero P)
+      (paperIncrementFloorScale_logCube_tendsto_zero P)
     · filter_upwards [Filter.eventually_ge_atTop (Real.exp 2)] with X hX
-      exact paperAppendageFloorScale_nonneg P hX
+      exact paperIncrementFloorScale_nonneg P hX
     · filter_upwards [hlogCubeLower,
         Filter.eventually_ge_atTop (Real.exp 2)] with X hlog hX
-      have hs := paperAppendageFloorScale_nonneg P hX
+      have hs := paperIncrementFloorScale_nonneg P hX
       nlinarith
   have hbound : ∀ᶠ X in Filter.atTop,
-      mass X * K * (Real.exp (paperAppendageFloorScale P X) - 1) ≤
-        2 * K * (mass X * paperAppendageFloorScale P X) := by
+      mass X * K * (Real.exp (paperIncrementFloorScale P X) - 1) ≤
+        2 * K * (mass X * paperIncrementFloorScale P X) := by
     have hscaleSmall : ∀ᶠ X in Filter.atTop,
-        paperAppendageFloorScale P X < (1 : ℝ) / 2 :=
+        paperIncrementFloorScale P X < (1 : ℝ) / 2 :=
       Filter.Tendsto.eventually_lt_const
         (by norm_num : (0 : ℝ) < 1 / 2) hscale0
     filter_upwards [hmass_nonneg, hscaleSmall,
         Filter.eventually_ge_atTop (Real.exp 2)] with X hm hsSmall hX
-    have hsNonneg := paperAppendageFloorScale_nonneg P hX
+    have hsNonneg := paperIncrementFloorScale_nonneg P hX
     have hexp := Real.exp_bound_div_one_sub_of_interval hsNonneg
       (lt_trans hsSmall (by norm_num : (1 : ℝ) / 2 < 1))
-    have hden : 0 < 1 - paperAppendageFloorScale P X := by linarith
-    have hexpLoss : Real.exp (paperAppendageFloorScale P X) - 1 ≤
-        2 * paperAppendageFloorScale P X := by
+    have hden : 0 < 1 - paperIncrementFloorScale P X := by linarith
+    have hexpLoss : Real.exp (paperIncrementFloorScale P X) - 1 ≤
+        2 * paperIncrementFloorScale P X := by
       calc
-        Real.exp (paperAppendageFloorScale P X) - 1 ≤
-            1 / (1 - paperAppendageFloorScale P X) - 1 := by linarith
-        _ ≤ 2 * paperAppendageFloorScale P X := by
+        Real.exp (paperIncrementFloorScale P X) - 1 ≤
+            1 / (1 - paperIncrementFloorScale P X) - 1 := by linarith
+        _ ≤ 2 * paperIncrementFloorScale P X := by
           rw [div_sub_one hden.ne']
           rw [div_le_iff₀ hden]
           nlinarith
@@ -6743,7 +6743,7 @@ theorem singletonEulerMassError_tendsto_zero
       Filter.eventually_ge_atTop (Real.exp 2)] with X hm hX
     exact mul_nonneg (mul_nonneg hm hK)
       (sub_nonneg.mpr (Real.one_le_exp
-        (paperAppendageFloorScale_nonneg P hX)))
+        (paperIncrementFloorScale_nonneg P hX)))
   · simpa [mul_assoc] using hmassScale.const_mul (2 * K)
 
 /-- A pair bound of shape `Delta <= 2*mu^2*K*(exp(scale)-1)` implies
@@ -6757,7 +6757,7 @@ theorem dependencyRatio_tendsto_zero_of_singletonEuler_bound
     (hdependency_nonneg : ∀ᶠ X in Filter.atTop, 0 ≤ dependency X)
     (hdependency : ∀ᶠ X in Filter.atTop,
       dependency X ≤ 2 * (mass X) ^ 2 * K *
-        (Real.exp (paperAppendageFloorScale P X) - 1)) :
+        (Real.exp (paperIncrementFloorScale P X) - 1)) :
     Filter.Tendsto (fun X => dependency X / mass X)
       Filter.atTop (nhds 0) := by
   have herror := singletonEulerMassError_tendsto_zero
@@ -6770,9 +6770,9 @@ theorem dependencyRatio_tendsto_zero_of_singletonEuler_bound
     rw [div_le_iff₀ hmass]
     calc
       dependency X ≤ 2 * mass X ^ 2 * K *
-          (Real.exp (paperAppendageFloorScale P X) - 1) := hdep
+          (Real.exp (paperIncrementFloorScale P X) - 1) := hdep
       _ = (mass X * (2 * K) *
-          (Real.exp (paperAppendageFloorScale P X) - 1)) * mass X := by ring
+          (Real.exp (paperIncrementFloorScale P X) - 1)) * mass X := by ring
   · simpa [mul_assoc] using herror
 
 theorem modularPairMass_nonneg
@@ -7167,32 +7167,32 @@ theorem actualPaperFamily_largePrimeDelta_tendsto_zero
 
 /-- A nonnegative cubic-log mass times the floor-scale dependency loss
 vanishes. -/
-theorem mass_mul_paperAppendageFloorScale_tendsto_zero
+theorem mass_mul_paperIncrementFloorScale_tendsto_zero
     (P : Params) (mass : ℝ → ℝ) (K C : ℝ)
     (hK : 0 ≤ K) (hC : 0 ≤ C)
     (hmass_nonneg : ∀ᶠ X in Filter.atTop, 0 ≤ mass X)
     (hmass_upper : ∀ᶠ X in Filter.atTop,
       mass X ≤ C * (Real.log X) ^ 3) :
     Filter.Tendsto
-      (fun X => K * mass X * paperAppendageFloorScale P X)
+      (fun X => K * mass X * paperIncrementFloorScale P X)
       Filter.atTop (nhds 0) := by
   apply squeeze_zero'
   · filter_upwards [hmass_nonneg,
       Filter.eventually_ge_atTop (Real.exp 2)] with X hmass hX
     exact mul_nonneg (mul_nonneg hK hmass)
-      (paperAppendageFloorScale_nonneg P hX)
+      (paperIncrementFloorScale_nonneg P hX)
   · filter_upwards [hmass_upper,
       Filter.eventually_ge_atTop (Real.exp 2)] with X hmass hX
-    have hscale := paperAppendageFloorScale_nonneg P hX
+    have hscale := paperIncrementFloorScale_nonneg P hX
     calc
-      K * mass X * paperAppendageFloorScale P X ≤
+      K * mass X * paperIncrementFloorScale P X ≤
           K * (C * (Real.log X) ^ 3) *
-            paperAppendageFloorScale P X := by
+            paperIncrementFloorScale P X := by
         gcongr
       _ = (K * C) *
-          ((Real.log X) ^ 3 * paperAppendageFloorScale P X) := by ring
+          ((Real.log X) ^ 3 * paperIncrementFloorScale P X) := by ring
   · simpa using
-      (paperAppendageFloorScale_logCube_tendsto_zero P).const_mul (K * C)
+      (paperIncrementFloorScale_logCube_tendsto_zero P).const_mul (K * C)
 
 /-- The full maximal dependency-neighborhood parameter of the actual modular
 event family tends to zero.  Both dependency mechanisms are now discharged. -/
@@ -7235,9 +7235,9 @@ theorem actualPaperFamily_modularDelta_tendsto_zero
     simpa [mass, logCube] using
       hmassUpper X hXmass hXgt (base X) hcop
   have hmedium : Filter.Tendsto
-      (fun X => K * mass X * paperAppendageFloorScale P X)
+      (fun X => K * mass X * paperIncrementFloorScale P X)
       Filter.atTop (nhds 0) :=
-    mass_mul_paperAppendageFloorScale_tendsto_zero
+    mass_mul_paperIncrementFloorScale_tendsto_zero
       P mass K C hK.le hC.le hmassNonneg hmassBound
   have hlarge := actualPaperFamily_largePrimeDelta_tendsto_zero P base
   apply squeeze_zero'
@@ -8431,7 +8431,7 @@ theorem twentyFour_mul_le_two_canonicalBrunRank
   nlinarith
 
 /-- Pointwise top-rank discharge for the actual family.  Once the bounded-rank
-appendage error is at most one, the coefficient at the canonical even rank is
+increment error is at most one, the coefficient at the canonical even rank is
 at most `exp(-3 μ)`. -/
 theorem actualPaperFamily_topRank_le_exp_neg_three_of_scalar
     (P : Params) [Fact (PhiProgressionGammaQuotientUpperYU P)] :
@@ -8443,7 +8443,7 @@ theorem actualPaperFamily_topRank_le_exp_neg_three_of_scalar
       let R := canonicalBrunRank μ
       (K : ℝ) *
           (Real.exp (((2 * R : ℕ) : ℝ) *
-            paperAppendageFloorScale P X) - 1) ≤ 1 →
+            paperIncrementFloorScale P X) - 1) ≤ 1 →
       (Family.familyCompatibleLcmMassRat indices (2 * R) : ℝ) ≤
         Real.exp (-3 * μ) := by
   rcases actualPaperFamily_compatibleLcmMassRat_le_up_to_of_rank_scale P with
@@ -8501,12 +8501,12 @@ theorem actualPaperFamily_topRank_le_exp_neg_three
     ⟨c, Xc, hc, hlower⟩
   rcases actualPaperFamily_indexMassRat_le_log_cube P with
     ⟨C, XC, hC, hupper⟩
-  have herr := paperAppendageCubicRankError_tendsto_zero
+  have herr := paperIncrementCubicRankError_tendsto_zero
     P (K : ℝ) (26 * C)
   have herr_one : ∀ᶠ X in Filter.atTop,
       (K : ℝ) *
         (Real.exp ((26 * C) *
-          ((Real.log X) ^ 3 * paperAppendageFloorScale P X)) - 1) ≤ 1 :=
+          ((Real.log X) ^ 3 * paperIncrementFloorScale P X)) - 1) ≤ 1 :=
     Filter.Tendsto.eventually_le_const (by norm_num : (0 : ℝ) < 1) herr
   rcases (Filter.eventually_atTop.1 herr_one) with ⟨XE, hXE⟩
   let Xone := Real.exp (max 1 (1 / c))
@@ -8566,7 +8566,7 @@ theorem actualPaperFamily_topRank_le_exp_neg_three
       _ = (26 * C) * (Real.log X) ^ 3 := by ring
   have hEnvelope := hXE X
     (le_trans (le_max_left _ _) (le_trans (le_max_right _ _) hX))
-  exact (paperAppendageRankError_le_cubicRankError P hXexp
+  exact (paperIncrementRankError_le_cubicRankError P hXexp
     (Rat.cast_nonneg.mpr hK.le) (mul_nonneg (by norm_num) hC.le) hR).trans
       hEnvelope
 
@@ -8582,7 +8582,7 @@ theorem actualPaperFamily_endpoint_le_of_scalar
       let R := canonicalBrunRank μ
       (K : ℝ) *
           (Real.exp (((2 * R : ℕ) : ℝ) *
-            paperAppendageFloorScale P X) - 1) ≤ 1 →
+            paperIncrementFloorScale P X) - 1) ≤ 1 →
       (∑ r ∈ Finset.range (2 * R + 1),
           (⌊X⌋₊ : ℝ) ^ r *
             (Family.familyCompatibleLcmMassRat indices r : ℝ)) ≤
@@ -8631,7 +8631,7 @@ theorem actualPaperFamily_endpoint_le_of_scalar
     (pow_le_pow_left₀ (by positivity) hfloor_le (2 * R))
     (Real.exp_pos _).le)
 
-/-- Any fixed nonnegative appendage constant satisfies the canonical
+/-- Any fixed nonnegative increment constant satisfies the canonical
 two-rank scalar condition uniformly over admissible base residues. -/
 theorem actualPaperFamily_canonicalScalar_eventually
     (P : Params) [Fact (PhiProgressionGammaQuotientUpperYU P)]
@@ -8642,15 +8642,15 @@ theorem actualPaperFamily_canonicalScalar_eventually
       let μ := (Family.familyIndexMassRat indices : ℝ)
       let R := canonicalBrunRank μ
       K * (Real.exp (((2 * R : ℕ) : ℝ) *
-        paperAppendageFloorScale P X) - 1) ≤ 1 := by
+        paperIncrementFloorScale P X) - 1) ≤ 1 := by
   rcases actualPaperFamily_indexMassRat_ge_log_cube P with
     ⟨c, Xc, hc, hlower⟩
   rcases actualPaperFamily_indexMassRat_le_log_cube P with
     ⟨C, XC, hC, hupper⟩
-  have herr := paperAppendageCubicRankError_tendsto_zero P K (26 * C)
+  have herr := paperIncrementCubicRankError_tendsto_zero P K (26 * C)
   have herr_one : ∀ᶠ X in Filter.atTop,
       K * (Real.exp ((26 * C) *
-        ((Real.log X) ^ 3 * paperAppendageFloorScale P X)) - 1) ≤ 1 :=
+        ((Real.log X) ^ 3 * paperIncrementFloorScale P X)) - 1) ≤ 1 :=
     Filter.Tendsto.eventually_le_const (by norm_num : (0 : ℝ) < 1) herr
   rcases Filter.eventually_atTop.1 herr_one with ⟨XE, hXE⟩
   let Xone := Real.exp (max 1 (1 / c))
@@ -8702,7 +8702,7 @@ theorem actualPaperFamily_canonicalScalar_eventually
       _ = (26 * C) * (Real.log X) ^ 3 := by ring
   have hEnvelope := hXE X
     (le_trans (le_max_left _ _) (le_trans (le_max_right _ _) hX))
-  exact (paperAppendageRankError_le_cubicRankError P hXexp hK
+  exact (paperIncrementRankError_le_cubicRankError P hXexp hK
     (mul_nonneg (by norm_num) hC.le) hR).trans hEnvelope
 
 /-- The manuscript's level condition absorbs the complete finite-interval
@@ -8749,7 +8749,7 @@ theorem actualPaperFamily_endpoint_le_of_level
   have hXexp : Real.exp 2 ≤ X := le_trans (le_max_right _ _) hX
   have hscalarX : (K : ℝ) *
       (Real.exp (((2 * R : ℕ) : ℝ) *
-        paperAppendageFloorScale P X) - 1) ≤ 1 := by
+        paperIncrementFloorScale P X) - 1) ≤ 1 := by
     simpa [indices, μ, R] using hscalar X hXS hXexp (base X) hcop
   have hendpointX :
       (∑ r ∈ Finset.range (2 * R + 1),
@@ -9317,7 +9317,7 @@ theorem actualPaperFamily_baseNoHit_natural_of_level
     simpa [X, indices, μ, R] using htop X hXT hXexp (base N) hcopN
   have hscalarN : (K : ℝ) *
       (Real.exp (((2 * R : ℕ) : ℝ) *
-        paperAppendageFloorScale P X) - 1) ≤ 1 := by
+        paperIncrementFloorScale P X) - 1) ≤ 1 := by
     simpa [X, indices, μ, R] using hscalar X hXS hXexp (base N) hcopN
   have hendpointEnvelope :
       (∑ r ∈ Finset.range (2 * R + 1),

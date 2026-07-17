@@ -22,7 +22,7 @@ The project is pinned to Lean and Mathlib `v4.14.0`.
 ```bash
 lake update
 lake build EscAnalytic.Paper
-lake env lean EscAnalytic/TrustBoundary.lean
+lake build EscAnalytic.TrustBoundary
 ```
 
 ## Source map

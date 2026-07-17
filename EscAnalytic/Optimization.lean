@@ -67,7 +67,7 @@ theorem logX_cube_eq {α LX LN : ℝ} (hLN : 0 ≤ LN)
 
 /-- **Mass-law transfer, lower half** (`eq:mu-asymp-N`, tex 2022–2024).
 
-Given the scale choice `LX = α LN^{1/4}` and the saturated mass law's lower bound
+Given the scale choice `LX = α LN^{1/4}` and the certificate mass law's lower bound
 `c₁ · LX^3 ≤ μ` (`μ_b ≍ (log X)^3`, tex 2016), we get
 `(α^3 c₁) · LN^{3/4} ≤ μ`. -/
 theorem mu_lower_N {α LX LN μ c₁ : ℝ} (hLN : 0 ≤ LN)
@@ -95,7 +95,7 @@ theorem mu_upper_N {α LX LN μ c₂ : ℝ} (hLN : 0 ≤ LN)
 
 /-- **Mass-law transfer** (`eq:mu-asymp-N`, tex 2022–2024), two-sided form.
 
-From the scale choice `log X = α (log N)^{1/4}` and the saturated mass law
+From the scale choice `log X = α (log N)^{1/4}` and the certificate mass law
 `c₁ (log X)^3 ≤ μ ≤ c₂ (log X)^3`, conclude `μ ≍ (log N)^{3/4}` with the explicit
 constants `α^3 c₁` and `α^3 c₂`:
 ```

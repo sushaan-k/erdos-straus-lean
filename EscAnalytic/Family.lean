@@ -102,9 +102,9 @@ def toSatEvent (i : FamilyIndex) : EscLeanChecks.SatEvent :=
 
 end FamilyIndex
 
-/-! ## Membership in the conductor-separated saturated family. -/
+/-! ## Membership in the conductor-separated certificate family. -/
 
-/-- The membership predicate `i ∈ 𝓘_b` for the conductor-separated saturated
+/-- The membership predicate `i ∈ 𝓘_b` for the conductor-separated certificate
 family at scale `X` with base class `b ∈ (ℤ/P(z)ℤ)ˣ` (tex lines 692–764).
 
 This bundles, faithfully to the manuscript:
@@ -115,7 +115,7 @@ This bundles, faithfully to the manuscript:
 * `(eq:dplus-conditions)` (tex lines 725–731): `d₋ d₊ ≤ Y`, `(d₊, P(z)) = 1`,
   `(d₋ d₊, 4ρ(e)) = 1`;
 * `(eq:p-condition-sat)` (tex lines 732–737): `X^β < p ≤ X^{1-σ}`, `p` prime,
-  and the saturation congruence `d₋ d₊ p ≡ -1 (mod 4 ρ(e))`.
+  and the certificate congruence `d₋ d₊ p ≡ -1 (mod 4 ρ(e))`.
 
 The real-power range bounds are stated via `Nat.cast` into `ℝ` using the scales
 of `EscAnalytic.Core`. `Pz` is the radical `P(z) = ∏_{ℓ ≤ z} ℓ` passed as a
@@ -143,7 +143,7 @@ structure FamilyMem (P : Params) (X : ℝ) (Pz b n : ℕ) (i : FamilyIndex) : Pr
   p_prime : Nat.Prime i.p
   p_gt : X ^ P.β < (i.p : ℝ)
   p_le : (i.p : ℝ) ≤ X ^ (1 - P.σ)
-  /-- The saturation congruence `d₋ d₊ p ≡ -1 (mod 4 ρ(e))` (tex line 736):
+  /-- The certificate congruence `d₋ d₊ p ≡ -1 (mod 4 ρ(e))` (tex line 736):
   `4 ρ(e) ∣ Q + 1`. -/
   sat_cong : 4 * i.rho ∣ i.Q + 1
   /-- The conditional residue congruence `n ≡ -4e (mod Q)` (tex lines 752–760):
@@ -362,14 +362,14 @@ noncomputable def familySubsetLcmRecipRat
 
 /-- Exact multiplicative increment in reciprocal-lcm weight when extending an
 old compatible set.  Its gcd/weight realization is proved separately below. -/
-noncomputable def familyAppendageIncrementRatioRat
+noncomputable def familyIncrementRatioRat
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent) : ℚ :=
   ∑ event ∈ familyCompatibleExtensions indices old,
     familySubsetLcmRecipRat (insert event old) /
       familySubsetLcmRecipRat old
 
 /-- The overlap factor `g(i;S) = gcd(L_S,q_i)` on the concrete event carrier. -/
-noncomputable def familyAppendageG
+noncomputable def familyIncrementG
     (old : Finset EscLeanChecks.SatEvent)
     (event : EscLeanChecks.SatEvent) : ℕ :=
   Nat.gcd
@@ -379,33 +379,33 @@ noncomputable def familyAppendageG
 
 /-- Manuscript increment quantity `A(S)`: each compatible extension contributes
 its true event weight `1/q_i` multiplied by `g(i;S) = gcd(q_i,L_S)`. -/
-noncomputable def familyAppendageIncrementRat
+noncomputable def familyIncrementRat
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent) : ℚ :=
   ∑ event ∈ familyCompatibleExtensions indices old,
     familyEventWeightRat event *
-      (familyAppendageG old event : ℚ)
+      (familyIncrementG old event : ℚ)
 
 /-- Extensions restricted by `D | g(i;S)`. -/
-noncomputable def familyAppendageDivisorEvents
+noncomputable def familyIncrementDivisorEvents
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent)
     (D : ℕ) : Finset EscLeanChecks.SatEvent :=
   (familyCompatibleExtensions indices old).filter
-    (fun event => D ∣ familyAppendageG old event)
+    (fun event => D ∣ familyIncrementG old event)
 
 /-- Extension mass restricted by `D | g(i;S)`, the exact finite carrier to
-which the event-tensor residue-class estimate is applied in `lem:appendage`. -/
-noncomputable def familyAppendageDivisorMassRat
+which the event-tensor residue-class estimate is applied in `lem:increment`. -/
+noncomputable def familyIncrementDivisorMassRat
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent)
     (D : ℕ) : ℚ :=
-  ∑ event ∈ familyAppendageDivisorEvents indices old D,
+  ∑ event ∈ familyIncrementDivisorEvents indices old D,
     familyEventWeightRat event
 
 /-- Residue classes modulo `D` actually represented by divisor-restricted
 compatible extensions. -/
-noncomputable def familyAppendageResidueClasses
+noncomputable def familyIncrementResidueClasses
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent)
     (D : ℕ) : Finset ℕ :=
-  (familyAppendageDivisorEvents indices old D).image
+  (familyIncrementDivisorEvents indices old D).image
     (fun event => event.e % D)
 
 /-- Residue classes modulo a medium prime represented by old events whose
@@ -417,7 +417,7 @@ noncomputable def familyOldPrimeResidueClasses
 
 /-- Multiplicative class count used in the squarefree Euler tail, with the
 actual squarefree/odd support retained explicitly. -/
-noncomputable def familyAppendageClassProductRat
+noncomputable def familyIncrementClassProductRat
     (old : Finset EscLeanChecks.SatEvent) (D : ℕ) : ℚ :=
   if Squarefree D ∧ Odd D then
     ∏ ell ∈ D.primeFactors,
@@ -425,25 +425,25 @@ noncomputable def familyAppendageClassProductRat
   else 0
 
 /-- Weight in one realized residue class modulo `D`. -/
-noncomputable def familyAppendageResidueMassRat
+noncomputable def familyIncrementResidueMassRat
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent)
     (D c : ℕ) : ℚ :=
-  ∑ event ∈ (familyAppendageDivisorEvents indices old D).filter
+  ∑ event ∈ (familyIncrementDivisorEvents indices old D).filter
       (fun event => event.e % D = c),
     familyEventWeightRat event
 
-/-- The `D=1` contribution to the appendage expansion. -/
-noncomputable def familyAppendageBaseMassRat
+/-- The `D=1` contribution to the increment expansion. -/
+noncomputable def familyIncrementBaseMassRat
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent) : ℚ :=
   ∑ event ∈ familyCompatibleExtensions indices old,
     familyEventWeightRat event
 
 /-- The finite `D>1` contribution in the totient-divisor expansion of `A(S)`. -/
-noncomputable def familyAppendageTailRat
+noncomputable def familyIncrementTailRat
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent)
     (B : ℕ) : ℚ :=
   ∑ D ∈ Finset.Icc 2 B, (Nat.totient D : ℚ) *
-    familyAppendageDivisorMassRat indices old D
+    familyIncrementDivisorMassRat indices old D
 
 /-- The exact extension ratio is the manuscript factor `w_i g(i;S)`. -/
 theorem familyExtensionRatio_eq_weight_mul_gcd
@@ -456,7 +456,7 @@ theorem familyExtensionRatio_eq_weight_mul_gcd
     familySubsetLcmRecipRat (insert event old) /
         familySubsetLcmRecipRat old =
       familyEventWeightRat event *
-        (familyAppendageG old event : ℚ) := by
+        (familyIncrementG old event : ℚ) := by
   have hLpos : 0 < EscLeanChecks.congruenceLcm
       (EscLeanChecks.satEventResidualHitRows old.toList) := by
     apply EscLeanChecks.congruenceLcm_pos_of_rows_positive
@@ -473,7 +473,7 @@ theorem familyExtensionRatio_eq_weight_mul_gcd
       (EscLeanChecks.satEventResidualHitRows old.toList))
     (EscLeanChecks.conditionalModulus event.dPlus event.p) hLpos hqpos
   unfold familySubsetLcmRecipRat familyEventWeightRat
-  unfold familyAppendageG
+  unfold familyIncrementG
   rw [EscLeanChecks.congruenceLcm_satEventResidualHitRows_insert_eq_lcm,
     Nat.lcm_comm, hid]
   have hLne : (EscLeanChecks.congruenceLcm
@@ -484,15 +484,15 @@ theorem familyExtensionRatio_eq_weight_mul_gcd
 
 /-- The ratio-defined increment and the paper's `w_i g(i;S)` increment agree
 term by term. -/
-theorem familyAppendageIncrementRatioRat_eq_incrementRat
+theorem familyIncrementRatioRat_eq_incrementRat
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices) :
-    familyAppendageIncrementRatioRat indices old =
-      familyAppendageIncrementRat indices old := by
+    familyIncrementRatioRat indices old =
+      familyIncrementRat indices old := by
   classical
-  unfold familyAppendageIncrementRatioRat familyAppendageIncrementRat
+  unfold familyIncrementRatioRat familyIncrementRat
   apply Finset.sum_congr rfl
   intro event hext
   apply familyExtensionRatio_eq_weight_mul_gcd
@@ -510,7 +510,7 @@ theorem familyCompatibleLcmMassRat_ratio_recurrence
     (r : ℚ) * familyCompatibleLcmMassRat indices r =
       ∑ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
         familySubsetLcmRecipRat old *
-          familyAppendageIncrementRatioRat indices old := by
+          familyIncrementRatioRat indices old := by
   classical
   rw [familyCompatibleLcmMassRat_deletion_identity indices r hr]
   apply Finset.sum_congr rfl
@@ -532,7 +532,7 @@ theorem familyCompatibleLcmMassRat_ratio_recurrence
     unfold familySubsetLcmRecipRat
     positivity
   have hfoldNe : familySubsetLcmRecipRat old ≠ 0 := ne_of_gt hfoldPos
-  rw [familyAppendageIncrementRatioRat, Finset.mul_sum]
+  rw [familyIncrementRatioRat, Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro event hevent
   change familySubsetLcmRecipRat (insert event old) =
@@ -541,7 +541,7 @@ theorem familyCompatibleLcmMassRat_ratio_recurrence
         familySubsetLcmRecipRat old)
   field_simp [hfoldNe]
 
-/-- Exact recurrence stated with the manuscript's appendage increment
+/-- Exact recurrence stated with the manuscript's one-step increment
 `A(S) = \sum_i w_i gcd(L_S,q_i)`. -/
 theorem familyCompatibleLcmMassRat_increment_recurrence
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
@@ -550,7 +550,7 @@ theorem familyCompatibleLcmMassRat_increment_recurrence
     (r : ℚ) * familyCompatibleLcmMassRat indices r =
       ∑ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
         familySubsetLcmRecipRat old *
-          familyAppendageIncrementRat indices old := by
+          familyIncrementRat indices old := by
   classical
   rw [familyCompatibleLcmMassRat_ratio_recurrence
     P X Pz b indices hmem r hr]
@@ -559,7 +559,7 @@ theorem familyCompatibleLcmMassRat_increment_recurrence
   rw [familyCompatibleSubsetsOfCard] at hold
   have hsub : old ⊆ familyEvents indices :=
     (Finset.mem_powersetCard.mp (Finset.mem_of_mem_filter old hold)).1
-  rw [familyAppendageIncrementRatioRat_eq_incrementRat
+  rw [familyIncrementRatioRat_eq_incrementRat
     P X Pz b indices hmem old hsub]
 
 @[simp] theorem familyCompatibleLcmMassRat_zero
@@ -588,7 +588,7 @@ theorem familyCompatibleLcmMassRat_recurrence_le_of_incrementRatio_le
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (M : ℚ) (r : ℕ)
     (hinc : ∀ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
-      familyAppendageIncrementRatioRat indices old ≤ M)
+      familyIncrementRatioRat indices old ≤ M)
     (hr : 0 < r) :
     (r : ℚ) * familyCompatibleLcmMassRat indices r ≤
       M * familyCompatibleLcmMassRat indices (r - 1) := by
@@ -597,7 +597,7 @@ theorem familyCompatibleLcmMassRat_recurrence_le_of_incrementRatio_le
   calc
     (∑ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
         familySubsetLcmRecipRat old *
-          familyAppendageIncrementRatioRat indices old) ≤
+          familyIncrementRatioRat indices old) ≤
       ∑ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
         familySubsetLcmRecipRat old * M := by
       apply Finset.sum_le_sum
@@ -610,14 +610,14 @@ theorem familyCompatibleLcmMassRat_recurrence_le_of_incrementRatio_le
       simp [familyCompatibleLcmMassRat, familyCompatibleSubsetsOfCard,
         familySubsetLcmRecipRat, mul_comm]
 
-/-- The paper's uniform appendage estimate `A(S) ≤ M` gives its Brun
+/-- The paper's uniform increment estimate `A(S) ≤ M` gives its Brun
 recurrence for the actual reciprocal-lcm coefficients. -/
 theorem familyCompatibleLcmMassRat_recurrence_le_of_increment_le
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (M : ℚ) (r : ℕ)
     (hinc : ∀ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
-      familyAppendageIncrementRat indices old ≤ M)
+      familyIncrementRat indices old ≤ M)
     (hr : 0 < r) :
     (r : ℚ) * familyCompatibleLcmMassRat indices r ≤
       M * familyCompatibleLcmMassRat indices (r - 1) := by
@@ -627,7 +627,7 @@ theorem familyCompatibleLcmMassRat_recurrence_le_of_increment_le
   calc
     (∑ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
         familySubsetLcmRecipRat old *
-          familyAppendageIncrementRat indices old) ≤
+          familyIncrementRat indices old) ≤
       ∑ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
         familySubsetLcmRecipRat old * M := by
       apply Finset.sum_le_sum
@@ -649,7 +649,7 @@ theorem familyCompatibleLcmMassRat_le_pow_div_factorial_of_incrementRatio_le
     (M : ℚ) (hM : 0 ≤ M)
     (hinc : ∀ r : ℕ, 1 ≤ r →
       ∀ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
-        familyAppendageIncrementRatioRat indices old ≤ M) :
+        familyIncrementRatioRat indices old ≤ M) :
     ∀ r : ℕ, familyCompatibleLcmMassRat indices r ≤
       M ^ r / (Nat.factorial r : ℚ) := by
   apply EscLeanChecks.brun_recurrence_iterated_bound_from_mul
@@ -660,14 +660,14 @@ theorem familyCompatibleLcmMassRat_le_pow_div_factorial_of_incrementRatio_le
       P X Pz b indices hmem M r (hinc r hr) (lt_of_lt_of_le Nat.zero_lt_one hr)
 
 /-- Finite Brun iteration directly from a uniform bound for the manuscript's
-appendage increment `A(S)`. -/
+one-step increment `A(S)`. -/
 theorem familyCompatibleLcmMassRat_le_pow_div_factorial_of_increment_le
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (M : ℚ) (hM : 0 ≤ M)
     (hinc : ∀ r : ℕ, 1 ≤ r →
       ∀ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
-        familyAppendageIncrementRat indices old ≤ M) :
+        familyIncrementRat indices old ≤ M) :
     ∀ r : ℕ, familyCompatibleLcmMassRat indices r ≤
       M ^ r / (Nat.factorial r : ℚ) := by
   apply EscLeanChecks.brun_recurrence_iterated_bound_from_mul
@@ -952,7 +952,7 @@ theorem FamilyStaticMem.dplus_le_floor_X
   Nat.le_floor (hmem.dplus_lt_X hX).le
 
 /-- The rough medium cofactor is odd, as forced by its coprimality with the
-factor `4` in the saturation modulus. -/
+factor `4` in the certificate modulus. -/
 theorem FamilyStaticMem.dplus_odd
     {P : Params} {X : ℝ} {Pz b : ℕ} {i : FamilyIndex}
     (hmem : FamilyStaticMem P X Pz b i) : Odd i.dplus := by
@@ -1005,7 +1005,7 @@ theorem FamilyStaticMem.dplus_primeFactors_recip_sum_le_YScale
         (div_le_div_of_nonneg_right hlog hlogqpos.le) hqpos.le
 
 /-- Any rough cofactor in the static paper family is smaller than any selected
-prime in that same family.  This is the scale separation used by the appendage
+prime in that same family.  This is the scale separation used by the increment
 argument. -/
 theorem FamilyStaticMem.dplus_lt_other_p
     {P : Params} {X : ℝ} {Pz b : ℕ} {i j : FamilyIndex}
@@ -1078,7 +1078,7 @@ theorem familyEvents_dPlus_le_floor_X_of_mem
   exact (hmem i hi).dplus_le_floor_X hX
 
 /-- Any ordering of distinct events from the same static paper family has the
-cofactor/large-prime separation required by the iterative appendage bound. -/
+cofactor/large-prime separation required by the iterative increment bound. -/
 theorem familyEvents_orderedDPlusLtLargePrime
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
@@ -1101,7 +1101,7 @@ theorem familyEvents_orderedDPlusLtLargePrime
         exact hsub other (by simp [hother])
 
 /-- Reciprocal-lcm estimate for a compatible subset of the actual paper
-family.  This is the manuscript's appendage step in the exact finite carrier:
+family.  This is the manuscript's increment step in the exact finite carrier:
 each added event costs one factor `floor(X)` times its true weight `1/q`. -/
 theorem familyEvents_congruenceLcm_recip_le_floor_scale_pow_weightProduct
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
@@ -1167,9 +1167,9 @@ theorem familyEvents_congruenceLcm_recip_le_floor_scale_pow_weightProduct
           (hsub hevent)
   exact hlcm.trans hweights
 
-/-- The structural appendage conclusion for a list of pairwise distinct
+/-- The structural increment conclusion for a list of pairwise distinct
 compatible events from the actual static paper family. -/
-theorem familyEvents_appendageCommonDivisor_dvd_medium_of_compatible
+theorem familyEvents_incrementCommonDivisor_dvd_medium_of_compatible
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
@@ -1178,11 +1178,11 @@ theorem familyEvents_appendageCommonDivisor_dvd_medium_of_compatible
     (hold : ∀ other ∈ old, other ∈ familyEvents indices)
     (hcompat : ∀ other ∈ old, EscLeanChecks.satEventCompatible event other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    EscLeanChecks.appendageG event.dPlus event.p
+    EscLeanChecks.incrementG event.dPlus event.p
         (EscLeanChecks.residualLcm (EscLeanChecks.satEventRows old)) ∣
       event.dPlus := by
   apply
-    EscLeanChecks.appendageCommonDivisor_dvd_medium_of_compatible_events_admissibleFor_autoCoprime
+    EscLeanChecks.incrementCommonDivisor_dvd_medium_of_compatible_events_admissibleFor_autoCoprime
       Pz (familyRhoOf indices) event old
   · exact familyEvents_admissibleFor P X Pz b indices hX hmem event hevent
   · intro other hother
@@ -1212,7 +1212,7 @@ theorem familyCompatibleExtension_gcd_dvd_dPlus
   classical
   rw [familyCompatibleExtensions] at hext
   rcases Finset.mem_filter.mp hext with ⟨hevent, hnot, hpair⟩
-  have hdiv := familyEvents_appendageCommonDivisor_dvd_medium_of_compatible
+  have hdiv := familyEvents_incrementCommonDivisor_dvd_medium_of_compatible
     P X Pz b indices hX hmem event old.toList hevent
     (by
       intro other hother
@@ -1230,31 +1230,31 @@ theorem familyCompatibleExtension_gcd_dvd_dPlus
       subst other
       exact hnot hotherOld)
   rw [EscLeanChecks.congruenceLcm_satEventResidualHitRows_eq_residualLcm_satEventRows]
-  simpa [EscLeanChecks.appendageG, Nat.gcd_comm] using hdiv
+  simpa [EscLeanChecks.incrementG, Nat.gcd_comm] using hdiv
 
 /-- If a prime `ell` divides the overlap of a compatible extension, then the
 extension's `e`-class modulo `ell` was already represented by an old event
 whose medium factor is divisible by `ell`.  This is the prime-by-prime
 compatibility assertion defining `C_ell(S)` in the manuscript. -/
-theorem familyAppendage_primeResidue_mem_oldClasses
+theorem familyIncrement_primeResidue_mem_oldClasses
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices)
     (D : ℕ) (event : EscLeanChecks.SatEvent)
-    (heventD : event ∈ familyAppendageDivisorEvents indices old D)
+    (heventD : event ∈ familyIncrementDivisorEvents indices old D)
     (ell : ℕ) (hell : Nat.Prime ell) (hellD : ell ∣ D)
     (hcop : Nat.gcd ell 4 = 1) :
     event.e % ell ∈ familyOldPrimeResidueClasses old ell := by
   classical
   have heventD' := heventD
-  rw [familyAppendageDivisorEvents] at heventD
+  rw [familyIncrementDivisorEvents] at heventD
   rcases Finset.mem_filter.mp heventD with ⟨hext, hDg⟩
   have hext' := hext
   rw [familyCompatibleExtensions] at hext
   rcases Finset.mem_filter.mp hext with ⟨hevent, hnot, hpair⟩
-  have hellg : ell ∣ familyAppendageG old event := hellD.trans hDg
+  have hellg : ell ∣ familyIncrementG old event := hellD.trans hDg
   have hellL : ell ∣ EscLeanChecks.congruenceLcm
       (EscLeanChecks.satEventResidualHitRows old.toList) := by
     exact hellg.trans (Nat.gcd_dvd_left _ _)
@@ -1304,17 +1304,17 @@ theorem familyAppendage_primeResidue_mem_oldClasses
   exact Finset.mem_image.mpr
     ⟨other, Finset.mem_filter.mpr ⟨hotherOld, hellOtherDPlus⟩, hmod.symm⟩
 
-/-- For squarefree odd `D`, the represented appendage classes modulo `D` inject
+/-- For squarefree odd `D`, the represented increment classes modulo `D` inject
 into the product of the old prime-residue class sets.  This is the exact CRT
 cardinality bound `|C_D(S)| ≤ prod_{ell|D} C_ell(S)`. -/
-theorem familyAppendageResidueClasses_card_le_prod_oldPrimeClasses
+theorem familyIncrementResidueClasses_card_le_prod_oldPrimeClasses
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices)
     (D : ℕ) (hDpos : 0 < D) (hDsqf : Squarefree D) (hDodd : Odd D) :
-    (familyAppendageResidueClasses indices old D).card ≤
+    (familyIncrementResidueClasses indices old D).card ≤
       ∏ ell ∈ D.primeFactors, (familyOldPrimeResidueClasses old ell).card := by
   classical
   let target := D.primeFactors.pi
@@ -1338,17 +1338,17 @@ theorem familyAppendageResidueClasses_card_le_prod_oldPrimeClasses
       have : ell ∣ 2 * 2 := by simpa using hellFour
       exact (hellPrime.dvd_mul.mp this).elim hellNotDvdTwo hellNotDvdTwo
     exact (hellPrime.coprime_iff_not_dvd.mpr hellNotDvdFour)
-  have hmap : ∀ c ∈ familyAppendageResidueClasses indices old D,
+  have hmap : ∀ c ∈ familyIncrementResidueClasses indices old D,
       code c ∈ target := by
     intro c hc
-    rw [familyAppendageResidueClasses] at hc
+    rw [familyIncrementResidueClasses] at hc
     rcases Finset.mem_image.mp hc with ⟨event, heventD, rfl⟩
     change code (event.e % D) ∈ D.primeFactors.pi
       (fun ell => familyOldPrimeResidueClasses old ell)
     rw [Finset.mem_pi]
     intro ell hellMem
     have hellData := Nat.mem_primeFactors.mp hellMem
-    have hclass := familyAppendage_primeResidue_mem_oldClasses
+    have hclass := familyIncrement_primeResidue_mem_oldClasses
       P X Pz b indices hX hmem old hsub D event heventD
       ell hellData.1 hellData.2.1 (hcopFour ell hellMem)
     simpa [code, Nat.mod_mod_of_dvd event.e hellData.2.1] using hclass
@@ -1378,7 +1378,7 @@ theorem familyAppendageResidueClasses_card_le_prod_oldPrimeClasses
     · intro ell hell
       exact Nat.prime_of_mem_primeFactorsList hell
   have hinj : Set.InjOn code
-      (familyAppendageResidueClasses indices old D : Set ℕ) := by
+      (familyIncrementResidueClasses indices old D : Set ℕ) := by
     intro c hc c' hc' hcode
     have hmodD : c ≡ c' [MOD D] := by
       rw [← Nat.prod_primeFactorsList hDne]
@@ -1391,16 +1391,16 @@ theorem familyAppendageResidueClasses_card_le_prod_oldPrimeClasses
       have hvalue := congrFun (congrFun hcode (D.primeFactorsList.get i)) hellMem
       simpa [code] using hvalue
     have hcLt : c < D := by
-      rw [familyAppendageResidueClasses] at hc
+      rw [familyIncrementResidueClasses] at hc
       rcases Finset.mem_image.mp hc with ⟨event, _hevent, rfl⟩
       exact Nat.mod_lt event.e hDpos
     have hc'Lt : c' < D := by
-      rw [familyAppendageResidueClasses] at hc'
+      rw [familyIncrementResidueClasses] at hc'
       rcases Finset.mem_image.mp hc' with ⟨event, _hevent, rfl⟩
       exact Nat.mod_lt event.e hDpos
     exact hmodD.eq_of_lt_of_lt hcLt hc'Lt
   have hcard := Finset.card_le_card_of_injOn code hmap hinj
-  change (familyAppendageResidueClasses indices old D).card ≤
+  change (familyIncrementResidueClasses indices old D).card ≤
     (D.primeFactors.pi
       (fun ell => familyOldPrimeResidueClasses old ell)).card at hcard
   simpa only [Finset.card_pi] using hcard
@@ -1409,33 +1409,33 @@ theorem familyAppendageResidueClasses_card_le_prod_oldPrimeClasses
 represented then `D | g(i;S) | d_{+,i}`, so positivity, squarefreeness, and
 oddness follow from static family membership; if no class is represented the
 bound is trivial. -/
-theorem familyAppendageResidueClasses_card_le_prod_oldPrimeClasses_auto
+theorem familyIncrementResidueClasses_card_le_prod_oldPrimeClasses_auto
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices)
     (D : ℕ) :
-    (familyAppendageResidueClasses indices old D).card ≤
+    (familyIncrementResidueClasses indices old D).card ≤
       ∏ ell ∈ D.primeFactors, (familyOldPrimeResidueClasses old ell).card := by
   classical
-  by_cases hempty : familyAppendageResidueClasses indices old D = ∅
+  by_cases hempty : familyIncrementResidueClasses indices old D = ∅
   · simp [hempty]
   · have hnonempty :
-        (familyAppendageResidueClasses indices old D).Nonempty :=
+        (familyIncrementResidueClasses indices old D).Nonempty :=
       Finset.nonempty_iff_ne_empty.mpr hempty
     rcases hnonempty with ⟨c, hc⟩
-    rw [familyAppendageResidueClasses] at hc
+    rw [familyIncrementResidueClasses] at hc
     rcases Finset.mem_image.mp hc with ⟨event, heventD, _hc⟩
     have heventD' := heventD
-    rw [familyAppendageDivisorEvents] at heventD
+    rw [familyIncrementDivisorEvents] at heventD
     rcases Finset.mem_filter.mp heventD with ⟨hext, hDg⟩
     have hext' := hext
     rw [familyCompatibleExtensions] at hext
     have hevent : event ∈ familyEvents indices := (Finset.mem_filter.mp hext).1
     have hDdiv : D ∣ event.dPlus :=
       hDg.trans (by
-        simpa [familyAppendageG] using
+        simpa [familyIncrementG] using
           familyCompatibleExtension_gcd_dvd_dPlus
             P X Pz b indices hX hmem old hsub event hext')
     rcases Finset.mem_image.mp hevent with ⟨i, hi, rfl⟩
@@ -1443,33 +1443,33 @@ theorem familyAppendageResidueClasses_card_le_prod_oldPrimeClasses_auto
     have hDsqf : Squarefree D :=
       Squarefree.squarefree_of_dvd hDdiv (hmem i hi).dplus_squarefree
     have hDodd : Odd D := Odd.of_dvd_nat (hmem i hi).dplus_odd hDdiv
-    exact familyAppendageResidueClasses_card_le_prod_oldPrimeClasses
+    exact familyIncrementResidueClasses_card_le_prod_oldPrimeClasses
       P X Pz b indices hX hmem old hsub D hDpos hDsqf hDodd
 
-/-- No divisor-restricted appendage residue class exists outside the
+/-- No divisor-restricted increment residue class exists outside the
 squarefree odd support inherited from `d_+`. -/
-theorem familyAppendageResidueClasses_eq_empty_of_not_squarefree_or_not_odd
+theorem familyIncrementResidueClasses_eq_empty_of_not_squarefree_or_not_odd
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices)
     (D : ℕ) (hbad : ¬(Squarefree D ∧ Odd D)) :
-    familyAppendageResidueClasses indices old D = ∅ := by
+    familyIncrementResidueClasses indices old D = ∅ := by
   classical
   apply Finset.eq_empty_iff_forall_not_mem.mpr
   intro c hc
-  rw [familyAppendageResidueClasses] at hc
+  rw [familyIncrementResidueClasses] at hc
   rcases Finset.mem_image.mp hc with ⟨event, heventD, _hc⟩
   have heventD' := heventD
-  rw [familyAppendageDivisorEvents] at heventD
+  rw [familyIncrementDivisorEvents] at heventD
   rcases Finset.mem_filter.mp heventD with ⟨hext, hDg⟩
   have hext' := hext
   rw [familyCompatibleExtensions] at hext
   have hevent : event ∈ familyEvents indices := (Finset.mem_filter.mp hext).1
   have hDdiv : D ∣ event.dPlus :=
     hDg.trans (by
-      simpa [familyAppendageG] using
+      simpa [familyIncrementG] using
         familyCompatibleExtension_gcd_dvd_dPlus
           P X Pz b indices hX hmem old hsub event hext')
   rcases Finset.mem_image.mp hevent with ⟨i, hi, rfl⟩
@@ -1479,32 +1479,32 @@ theorem familyAppendageResidueClasses_eq_empty_of_not_squarefree_or_not_odd
 
 /-- The realized class count is bounded by the correctly supported
 squarefree multiplicative class product. -/
-theorem familyAppendageResidueClasses_card_le_classProductRat
+theorem familyIncrementResidueClasses_card_le_classProductRat
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices)
     (D : ℕ) :
-    ((familyAppendageResidueClasses indices old D).card : ℚ) ≤
-      familyAppendageClassProductRat old D := by
+    ((familyIncrementResidueClasses indices old D).card : ℚ) ≤
+      familyIncrementClassProductRat old D := by
   classical
   by_cases hgood : Squarefree D ∧ Odd D
-  · rw [familyAppendageClassProductRat, if_pos hgood]
+  · rw [familyIncrementClassProductRat, if_pos hgood]
     exact_mod_cast
-      familyAppendageResidueClasses_card_le_prod_oldPrimeClasses_auto
+      familyIncrementResidueClasses_card_le_prod_oldPrimeClasses_auto
         P X Pz b indices hX hmem old hsub D
-  · rw [familyAppendageClassProductRat, if_neg hgood,
-      familyAppendageResidueClasses_eq_empty_of_not_squarefree_or_not_odd
+  · rw [familyIncrementClassProductRat, if_neg hgood,
+      familyIncrementResidueClasses_eq_empty_of_not_squarefree_or_not_odd
         P X Pz b indices hX hmem old hsub D hgood]
     simp
 
 /-- The correctly supported class-count divisor sum is bounded by the finite
 Euler product over primes up to `B`. -/
-theorem familyAppendageClassProduct_sum_le_eulerProduct
+theorem familyIncrementClassProduct_sum_le_eulerProduct
     (old : Finset EscLeanChecks.SatEvent) (B : ℕ) (hB : 1 ≤ B) :
     1 + (∑ D ∈ Finset.Icc 2 B,
-      familyAppendageClassProductRat old D / (D : ℚ)) ≤
+      familyIncrementClassProductRat old D / (D : ℚ)) ≤
       ∏ p ∈ EscLeanChecks.primeFinsetUpTo B,
         (1 + ((familyOldPrimeResidueClasses old p).card : ℚ) / (p : ℚ)) := by
   classical
@@ -1515,34 +1515,34 @@ theorem familyAppendageClassProduct_sum_le_eulerProduct
     unfold a
     positivity
   have hterm : ∀ D ∈ Finset.Icc 2 B,
-      familyAppendageClassProductRat old D / (D : ℚ) ≤
+      familyIncrementClassProductRat old D / (D : ℚ) ≤
         if Squarefree D then ∏ p ∈ D.primeFactors, a p else 0 := by
     intro D hD
     by_cases hsq : Squarefree D
     · rw [if_pos hsq]
       by_cases hodd : Odd D
-      · rw [familyAppendageClassProductRat, if_pos ⟨hsq, hodd⟩]
+      · rw [familyIncrementClassProductRat, if_pos ⟨hsq, hodd⟩]
         have hprodD := Nat.prod_primeFactors_of_squarefree hsq
         have hDcast : (D : ℚ) = ∏ p ∈ D.primeFactors, (p : ℚ) := by
           simpa using congrArg (fun n : ℕ => (n : ℚ)) hprodD.symm
         unfold a
         rw [hDcast, ← Finset.prod_div_distrib]
-      · rw [familyAppendageClassProductRat, if_neg (by simp [hsq, hodd])]
+      · rw [familyIncrementClassProductRat, if_neg (by simp [hsq, hodd])]
         simp
         apply Finset.prod_nonneg
         intro p hp
         positivity
-    · rw [if_neg hsq, familyAppendageClassProductRat,
+    · rw [if_neg hsq, familyIncrementClassProductRat,
         if_neg (by simp [hsq])]
       simp
   have hmajor :
       (∑ D ∈ Finset.Icc 2 B,
-        familyAppendageClassProductRat old D / (D : ℚ)) ≤
+        familyIncrementClassProductRat old D / (D : ℚ)) ≤
       ∑ D ∈ (Finset.Icc 2 B).filter Squarefree,
         ∏ p ∈ D.primeFactors, a p := by
     calc
       (∑ D ∈ Finset.Icc 2 B,
-          familyAppendageClassProductRat old D / (D : ℚ)) ≤
+          familyIncrementClassProductRat old D / (D : ℚ)) ≤
         ∑ D ∈ Finset.Icc 2 B,
           if Squarefree D then ∏ p ∈ D.primeFactors, a p else 0 := by
             apply Finset.sum_le_sum
@@ -1568,7 +1568,7 @@ theorem familyAppendageClassProduct_sum_le_eulerProduct
     B a ha
   calc
     1 + (∑ D ∈ Finset.Icc 2 B,
-        familyAppendageClassProductRat old D / (D : ℚ)) ≤
+        familyIncrementClassProductRat old D / (D : ℚ)) ≤
       1 + ∑ D ∈ (Finset.Icc 2 B).filter Squarefree,
         ∏ p ∈ D.primeFactors, a p := add_le_add_left hmajor 1
     _ = ∑ D ∈ (Finset.Icc 1 B).filter Squarefree,
@@ -1580,29 +1580,29 @@ theorem familyAppendageClassProduct_sum_le_eulerProduct
     _ = ∏ p ∈ EscLeanChecks.primeFinsetUpTo B,
         (1 + ((familyOldPrimeResidueClasses old p).card : ℚ) / (p : ℚ)) := rfl
 
-/-- Real exponential form of the finite appendage Euler-product bound. -/
-theorem familyAppendageClassProduct_real_sum_le_exp
+/-- Real exponential form of the finite increment Euler-product bound. -/
+theorem familyIncrementClassProduct_real_sum_le_exp
     (old : Finset EscLeanChecks.SatEvent) (B : ℕ) (hB : 1 ≤ B) :
     (1 : ℝ) + (∑ D ∈ Finset.Icc 2 B,
-      (familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) ≤
+      (familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) ≤
       Real.exp (∑ p ∈ EscLeanChecks.primeFinsetUpTo B,
         ((familyOldPrimeResidueClasses old p).card : ℝ) / (p : ℝ)) := by
-  have heulerQ := familyAppendageClassProduct_sum_le_eulerProduct old B hB
+  have heulerQ := familyIncrementClassProduct_sum_le_eulerProduct old B hB
   have heulerR :
       (1 : ℝ) + (∑ D ∈ Finset.Icc 2 B,
-        (familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) ≤
+        (familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) ≤
         ∏ p ∈ EscLeanChecks.primeFinsetUpTo B,
           (1 + ((familyOldPrimeResidueClasses old p).card : ℝ) / (p : ℝ)) := by
     have hcast :
         (((1 + (∑ D ∈ Finset.Icc 2 B,
-          familyAppendageClassProductRat old D / (D : ℚ))) : ℚ) : ℝ) ≤
+          familyIncrementClassProductRat old D / (D : ℚ))) : ℚ) : ℝ) ≤
         (((∏ p ∈ EscLeanChecks.primeFinsetUpTo B,
           (1 + ((familyOldPrimeResidueClasses old p).card : ℚ) / (p : ℚ))) : ℚ) : ℝ) := by
       exact_mod_cast heulerQ
     simpa using hcast
   calc
     (1 : ℝ) + (∑ D ∈ Finset.Icc 2 B,
-        (familyAppendageClassProductRat old D : ℝ) / (D : ℝ)) ≤
+        (familyIncrementClassProductRat old D : ℝ) / (D : ℝ)) ≤
       ∏ p ∈ EscLeanChecks.primeFinsetUpTo B,
         (1 + ((familyOldPrimeResidueClasses old p).card : ℝ) / (p : ℝ)) := heulerR
     _ ≤ ∏ p ∈ EscLeanChecks.primeFinsetUpTo B,
@@ -1626,7 +1626,7 @@ theorem familyOldPrimeResidueClasses_card_le_incidence
   exact Finset.card_image_le
 
 /-- Exact double-counting identity for prime/event incidences in the exponent
-of the appendage Euler product. -/
+of the increment Euler product. -/
 theorem familyOldPrimeIncidence_sum_eq_event_primeDivisor_sum
     (old : Finset EscLeanChecks.SatEvent) (B : ℕ) :
     (∑ p ∈ EscLeanChecks.primeFinsetUpTo B,
@@ -1740,28 +1740,28 @@ theorem familyOldPrimeClass_exponent_le_card_mul_YScale
 /-- Exact totient-divisor expansion of the concrete manuscript increment.
 The upper cutoff is finite because every overlap gcd divides the new event's
 medium factor, which is at most `floor X`. -/
-theorem familyAppendageIncrementRat_eq_totient_divisorMass
+theorem familyIncrementRat_eq_totient_divisorMass
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices) :
-    familyAppendageIncrementRat indices old =
+    familyIncrementRat indices old =
       ∑ D ∈ Finset.Icc 1 ⌊X⌋₊, (Nat.totient D : ℚ) *
-        familyAppendageDivisorMassRat indices old D := by
+        familyIncrementDivisorMassRat indices old D := by
   classical
-  unfold familyAppendageIncrementRat familyAppendageDivisorMassRat
+  unfold familyIncrementRat familyIncrementDivisorMassRat
   apply EscLeanChecks.weighted_sum_eq_totient_divisor_mass
   · intro event hext
-    rw [familyAppendageG]
+    rw [familyIncrementG]
     apply Nat.gcd_pos_of_pos_right
     rw [familyCompatibleExtensions] at hext
     rcases Finset.mem_filter.mp hext with ⟨hevent, _hrest⟩
     rcases Finset.mem_image.mp hevent with ⟨i, hi, rfl⟩
     exact Nat.mul_pos (hmem i hi).dplus_pos (hmem i hi).p_prime.pos
   · intro event hext
-    have hdiv : familyAppendageG old event ∣ event.dPlus := by
-      simpa [familyAppendageG] using
+    have hdiv : familyIncrementG old event ∣ event.dPlus := by
+      simpa [familyIncrementG] using
         familyCompatibleExtension_gcd_dvd_dPlus
           P X Pz b indices hX hmem old hsub event hext
     rw [familyCompatibleExtensions] at hext
@@ -1770,25 +1770,25 @@ theorem familyAppendageIncrementRat_eq_totient_divisorMass
     exact (Nat.le_of_dvd (hmem i hi).dplus_pos hdiv).trans
       (FamilyStaticMem.dplus_le_floor_X hX (hmem i hi))
 
-@[simp] theorem familyAppendageDivisorMassRat_one
+@[simp] theorem familyIncrementDivisorMassRat_one
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent) :
-    familyAppendageDivisorMassRat indices old 1 =
-      familyAppendageBaseMassRat indices old := by
+    familyIncrementDivisorMassRat indices old 1 =
+      familyIncrementBaseMassRat indices old := by
   classical
-  simp [familyAppendageDivisorMassRat, familyAppendageDivisorEvents,
-    familyAppendageBaseMassRat]
+  simp [familyIncrementDivisorMassRat, familyIncrementDivisorEvents,
+    familyIncrementBaseMassRat]
 
 /-- Exact partition of the `D | g(i;S)` mass by the represented residue
 classes modulo `D`. -/
-theorem familyAppendageDivisorMassRat_eq_sum_residueMass
+theorem familyIncrementDivisorMassRat_eq_sum_residueMass
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent)
     (D : ℕ) :
-    familyAppendageDivisorMassRat indices old D =
-      ∑ c ∈ familyAppendageResidueClasses indices old D,
-        familyAppendageResidueMassRat indices old D c := by
+    familyIncrementDivisorMassRat indices old D =
+      ∑ c ∈ familyIncrementResidueClasses indices old D,
+        familyIncrementResidueMassRat indices old D c := by
   classical
-  unfold familyAppendageDivisorMassRat familyAppendageResidueClasses
-    familyAppendageResidueMassRat
+  unfold familyIncrementDivisorMassRat familyIncrementResidueClasses
+    familyIncrementResidueMassRat
   symm
   apply Finset.sum_fiberwise_of_maps_to
   intro event hevent
@@ -1796,43 +1796,43 @@ theorem familyAppendageDivisorMassRat_eq_sum_residueMass
 
 /-- A uniform event-tensor bound on each represented residue class bounds the
 whole divisor-restricted mass by the number of represented classes. -/
-theorem familyAppendageDivisorMassRat_le_card_mul_of_residueMass_le
+theorem familyIncrementDivisorMassRat_le_card_mul_of_residueMass_le
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent)
     (D : ℕ) (M : ℚ)
-    (hM : ∀ c ∈ familyAppendageResidueClasses indices old D,
-      familyAppendageResidueMassRat indices old D c ≤ M) :
-    familyAppendageDivisorMassRat indices old D ≤
-      (familyAppendageResidueClasses indices old D).card * M := by
-  rw [familyAppendageDivisorMassRat_eq_sum_residueMass]
+    (hM : ∀ c ∈ familyIncrementResidueClasses indices old D,
+      familyIncrementResidueMassRat indices old D c ≤ M) :
+    familyIncrementDivisorMassRat indices old D ≤
+      (familyIncrementResidueClasses indices old D).card * M := by
+  rw [familyIncrementDivisorMassRat_eq_sum_residueMass]
   calc
-    (∑ c ∈ familyAppendageResidueClasses indices old D,
-        familyAppendageResidueMassRat indices old D c) ≤
-      ∑ _c ∈ familyAppendageResidueClasses indices old D, M := by
+    (∑ c ∈ familyIncrementResidueClasses indices old D,
+        familyIncrementResidueMassRat indices old D c) ≤
+      ∑ _c ∈ familyIncrementResidueClasses indices old D, M := by
         apply Finset.sum_le_sum
         intro c hc
         exact hM c hc
-    _ = (familyAppendageResidueClasses indices old D).card * M := by
+    _ = (familyIncrementResidueClasses indices old D).card * M := by
       simp
 
-/-- Every appendage residue fiber is a subfamily of the corresponding full
+/-- Every increment residue fiber is a subfamily of the corresponding full
 event-tensor residue fiber. -/
-theorem familyAppendageResidueMassRat_le_familyResidueMassRat
+theorem familyIncrementResidueMassRat_le_familyResidueMassRat
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices) (D c : ℕ) :
-    familyAppendageResidueMassRat indices old D c ≤
+    familyIncrementResidueMassRat indices old D c ≤
       familyResidueMassRat indices D c := by
   classical
-  unfold familyAppendageResidueMassRat familyAppendageDivisorEvents
+  unfold familyIncrementResidueMassRat familyIncrementDivisorEvents
     familyResidueMassRat
   apply Finset.sum_le_sum_of_subset_of_nonneg
   · intro event hevent
     rcases Finset.mem_filter.mp hevent with ⟨hdivEvent, hresidue⟩
     rcases Finset.mem_filter.mp hdivEvent with ⟨hext, hdiv⟩
-    have hgDvd : familyAppendageG old event ∣ event.dPlus := by
-      simpa [familyAppendageG] using
+    have hgDvd : familyIncrementG old event ∣ event.dPlus := by
+      simpa [familyIncrementG] using
         familyCompatibleExtension_gcd_dvd_dPlus
           P X Pz b indices hX hmem old hsub event hext
     have hDvd : D ∣ event.dPlus := hdiv.trans hgDvd
@@ -1843,17 +1843,17 @@ theorem familyAppendageResidueMassRat_le_familyResidueMassRat
     exact familyEventWeightRat_nonneg event
 
 /-- The exact paper decomposition `A(S) = mass(extensions) + divisor tail`. -/
-theorem familyAppendageIncrementRat_eq_base_add_tail
+theorem familyIncrementRat_eq_base_add_tail
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices) :
-    familyAppendageIncrementRat indices old =
-      familyAppendageBaseMassRat indices old +
-        familyAppendageTailRat indices old ⌊X⌋₊ := by
+    familyIncrementRat indices old =
+      familyIncrementBaseMassRat indices old +
+        familyIncrementTailRat indices old ⌊X⌋₊ := by
   classical
-  rw [familyAppendageIncrementRat_eq_totient_divisorMass
+  rw [familyIncrementRat_eq_totient_divisorMass
     P X Pz b indices hX hmem old hsub]
   have hBpos : 0 < ⌊X⌋₊ := Nat.floor_pos.mpr hX.le
   have hB : 1 ≤ ⌊X⌋₊ := by omega
@@ -1863,20 +1863,20 @@ theorem familyAppendageIncrementRat_eq_base_add_tail
     simp only [Finset.mem_Icc, Finset.mem_insert]
     omega
   rw [hIcc, Finset.sum_insert (by simp)]
-  simp [familyAppendageTailRat]
+  simp [familyIncrementTailRat]
 
 /-- The compatible-extension base mass is at most the total mass of the exact
 finite paper family. -/
-theorem familyAppendageBaseMassRat_le_indexMassRat
+theorem familyIncrementBaseMassRat_le_indexMassRat
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent) :
-    familyAppendageBaseMassRat indices old ≤ familyIndexMassRat indices := by
+    familyIncrementBaseMassRat indices old ≤ familyIndexMassRat indices := by
   classical
   rw [← familyEventMassRat_eq_familyIndexMassRat
     P X Pz b indices hX hmem]
-  unfold familyAppendageBaseMassRat familyEventMassRat
+  unfold familyIncrementBaseMassRat familyEventMassRat
   apply Finset.sum_le_sum_of_subset_of_nonneg
   · intro event hext
     rw [familyCompatibleExtensions] at hext
@@ -1886,46 +1886,46 @@ theorem familyAppendageBaseMassRat_le_indexMassRat
 
 /-- Once the finite divisor tail is bounded by `mu * epsilon`, the concrete
 increment has the manuscript form `A(S) ≤ mu(1+epsilon)`. -/
-theorem familyAppendageIncrementRat_le_mass_mul_one_add
+theorem familyIncrementRat_le_mass_mul_one_add
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices)
     (ε : ℚ)
-    (htail : familyAppendageTailRat indices old ⌊X⌋₊ ≤
+    (htail : familyIncrementTailRat indices old ⌊X⌋₊ ≤
       familyIndexMassRat indices * ε) :
-    familyAppendageIncrementRat indices old ≤
+    familyIncrementRat indices old ≤
       familyIndexMassRat indices * (1 + ε) := by
-  rw [familyAppendageIncrementRat_eq_base_add_tail
+  rw [familyIncrementRat_eq_base_add_tail
     P X Pz b indices hX hmem old hsub]
   calc
-    familyAppendageBaseMassRat indices old +
-        familyAppendageTailRat indices old ⌊X⌋₊ ≤
+    familyIncrementBaseMassRat indices old +
+        familyIncrementTailRat indices old ⌊X⌋₊ ≤
       familyIndexMassRat indices + familyIndexMassRat indices * ε :=
         add_le_add
-          (familyAppendageBaseMassRat_le_indexMassRat
+          (familyIncrementBaseMassRat_le_indexMassRat
             P X Pz b indices hX hmem old)
           htail
     _ = familyIndexMassRat indices * (1 + ε) := by ring
 
 /-- Divisor-by-divisor event-tensor bounds control the complete finite
-appendage tail.  This is the checked sum reversal and `phi(D)/D^2 ≤ 1/D`
-step in the proof of `lem:appendage`. -/
-theorem familyAppendageTailRat_le_mass_mul_classTail
+increment tail.  This is the checked sum reversal and `phi(D)/D^2 ≤ 1/D`
+step in the proof of `lem:increment`. -/
+theorem familyIncrementTailRat_le_mass_mul_classTail
     (indices : Finset FamilyIndex) (old : Finset EscLeanChecks.SatEvent)
     (B : ℕ) (μ : ℚ) (C : ℕ → ℚ)
     (hμ : 0 ≤ μ)
     (hC : ∀ D ∈ Finset.Icc 2 B, 0 ≤ C D)
     (hmass : ∀ D ∈ Finset.Icc 2 B,
-      familyAppendageDivisorMassRat indices old D ≤
+      familyIncrementDivisorMassRat indices old D ≤
         μ * C D / (D : ℚ) ^ 2) :
-    familyAppendageTailRat indices old B ≤
+    familyIncrementTailRat indices old B ≤
       μ * ∑ D ∈ Finset.Icc 2 B, C D / (D : ℚ) := by
-  unfold familyAppendageTailRat
+  unfold familyIncrementTailRat
   calc
     (∑ D ∈ Finset.Icc 2 B, (Nat.totient D : ℚ) *
-        familyAppendageDivisorMassRat indices old D) ≤
+        familyIncrementDivisorMassRat indices old D) ≤
       ∑ D ∈ Finset.Icc 2 B, μ * (C D / (D : ℚ)) := by
       apply Finset.sum_le_sum
       intro D hD
@@ -1936,7 +1936,7 @@ theorem familyAppendageTailRat_le_mass_mul_classTail
       have hμC : 0 ≤ μ * C D := mul_nonneg hμ (hC D hD)
       calc
         (Nat.totient D : ℚ) *
-            familyAppendageDivisorMassRat indices old D ≤
+            familyIncrementDivisorMassRat indices old D ≤
           (Nat.totient D : ℚ) *
             (μ * C D / (D : ℚ) ^ 2) :=
               mul_le_mul_of_nonneg_left (hmass D hD) hphi
@@ -1949,9 +1949,9 @@ theorem familyAppendageTailRat_le_mass_mul_classTail
     _ = μ * ∑ D ∈ Finset.Icc 2 B, C D / (D : ℚ) := by
       rw [Finset.mul_sum]
 
-/-- Concrete `lem:appendage` bound from the event-tensor estimate for every
+/-- Concrete `lem:increment` bound from the event-tensor estimate for every
 divisor and the resulting finite class-count tail. -/
-theorem familyAppendageIncrementRat_le_of_divisorMass
+theorem familyIncrementRat_le_of_divisorMass
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
@@ -1960,14 +1960,14 @@ theorem familyAppendageIncrementRat_le_of_divisorMass
     (C : ℕ → ℚ)
     (hC : ∀ D ∈ Finset.Icc 2 ⌊X⌋₊, 0 ≤ C D)
     (hmass : ∀ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      familyAppendageDivisorMassRat indices old D ≤
+      familyIncrementDivisorMassRat indices old D ≤
         familyIndexMassRat indices * C D / (D : ℚ) ^ 2) :
-    familyAppendageIncrementRat indices old ≤
+    familyIncrementRat indices old ≤
       familyIndexMassRat indices *
         (1 + ∑ D ∈ Finset.Icc 2 ⌊X⌋₊, C D / (D : ℚ)) := by
-  apply familyAppendageIncrementRat_le_mass_mul_one_add
+  apply familyIncrementRat_le_mass_mul_one_add
     P X Pz b indices hX hmem old hsub
-  apply familyAppendageTailRat_le_mass_mul_classTail
+  apply familyIncrementTailRat_le_mass_mul_classTail
   · unfold familyIndexMassRat
     apply Finset.sum_nonneg
     intro i _hi
@@ -1976,44 +1976,44 @@ theorem familyAppendageIncrementRat_le_of_divisorMass
   · exact hC
   · exact hmass
 
-/-- Paper-shaped appendage bound after applying the event-tensor estimate to
+/-- Paper-shaped increment bound after applying the event-tensor estimate to
 each residue class actually represented modulo `D`.  The only remaining term
 is the explicit finite class-count tail. -/
-theorem familyAppendageIncrementRat_le_of_residueMass
+theorem familyIncrementRat_le_of_residueMass
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
     (old : Finset EscLeanChecks.SatEvent)
     (hsub : old ⊆ familyEvents indices)
     (hresidue : ∀ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      ∀ c ∈ familyAppendageResidueClasses indices old D,
-        familyAppendageResidueMassRat indices old D c ≤
+      ∀ c ∈ familyIncrementResidueClasses indices old D,
+        familyIncrementResidueMassRat indices old D c ≤
           familyIndexMassRat indices / (D : ℚ) ^ 2) :
-    familyAppendageIncrementRat indices old ≤
+    familyIncrementRat indices old ≤
       familyIndexMassRat indices *
         (1 + ∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-          ((familyAppendageResidueClasses indices old D).card : ℚ) /
+          ((familyIncrementResidueClasses indices old D).card : ℚ) /
             (D : ℚ)) := by
-  apply familyAppendageIncrementRat_le_of_divisorMass
+  apply familyIncrementRat_le_of_divisorMass
     P X Pz b indices hX hmem old hsub
-    (fun D => (familyAppendageResidueClasses indices old D).card)
+    (fun D => (familyIncrementResidueClasses indices old D).card)
   · intro D _hD
     positivity
   · intro D hD
     calc
-      familyAppendageDivisorMassRat indices old D ≤
-          (familyAppendageResidueClasses indices old D).card *
+      familyIncrementDivisorMassRat indices old D ≤
+          (familyIncrementResidueClasses indices old D).card *
             (familyIndexMassRat indices / (D : ℚ) ^ 2) :=
-        familyAppendageDivisorMassRat_le_card_mul_of_residueMass_le
+        familyIncrementDivisorMassRat_le_card_mul_of_residueMass_le
           indices old D _ (hresidue D hD)
       _ = familyIndexMassRat indices *
-          (familyAppendageResidueClasses indices old D).card /
+          (familyIncrementResidueClasses indices old D).card /
             (D : ℚ) ^ 2 := by ring
 
-/-- Actual-family appendage bound from the full event-tensor estimate
+/-- Actual-family increment bound from the full event-tensor estimate
 `B_{D,c} ≤ K mu / D^2`.  All compatibility, divisor expansion, residue-fiber
 partitioning, and class multiplicity bookkeeping are internal to this theorem. -/
-theorem familyAppendageIncrementRat_le_of_familyResidueMass
+theorem familyIncrementRat_le_of_familyResidueMass
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
@@ -2021,39 +2021,39 @@ theorem familyAppendageIncrementRat_le_of_familyResidueMass
     (hsub : old ⊆ familyEvents indices)
     (K : ℚ) (hK : 0 ≤ K)
     (htensor : ∀ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      ∀ c ∈ familyAppendageResidueClasses indices old D,
+      ∀ c ∈ familyIncrementResidueClasses indices old D,
         familyResidueMassRat indices D c ≤
           K * familyIndexMassRat indices / (D : ℚ) ^ 2) :
-    familyAppendageIncrementRat indices old ≤
+    familyIncrementRat indices old ≤
       familyIndexMassRat indices *
         (1 + ∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-          (K * (familyAppendageResidueClasses indices old D).card) /
+          (K * (familyIncrementResidueClasses indices old D).card) /
             (D : ℚ)) := by
-  apply familyAppendageIncrementRat_le_of_divisorMass
+  apply familyIncrementRat_le_of_divisorMass
     P X Pz b indices hX hmem old hsub
-    (fun D => K * (familyAppendageResidueClasses indices old D).card)
+    (fun D => K * (familyIncrementResidueClasses indices old D).card)
   · intro D _hD
     positivity
   · intro D hD
-    have hfiber : ∀ c ∈ familyAppendageResidueClasses indices old D,
-        familyAppendageResidueMassRat indices old D c ≤
+    have hfiber : ∀ c ∈ familyIncrementResidueClasses indices old D,
+        familyIncrementResidueMassRat indices old D c ≤
           K * familyIndexMassRat indices / (D : ℚ) ^ 2 := by
       intro c hc
-      exact (familyAppendageResidueMassRat_le_familyResidueMassRat
+      exact (familyIncrementResidueMassRat_le_familyResidueMassRat
         P X Pz b indices hX hmem old hsub D c).trans (htensor D hD c hc)
     calc
-      familyAppendageDivisorMassRat indices old D ≤
-          (familyAppendageResidueClasses indices old D).card *
+      familyIncrementDivisorMassRat indices old D ≤
+          (familyIncrementResidueClasses indices old D).card *
             (K * familyIndexMassRat indices / (D : ℚ) ^ 2) :=
-        familyAppendageDivisorMassRat_le_card_mul_of_residueMass_le
+        familyIncrementDivisorMassRat_le_card_mul_of_residueMass_le
           indices old D _ hfiber
       _ = familyIndexMassRat indices *
-          (K * (familyAppendageResidueClasses indices old D).card) /
+          (K * (familyIncrementResidueClasses indices old D).card) /
             (D : ℚ) ^ 2 := by ring
 
 /-- The event-tensor increment bound with the manuscript's multiplicative
 class count `C_D(S) = prod_{ell|D} C_ell(S)` exposed explicitly. -/
-theorem familyAppendageIncrementRat_le_of_familyResidueMass_prod_classes
+theorem familyIncrementRat_le_of_familyResidueMass_prod_classes
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
@@ -2061,15 +2061,15 @@ theorem familyAppendageIncrementRat_le_of_familyResidueMass_prod_classes
     (hsub : old ⊆ familyEvents indices)
     (K : ℚ) (hK : 0 ≤ K)
     (htensor : ∀ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      ∀ c ∈ familyAppendageResidueClasses indices old D,
+      ∀ c ∈ familyIncrementResidueClasses indices old D,
         familyResidueMassRat indices D c ≤
           K * familyIndexMassRat indices / (D : ℚ) ^ 2) :
-    familyAppendageIncrementRat indices old ≤
+    familyIncrementRat indices old ≤
       familyIndexMassRat indices *
         (1 + ∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
           (K * (∏ ell ∈ D.primeFactors,
             (familyOldPrimeResidueClasses old ell).card : ℚ)) / (D : ℚ)) := by
-  have hfirst := familyAppendageIncrementRat_le_of_familyResidueMass
+  have hfirst := familyIncrementRat_le_of_familyResidueMass
     P X Pz b indices hX hmem old hsub K hK htensor
   apply hfirst.trans
   have hmassNonneg : 0 ≤ familyIndexMassRat indices := by
@@ -2080,10 +2080,10 @@ theorem familyAppendageIncrementRat_le_of_familyResidueMass_prod_classes
     positivity
   apply mul_le_mul_of_nonneg_left _ hmassNonneg
   gcongr with D hD
-  have hcard := familyAppendageResidueClasses_card_le_prod_oldPrimeClasses_auto
+  have hcard := familyIncrementResidueClasses_card_le_prod_oldPrimeClasses_auto
     P X Pz b indices hX hmem old hsub D
   have hcardQ :
-      ((familyAppendageResidueClasses indices old D).card : ℚ) ≤
+      ((familyIncrementResidueClasses indices old D).card : ℚ) ≤
         (∏ ell ∈ D.primeFactors,
           (familyOldPrimeResidueClasses old ell).card : ℚ) := by
     exact_mod_cast hcard
@@ -2091,8 +2091,8 @@ theorem familyAppendageIncrementRat_le_of_familyResidueMass_prod_classes
 
 /-- Supported version of the multiplicative class-count bound.  Unlike the
 raw product majorant, this retains the fact that nonsquarefree or even `D`
-have empty appendage carrier. -/
-theorem familyAppendageIncrementRat_le_of_familyResidueMass_classProduct
+have empty increment carrier. -/
+theorem familyIncrementRat_le_of_familyResidueMass_classProduct
     (P : Params) (X : ℝ) (Pz b : ℕ) (indices : Finset FamilyIndex)
     (hX : 1 < X)
     (hmem : ∀ i ∈ indices, FamilyStaticMem P X Pz b i)
@@ -2100,14 +2100,14 @@ theorem familyAppendageIncrementRat_le_of_familyResidueMass_classProduct
     (hsub : old ⊆ familyEvents indices)
     (K : ℚ) (hK : 0 ≤ K)
     (htensor : ∀ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      ∀ c ∈ familyAppendageResidueClasses indices old D,
+      ∀ c ∈ familyIncrementResidueClasses indices old D,
         familyResidueMassRat indices D c ≤
           K * familyIndexMassRat indices / (D : ℚ) ^ 2) :
-    familyAppendageIncrementRat indices old ≤
+    familyIncrementRat indices old ≤
       familyIndexMassRat indices *
         (1 + ∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-          (K * familyAppendageClassProductRat old D) / (D : ℚ)) := by
-  have hfirst := familyAppendageIncrementRat_le_of_familyResidueMass
+          (K * familyIncrementClassProductRat old D) / (D : ℚ)) := by
+  have hfirst := familyIncrementRat_le_of_familyResidueMass
     P X Pz b indices hX hmem old hsub K hK htensor
   apply hfirst.trans
   have hmassNonneg : 0 ≤ familyIndexMassRat indices := by
@@ -2118,7 +2118,7 @@ theorem familyAppendageIncrementRat_le_of_familyResidueMass_classProduct
     positivity
   apply mul_le_mul_of_nonneg_left _ hmassNonneg
   gcongr with D hD
-  exact familyAppendageResidueClasses_card_le_classProductRat
+  exact familyIncrementResidueClasses_card_le_classProductRat
     P X Pz b indices hX hmem old hsub D
 
 /-- The actual reciprocal-lcm Brun coefficients satisfy the manuscript's
@@ -2132,13 +2132,13 @@ theorem familyCompatibleLcmMassRat_le_mass_one_add_pow_of_residueTensor
     (htensor : ∀ r : ℕ, 1 ≤ r →
       ∀ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
       ∀ D ∈ Finset.Icc 2 ⌊X⌋₊,
-      ∀ c ∈ familyAppendageResidueClasses indices old D,
+      ∀ c ∈ familyIncrementResidueClasses indices old D,
         familyResidueMassRat indices D c ≤
           K * familyIndexMassRat indices / (D : ℚ) ^ 2)
     (htail : ∀ r : ℕ, 1 ≤ r →
       ∀ old ∈ familyCompatibleSubsetsOfCard indices (r - 1),
         (∑ D ∈ Finset.Icc 2 ⌊X⌋₊,
-          (K * familyAppendageClassProductRat old D) / (D : ℚ)) ≤ ε) :
+          (K * familyIncrementClassProductRat old D) / (D : ℚ)) ≤ ε) :
     ∀ r : ℕ, familyCompatibleLcmMassRat indices r ≤
       (familyIndexMassRat indices * (1 + ε)) ^ r /
         (Nat.factorial r : ℚ) := by
@@ -2156,13 +2156,13 @@ theorem familyCompatibleLcmMassRat_le_mass_one_add_pow_of_residueTensor
     rw [familyCompatibleSubsetsOfCard] at hold
     have hsub : old ⊆ familyEvents indices :=
       (Finset.mem_powersetCard.mp (Finset.mem_of_mem_filter old hold)).1
-    have happendage :=
-      familyAppendageIncrementRat_le_of_familyResidueMass_classProduct
+    have hincrement :=
+      familyIncrementRat_le_of_familyResidueMass_classProduct
         P X Pz b indices hX hmem old hsub K hK
           (htensor r hr old (by
             rw [familyCompatibleSubsetsOfCard]
             exact hold))
-    exact happendage.trans (mul_le_mul_of_nonneg_left
+    exact hincrement.trans (mul_le_mul_of_nonneg_left
       (add_le_add_left (htail r hr old (by
         rw [familyCompatibleSubsetsOfCard]
         exact hold)) 1) hmassNonneg)
@@ -3042,7 +3042,7 @@ theorem FamilyStaticMem.eventHit_Q_dvd
 
 /-! ## Arithmetic of the fan center `a = (Q+1)/4`. -/
 
-/-- From the saturation congruence `4 ρ(e) ∣ Q + 1` the fan center `a = (Q+1)/4`
+/-- From the certificate congruence `4 ρ(e) ∣ Q + 1` the fan center `a = (Q+1)/4`
 is integral and satisfies `4 a = Q + 1`, i.e. `Q = 4a - 1`
 (tex lines 761–763: "the congruence implies `aᵢ` is an integer ... `Qᵢ = 4aᵢ-1`"). -/
 theorem four_mul_a_eq (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) :
@@ -3069,7 +3069,7 @@ theorem a_pos (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) (hQ : 0 < i.Q) :
 
 /-- The conductor divides the fan center: `ρ(e) ∣ a`.
 
-This is the saturation step (tex lines 761–762: "the congruence implies that
+This is the certificate step (tex lines 761–762: "the congruence implies that
 `aᵢ` is an integer and `ρ(e) ∣ aᵢ`").  Indeed `4 ρ(e) ∣ Q + 1 = 4 a` gives
 `ρ(e) ∣ a`. -/
 theorem rho_dvd_a (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) :
@@ -3081,13 +3081,13 @@ theorem rho_dvd_a (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) :
   have : 4 * i.a = 4 * (i.rho * k) := by rw [h4a, hk]; ring
   omega
 
-/-- The exact-divisor saturation: `e ∣ a²`
+/-- The exact-divisor certificate: `e ∣ a²`
 (tex line 762: "Because `e = rs²` and `ρ(e) = rs`, this gives `e ∣ aᵢ²`"). -/
 theorem e_dvd_a_sq (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) :
     i.e ∣ i.a ^ 2 :=
   i.E.e_dvd_sq_of_rho_dvd (rho_dvd_a i hsat)
 
-/-- The saturation congruence forces the reduced conductor `ρ(e)` to be positive.
+/-- The certificate congruence forces the reduced conductor `ρ(e)` to be positive.
 
 If `ρ(e) = 0`, then the divisor `4ρ(e)` is zero, so `4ρ(e) ∣ Q+1` would force
 `Q+1 = 0`, impossible in `ℕ`. -/
@@ -3099,7 +3099,7 @@ theorem rho_pos_of_sat (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) :
   rw [hrho0] at hk
   simp at hk
 
-/-- The saturation congruence also forces `Q > 0`.  If `Q=0`, then the positive
+/-- The certificate congruence also forces `Q > 0`.  If `Q=0`, then the positive
 number `4ρ(e)` would divide `1`. -/
 theorem Q_pos_of_sat (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) :
     0 < i.Q := by
@@ -3112,7 +3112,7 @@ theorem Q_pos_of_sat (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) :
   have hle : 4 * i.rho ≤ 1 := Nat.le_of_dvd (by norm_num : 0 < 1) hdiv1
   omega
 
-/-- The exact divisor `e = r s²` is positive whenever the saturation congruence
+/-- The exact divisor `e = r s²` is positive whenever the certificate congruence
 holds.  This removes the last auxiliary positivity hypothesis from the
 family-membership-to-representability corollary. -/
 theorem e_pos_of_sat (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) :
@@ -3130,7 +3130,7 @@ theorem e_pos_of_sat (i : FamilyIndex) (hsat : 4 * i.rho ∣ i.Q + 1) :
 (tex lines 752–764: "Thus every such hit is a valid certificate by
 \Cref{lem:fan}.")
 
-Given a family index `i` whose data satisfy the saturation congruence
+Given a family index `i` whose data satisfy the certificate congruence
 `4 ρ(e) ∣ Q + 1` (so that `a = (Q+1)/4` is integral with `ρ(e) ∣ a`, hence
 `e ∣ a²`, `Q > 0`, `e > 0`, and `Q = 4a-1 = qOf a`) and the conditional residue
 congruence `Q ∣ n + 4e`, the number `n` is Erdős–Straus representable:
@@ -3310,14 +3310,14 @@ theorem Q_pos_of_mem
   positivity
 
 /-- Membership hit ⟹ representable, with both `Q`-positivity and `e`-positivity
-discharged from the membership data and the saturation congruence. -/
+discharged from the membership data and the certificate congruence. -/
 theorem familyMem_esRepresentable'
     (P : Params) (X : ℝ) (Pz b n : ℕ) (i : FamilyIndex)
     (hmem : FamilyMem P X Pz b n i) :
     EscLeanChecks.esRepresentable n :=
   familyMem_esRepresentable P X Pz b n i hmem
 
-/-! ## The index set `𝓘_b` and the saturated mass `μ_b`. -/
+/-! ## The index set `𝓘_b` and the certificate mass `μ_b`. -/
 
 /-- The set `𝓘_b` of all static family quadruples for base class `b` at scale
 `X` (tex line 764: "Let `𝓘_b` be the set of all quadruples above").  It is
@@ -3419,7 +3419,7 @@ theorem actualPaperFamily_compatibleLcmMassRat_increment_recurrence
       ∑ old ∈ familyCompatibleSubsetsOfCard
           (familyIndexFinset P X Pz b) (r - 1),
         familySubsetLcmRecipRat old *
-          familyAppendageIncrementRat
+          familyIncrementRat
             (familyIndexFinset P X Pz b) old := by
   apply familyCompatibleLcmMassRat_increment_recurrence
     P X Pz b (familyIndexFinset P X Pz b)
@@ -3435,7 +3435,7 @@ theorem actualPaperFamily_compatibleLcmMassRat_le_pow_div_factorial
     (hinc : ∀ r : ℕ, 1 ≤ r →
       ∀ old ∈ familyCompatibleSubsetsOfCard
           (familyIndexFinset P X Pz b) (r - 1),
-        familyAppendageIncrementRat
+        familyIncrementRat
           (familyIndexFinset P X Pz b) old ≤ M) :
     ∀ r : ℕ,
       familyCompatibleLcmMassRat (familyIndexFinset P X Pz b) r ≤
@@ -3522,9 +3522,9 @@ theorem actualPaperFamily_largePrime_ne_of_compatible_ne
   · exact hcompat
   · exact hne
 
-/-- The structural appendage divisibility conclusion for the complete static
+/-- The structural increment divisibility conclusion for the complete static
 paper family. -/
-theorem actualPaperFamily_appendageCommonDivisor_dvd_medium_of_compatible
+theorem actualPaperFamily_incrementCommonDivisor_dvd_medium_of_compatible
     (P : Params) (X : ℝ) (Pz b : ℕ) (hX : 1 < X)
     (event : EscLeanChecks.SatEvent) (old : List EscLeanChecks.SatEvent)
     (hevent : event ∈ familyEvents (familyIndexFinset P X Pz b))
@@ -3532,10 +3532,10 @@ theorem actualPaperFamily_appendageCommonDivisor_dvd_medium_of_compatible
       other ∈ familyEvents (familyIndexFinset P X Pz b))
     (hcompat : ∀ other ∈ old, EscLeanChecks.satEventCompatible event other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    EscLeanChecks.appendageG event.dPlus event.p
+    EscLeanChecks.incrementG event.dPlus event.p
         (EscLeanChecks.residualLcm (EscLeanChecks.satEventRows old)) ∣
       event.dPlus := by
-  apply familyEvents_appendageCommonDivisor_dvd_medium_of_compatible P X Pz b
+  apply familyEvents_incrementCommonDivisor_dvd_medium_of_compatible P X Pz b
     (familyIndexFinset P X Pz b) hX
   · intro i hi
     exact (mem_familyIndexFinset_iff P X Pz b i

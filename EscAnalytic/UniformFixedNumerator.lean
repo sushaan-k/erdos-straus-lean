@@ -550,14 +550,14 @@ noncomputable def UniformNumeratorLargeRangeInputs.of_uniform_final_assembly_exa
         (m := m) (z := z m N) (N := N) (euler := euler m N)
         (heuler_ge_one N m hN hTN hm hm_log))
 
-/-- Global saturation package from the exact fixed-numerator reduced summatory
+/-- Global certificate package from the exact fixed-numerator reduced summatory
 carrier.
 
 This composes
 `UniformNumeratorLargeRangeInputs.of_uniform_final_assembly_exact_reduced_sum_count`
-with the existing finite-initial absorption step, so `hyp:uniform-m-saturation`
+with the existing finite-initial absorption step, so `hyp:uniform-m-certificate`
 can be supplied from the exact reduced-count large-range estimate directly. -/
-noncomputable def UniformNumeratorSaturationInputs.of_uniform_final_assembly_exact_reduced_sum_count
+noncomputable def UniformNumeratorCertificateInputs.of_uniform_final_assembly_exact_reduced_sum_count
     {A Ered_c₁ Ered_C₁ smoothExp smoothC eulerC B : ℝ} (T : ℕ)
     (hEred_c₁ : 0 < Ered_c₁) (hEred_C₁ : 0 < Ered_C₁)
     (hsmoothExp_pos : 0 < smoothExp) (hsmoothExp_lt_one : smoothExp < 1)
@@ -581,24 +581,24 @@ noncomputable def UniformNumeratorSaturationInputs.of_uniform_final_assembly_exa
     (hsmooth_count : ∀ N m : ℕ, 3 ≤ N → T ≤ N → 2 ≤ m →
       (m : ℝ) ≤ (Real.log N) ^ A →
         (fixedNumeratorSmoothRangeCount m (z m N) N : ℝ) ≤ smooth m N) :
-    UniformNumeratorSaturationInputs A :=
+    UniformNumeratorCertificateInputs A :=
   (UniformNumeratorLargeRangeInputs.of_uniform_final_assembly_exact_reduced_sum_count
     (T := T) hEred_c₁ hEred_C₁ hsmoothExp_pos hsmoothExp_lt_one hsmoothC_pos
     heulerC_pos hB smooth euler z hEred_exact hsmooth heuler heuler_ge_one
-    hsmooth_count).toSaturationInputs
+    hsmooth_count).toCertificateInputs
 
-/-- Global saturation from the exact reduced summatory carrier, with the
+/-- Global certificate from the exact reduced summatory carrier, with the
 smooth and Euler sides fixed to the checked Rankin/smoothPsi and concrete
 Euler-product machinery.
 
 Compared with
-`UniformNumeratorSaturationInputs.of_uniform_final_assembly_exact_reduced_sum_count`,
+`UniformNumeratorCertificateInputs.of_uniform_final_assembly_exact_reduced_sum_count`,
 this removes the auxiliary smooth carrier, Euler carrier, smooth-count bound,
 and Euler lower-bound fields.  The only remaining analytic input is the
 large-range saving estimate for the exact finite carrier
 `fixedNumeratorReducedSumCount m (zNatScale N) N`, uniformly over the displayed
 logarithmic numerator range. -/
-noncomputable def UniformNumeratorSaturationInputs.of_uniform_rankin_smoothPsi_exact_reduced_sum_count
+noncomputable def UniformNumeratorCertificateInputs.of_uniform_rankin_smoothPsi_exact_reduced_sum_count
     {A Ered_c₁ Ered_C₁ B : ℝ} (T : ℕ)
     (hEred_c₁ : 0 < Ered_c₁) (hEred_C₁ : 0 < Ered_C₁)
     (hB : 0 < B)
@@ -606,26 +606,26 @@ noncomputable def UniformNumeratorSaturationInputs.of_uniform_rankin_smoothPsi_e
       (m : ℝ) ≤ (Real.log N) ^ A →
         (fixedNumeratorReducedSumCount m (zNatScale N) N : ℝ) ≤
           Ered_C₁ * ((N : ℝ) * saving Ered_c₁ N)) :
-    UniformNumeratorSaturationInputs A :=
+    UniformNumeratorCertificateInputs A :=
   (UniformNumeratorLargeRangeInputs.of_uniform_final_assembly_rankin_smoothPsi_exact_reduced_sum_count
     (T := T) (Ered_c₁ := Ered_c₁) (Ered_C₁ := Ered_C₁) (B := B)
-    hEred_c₁ hEred_C₁ hB hEred_exact).toSaturationInputs
+    hEred_c₁ hEred_C₁ hB hEred_exact).toCertificateInputs
 
 /-- Same as
-`UniformNumeratorSaturationInputs.of_uniform_rankin_smoothPsi_exact_reduced_sum_count`,
+`UniformNumeratorCertificateInputs.of_uniform_rankin_smoothPsi_exact_reduced_sum_count`,
 with the denominator-loss exponent fixed to `1`.  This removes a purely
 auxiliary parameter from callers: the hard input remains exactly the uniform
 large-range saving estimate for
 `fixedNumeratorReducedSumCount m (zNatScale N) N`. -/
-noncomputable def UniformNumeratorSaturationInputs.of_uniform_rankin_smoothPsi_exact_reduced_sum_count_one
+noncomputable def UniformNumeratorCertificateInputs.of_uniform_rankin_smoothPsi_exact_reduced_sum_count_one
     {A Ered_c₁ Ered_C₁ : ℝ} (T : ℕ)
     (hEred_c₁ : 0 < Ered_c₁) (hEred_C₁ : 0 < Ered_C₁)
     (hEred_exact : ∀ N m : ℕ, 3 ≤ N → T ≤ N → 2 ≤ m →
       (m : ℝ) ≤ (Real.log N) ^ A →
         (fixedNumeratorReducedSumCount m (zNatScale N) N : ℝ) ≤
           Ered_C₁ * ((N : ℝ) * saving Ered_c₁ N)) :
-    UniformNumeratorSaturationInputs A :=
-  UniformNumeratorSaturationInputs.of_uniform_rankin_smoothPsi_exact_reduced_sum_count
+    UniformNumeratorCertificateInputs A :=
+  UniformNumeratorCertificateInputs.of_uniform_rankin_smoothPsi_exact_reduced_sum_count
     (T := T) (Ered_c₁ := Ered_c₁) (Ered_C₁ := Ered_C₁) (B := 1)
     hEred_c₁ hEred_C₁ (by norm_num) hEred_exact
 
@@ -634,7 +634,7 @@ noncomputable def UniformNumeratorSaturationInputs.of_uniform_rankin_smoothPsi_e
 This is the direct paper-hypothesis bridge for the fixed-numerator lane: for
 each fixed logarithmic range `A`, a single large-range bound for
 `fixedNumeratorReducedSumCount m (zNatScale N) N` supplies the full
-`hyp:uniform-m-saturation` package and hence the published uniform-numerator
+`hyp:uniform-m-certificate` package and hence the published uniform-numerator
 conclusion. -/
 theorem thm_uniform_m_of_uniform_rankin_smoothPsi_exact_reduced_sum_count
     (T : ℝ → ℕ) (Ered_c₁ Ered_C₁ B : ℝ → ℝ)

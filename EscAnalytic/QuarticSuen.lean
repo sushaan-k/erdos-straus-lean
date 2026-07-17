@@ -171,7 +171,7 @@ theorem actualPaperFamilyLcmCoefficientCanonicalScale_factorial_up_to
         (Inputs.roughModulus (canonicalPaperFamilyScale Cp N)) →
       ∀ ε : ℚ, 0 ≤ ε → ∀ R : ℕ,
       (K : ℝ) *
-        (Real.exp ((R : ℝ) * paperAppendageFloorScale P
+        (Real.exp ((R : ℝ) * paperIncrementFloorScale P
           (canonicalPaperFamilyScale Cp N)) - 1) ≤ (ε : ℝ) →
       ∀ r : ℕ, r ≤ R →
         actualPaperFamilyLcmCoefficientCanonicalScale P Cp bres N r ≤
@@ -200,7 +200,7 @@ theorem actualPaperFamilyLcmCoefficientCanonicalScale_brun_envelope
         (Inputs.roughModulus (canonicalPaperFamilyScale Cp N)) →
       ∀ ε : ℚ, 0 ≤ ε → ∀ R : ℕ,
       (K : ℝ) *
-        (Real.exp ((R : ℝ) * paperAppendageFloorScale P
+        (Real.exp ((R : ℝ) * paperIncrementFloorScale P
           (canonicalPaperFamilyScale Cp N)) - 1) ≤ (ε : ℝ) →
       ∀ A : ℝ, 1 ≤ A →
         (∑ r ∈ Finset.range (R + 1), A ^ r *
@@ -1046,7 +1046,7 @@ noncomputable def QuarticCertificateFamilyInput.of_canonical_suen_elemSymm_sum_m
 
 /-- Overstrong rank-tail packet interface for the canonical Suen route.
 
-This record spells out the finite canonical classes, the weighted appendage
+This record spells out the finite canonical classes, the weighted increment
 majorants, the Suen tail, the local decomposition, the real-scale optimization
 budget, and the rank choice needed for the top elementary-symmetric tail.  The
 rank choice is intentionally separated from the scalar-two-mu packet below,

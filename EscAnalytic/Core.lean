@@ -27,7 +27,7 @@ namespace EscAnalytic
 open scoped BigOperators
 open Filter
 
-/-- The fixed real parameters `0 < η, σ, λ, θ, β < 1` of the saturated family,
+/-- The fixed real parameters `0 < η, σ, λ, θ, β < 1` of the certificate family,
 together with the admissibility inequalities `(eq:param-conditions)`:
 `3η < λ`, `η+σ < λ`, `λ+η < θ`, `2θ < β < 1-σ`. -/
 structure Params where
@@ -214,7 +214,7 @@ the key divisibility used in the certificate is `e ∣ a²` once `ρ(e) ∣ a`. 
 theorem rho_sq_eq (E : ExactDivisor) : E.rho ^ 2 = E.r ^ 2 * E.s ^ 2 := by
   unfold rho; ring
 
-/-- If `ρ(e) ∣ a` then `e ∣ a²` (the saturation step `ρ(e) ∣ aᵢ ⟹ e ∣ aᵢ²`). -/
+/-- If `ρ(e) ∣ a` then `e ∣ a²` (the certificate step `ρ(e) ∣ aᵢ ⟹ e ∣ aᵢ²`). -/
 theorem e_dvd_sq_of_rho_dvd (E : ExactDivisor) {a : ℕ} (h : E.rho ∣ a) : E.e ∣ a ^ 2 := by
   obtain ⟨k, rfl⟩ := h
   refine ⟨E.r * k ^ 2, ?_⟩

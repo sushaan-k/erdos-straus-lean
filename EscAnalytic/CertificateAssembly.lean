@@ -67,7 +67,7 @@ noncomputable def satEventRankBudgetCertificateOfPaperFamily
 
 /-- Build a finite rank-budget certificate from uniform admissible event data.
 
-This removes the need to restate the low-level saturated-event witness
+This removes the need to restate the low-level certificate-event witness
 `hcert`: it follows from admissibility, the `rho/e` identities, base-prime
 coprimality, and the base congruence. -/
 noncomputable def satEventRankBudgetCertificateOfAdmissibleForUniform

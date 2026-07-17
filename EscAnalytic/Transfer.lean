@@ -130,7 +130,7 @@ theorem relaxed_defect_tendsto_zero
 /-- **Error-side level-condition step** (tex 1995–2002).
 
 The Brun envelope error `∑_{r≤2R} X^r F_r ≤ X^{2R}·exp{(1+ε_K)μ}` is bounded by
-`X^{2R}·exp{2μ}` once `(1+ε_K)μ ≤ 2μ` (i.e. `ε_K ≤ 1`, the appendage bound for
+`X^{2R}·exp{2μ}` once `(1+ε_K)μ ≤ 2μ` (i.e. `ε_K ≤ 1`, the increment bound for
 `K` large, tex 1810–1815), and then — *dividing the level condition*
 `P(z)·X^{2R}·exp{2μ} ≤ N·exp{-4μ}` by `P(z) > 0` — by `(N/P(z))·exp{-4μ}`.  This
 is precisely the manuscript's "at most `(N/P(z))e^{-4μ}` by the hypothesis."
@@ -162,7 +162,7 @@ theorem error_le_level
 
 /-! ## Part 1.  `thm:finite-transfer` — the assembled per-base-class bound. -/
 
-/-- **Saturated finite-interval transfer** (`thm:finite-transfer`, tex 1963–2013).
+/-- **Certificate finite-interval transfer** (`thm:finite-transfer`, tex 1963–2013).
 
 We index by the manuscript variable `X` (the missed count, scales, and mass are
 all functions of `X`).  Fix a base class `b`; abbreviate
@@ -170,7 +170,7 @@ all functions of `X`).  Fix a base class `b`; abbreviate
 * `Mb X`     := the per-base missed count
   `#{n ≤ N : n ≡ b (mod P(z)), n ∉ A_i^{(b)} ∀ i}`  (LHS, tex 1969–1972);
 * `N X`, `Pz X`  := `N` and `P(z)`;
-* `μ X`      := the saturated mass `μ_b`;
+* `μ X`      := the certificate mass `μ_b`;
 * `Xpow X`   := `X^{2R_b}` (the top power of the Brun envelope);
 * `nohit X`  := the CRT no-hit probability `P(W_b = 0)` (tex 1922–1925).
 
@@ -187,7 +187,7 @@ all functions of `X`).  Fix a base class `b`; abbreviate
   Brun-coefficient data;
 * `herr`  : the **Brun envelope** bound `errTerm ≤ X^{2R}·exp{(1+ε_K)μ}`
   (`thm:Brun`, tex 1776–1816 via `brun_envelope_factorial`);
-* `hεle`  : the appendage bound `ε_K ≤ 1` (`lem:appendage`, `K` large, tex 1810);
+* `hεle`  : the increment bound `ε_K ≤ 1` (`lem:increment`, `K` large, tex 1810);
 * `hF2R`  : **`thm:Brun` + Stirling** `F_{2R_b} ≤ exp{-3μ_b}` (tex 2006–2007);
 * `hnohit`: the **CRT no-hit** bound `nohit ≤ exp{-(1-ε_b)μ_b}`
   (`thm:CRT-nohit` via `crt_nohit`, tex 1922–1925).
@@ -299,7 +299,7 @@ raw top-coefficient hypothesis `F2R ≤ exp(-3μ)` by:
 * the explicit factorial/Stirling tail inequality
   `M^{2R}/(2R)! ≤ exp(-3μ)`.
 
-Thus the remaining hypotheses are the decomposition, appendage/level
+Thus the remaining hypotheses are the decomposition, increment/level
 inequalities, and the cited-Suen no-hit envelope, not a free Brun coefficient
 tail. -/
 theorem finite_transfer_of_elemSymm_brun_error_and_top

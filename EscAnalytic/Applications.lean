@@ -125,7 +125,7 @@ theorem geometric_exceptional_of_main (h : IsMainBound exceptionalCount) :
 /-! ## Fixed-numerator certificate core
 
 The asymptotic fixed-numerator theorem also needs fixed-`m` analytic mass,
-tensorisation, appendage, dependency, and transfer estimates.  The elementary
+tensorisation, increment, dependency, and transfer estimates.  The elementary
 certificate algebra itself is already checked in `EscLeanChecks`; the wrappers
 below expose exactly the paper's `q = ma - 1`, `e ∣ a^2`,
 `n ≡ -me (mod q)` bridge at the analytic-application layer.
@@ -182,20 +182,20 @@ theorem fixed_numerator_representable_of_Q_add_one_eq_mul
   exact fixed_numerator_representable_of_fixed_fan m n a e hm hn ha he hedvd
     (by simpa [hfixedQ] using hcong)
 
-/-- Saturated-progression version of the fixed-numerator certificate core. -/
-theorem fixed_numerator_representable_of_saturated_progression
+/-- Certificate-progression version of the fixed-numerator certificate core. -/
+theorem fixed_numerator_representable_of_certificate_progression
     (m n Q r s : ℕ)
     (hm : 2 ≤ m) (hn : 0 < n) (hr : 0 < r) (hs : 0 < s)
     (hprogression : m * (r * s) ∣ Q + 1)
     (hcong : Q ∣ n + m * (r * s ^ 2)) :
     fixedNumeratorRepresentable m n := by
-  rcases EscLeanChecks.fixedFan_positive_unit_fractions_of_saturated_progression
+  rcases EscLeanChecks.fixedFan_positive_unit_fractions_of_certificate_progression
       m n Q r s hm hn hr hs hprogression hcong with
     ⟨_a, x, y, z, _ha, _hma, hx, hy, hz, hident⟩
   exact ⟨x, y, z, hx, hy, hz, hident⟩
 
 /-- Base-plus-residual fixed-numerator certificate core, matching the event
-decomposition used in the fixed-`m` saturated family. -/
+decomposition used in the fixed-`m` certificate family. -/
 theorem fixed_numerator_representable_of_base_residual_progression
     (m n dMinus dPlus p r s : ℕ)
     (hm : 2 ≤ m) (hn : 0 < n) (hr : 0 < r) (hs : 0 < s)

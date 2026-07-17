@@ -13455,7 +13455,7 @@ separation inequality `λ + η < θ`; the upper constant is `θ - λ`.
 
 This does not prove the arithmetic progression average itself.  It formalizes
 the scale comparison used after that average is invoked in the proof of
-`lem:small-saturation-average`. -/
+`lem:small-certificate-average`. -/
 theorem slantLogLength_uniform_bounds (P : Params) :
     ∃ c C X₀ : ℝ, 0 < c ∧ 0 < C ∧ ∀ X : ℝ, X₀ ≤ X → ∀ s : ℕ,
       1 ≤ s → (s : ℝ) ≤ SScale P X →
@@ -15855,7 +15855,7 @@ theorem logX_mul_logX_mul_logZ (X : ℝ) :
   unfold logX logZ sigmaShape
   ring
 
-/-! ## The concrete small-prime saturation average `Σ_b`.
+/-! ## The concrete small-prime certificate average `Σ_b`.
 
 We encode `Σ_b` as the product of its three constituent factor-functions, in the
 manuscript's grouping `Σ_b ≍ (log S) · ((inner r-length) · (A_s-divisor)) ≍
@@ -15870,13 +15870,13 @@ log X · (log X · log z)` (tex 1559–1578):
 
 `sigmaSmallConcrete = sAvg · (slant · divLogZ)`. -/
 
-/-- The concrete small-prime saturation average `Σ_b`, as the product of its three
-constituent factor-functions (`lem:small-saturation-average`, tex 1542–1578,
+/-- The concrete small-prime certificate average `Σ_b`, as the product of its three
+constituent factor-functions (`lem:small-certificate-average`, tex 1542–1578,
 factored per the proof at 1559–1578). -/
 noncomputable def sigmaSmallConcrete (sAvg slant divLogZ : ℝ → ℝ) (X : ℝ) : ℝ :=
   sAvg X * (slant X * divLogZ X)
 
-/-- Alternative concrete small-prime saturation average using the already
+/-- Alternative concrete small-prime certificate average using the already
 interchanged finite carrier `Inputs.smallDivisorAverage P` for
 `∑_{s≤S,sqf} A_s/s`, instead of keeping its `sAvg · divLogZ` proof factors
 separate. -/
@@ -15931,7 +15931,7 @@ noncomputable def sigmaSmallAverage_factor_asymp_standard
   rw [hshape, hfun] at hprod
   exact hprod
 
-/-- Unpacked paper-facing form of `lem:small-saturation-average` for the
+/-- Unpacked paper-facing form of `lem:small-certificate-average` for the
 already-interchanged finite small-divisor average carrier.
 
 The `FactorAsymp` data in `sigmaSmallAverage_factor_asymp_standard` is converted
@@ -16265,8 +16265,8 @@ theorem sigmaSmallAverage_mertensFree_bounds_iff_carrier_bounds
   · exact sigmaSmallAverage_mertensFree_with_carrier_bounds_of_bounds P s hs
   · exact sigmaSmallAverage_mertensFree_bounds_of_carrier_bounds P s hs
 
-/-- **The small-prime saturation average as a `FactorAsymp` to `sigmaShape`**
-(`lem:small-saturation-average`, tex 1542–1578), analogous to
+/-- **The small-prime certificate average as a `FactorAsymp` to `sigmaShape`**
+(`lem:small-certificate-average`, tex 1542–1578), analogous to
 `MassTensor.roughFactor_asymp`.
 
 The cited `log S ≍ log X` factor (`sAvg = Inputs.sAvgRecip P`) is discharged to
@@ -16344,7 +16344,7 @@ noncomputable def sigmaFactor_asymp (P : Params)
   rw [hshape, hfun] at hprod
   exact hprod
 
-/-! ## `mass_law_from_inputs` — the saturated mass law with both factors from Inputs.
+/-! ## `mass_law_from_inputs` — the certificate mass law with both factors from Inputs.
 
 We now feed `sigmaFactor_asymp` (from `Inputs.s_average_recip` + intermediate
 `Σ_b` constituents) and `MassTensor.roughFactor_asymp` (from
@@ -16357,7 +16357,7 @@ odd-divisor `A_s`-average `≍ log z`); these are the manuscript's
 `lem:phi-progression-average` and `lem:small-divisor-average`, which the cited
 `Inputs` interface does not isolate as single sums. -/
 
-/-- **Saturated cubic event mass, reduced to cited Inputs** (`prop:mu`,
+/-- **Certificate cubic event mass, reduced to cited Inputs** (`prop:mu`,
 tex 1580–1629).
 
 Both constituent factor-asymptotics of `μ_b = Σ_b · roughFactor` are produced
@@ -16365,7 +16365,7 @@ internally:
 
 * the rough `d₊`-factor `roughFactor ≍ (log X)/(log z)` from the cited
   `Inputs.rough_sqf_recip` (via `MassTensor.roughFactor_asymp`);
-* the small-prime saturation average `Σ_b ≍ (log X)² · log z` from the cited
+* the small-prime certificate average `Σ_b ≍ (log X)² · log z` from the cited
   `Inputs.s_average_recip` (the `log S ≍ log X` factor) via `sigmaFactor_asymp`,
   together with the two threaded intermediate `Σ_b`-constituent asymptotics
   `hslant`/`hdiv`.
@@ -17539,7 +17539,7 @@ theorem mass_law_and_event_tensor_from_inputs_of_twoSided_and_normalized
 
 This carries the checked deterministic slanted-length scale through the bundled
 mass-law/event-tensor route, leaving only the divisor/Euler-product constituent
-`divLogZ` as the small-saturation arithmetic input. -/
+`divLogZ` as the small-certificate arithmetic input. -/
 theorem mass_law_and_event_tensor_from_inputs_fixed_slant
     (P : Params) (b s : ℕ) (hs : 1 ≤ s)
     (divLogZ : ℝ → ℝ)

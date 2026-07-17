@@ -732,7 +732,7 @@ example : parameterBoundsHold = true := by
   native_decide
 
 /-!
-## Elementary congruence core for the saturated dependency graph
+## Elementary congruence core for the certificate dependency graph
 
 The analytic proof uses a large-prime uniqueness lemma: two distinct compatible
 events cannot share their large prime.  The following finite lemmas formalize the
@@ -744,13 +744,13 @@ small/rough split uniqueness used in the proof.
 def conditionalModulus (dPlus p : Nat) : Nat :=
   dPlus * p
 
-def appendageG (dPlus p L : Nat) : Nat :=
+def incrementG (dPlus p L : Nat) : Nat :=
   Nat.gcd (conditionalModulus dPlus p) L
 
 def residueCompatible (q r a b : Nat) : Prop :=
   a ≡ b [MOD Nat.gcd q r]
 
-/-- Data for a saturated residual event.  Its residual row is
+/-- Data for a certificate residual event.  Its residual row is
 `dPlus * p ∣ n + 4 * e`, so compatibility compares the shifted residues
 `4 * e`, not bare `e`. -/
 structure SatEvent where
@@ -780,7 +780,7 @@ instance satEventHit_decidable (n : Nat) (event : SatEvent) :
   unfold satEventHit
   infer_instance
 
-/-- Congruence row attached to a saturated shifted residual hit
+/-- Congruence row attached to a certificate shifted residual hit
 `dPlus * p ∣ n + 4 * e`. -/
 def satEventShiftedResidualRow (event : SatEvent) : Nat × Nat :=
   (conditionalModulus event.dPlus event.p, 4 * event.e)
@@ -791,7 +791,7 @@ def satEventShiftedResidualRows (events : List SatEvent) : List (Nat × Nat) :=
 def negModResidue (q a : Nat) : Nat :=
   (q - a % q) % q
 
-/-- Actual congruence row for the saturated shifted residual hit
+/-- Actual congruence row for the certificate shifted residual hit
 `dPlus * p ∣ n + 4 * e`, represented as `n ≡ -4e` modulo `dPlus * p`. -/
 def satEventResidualHitRow (event : SatEvent) : Nat × Nat :=
   let q := conditionalModulus event.dPlus event.p
@@ -982,7 +982,7 @@ theorem satEvent_e_eq_of_compatible_same_largePrime_of_lt
     simpa [hsamePrime] using hotherE
   exact hmod.eq_of_lt_of_lt he hotherEAtEventP
 
-/- Rows are `(dPlus, largePrime)` pairs from the saturated fan. -/
+/- Rows are `(dPlus, largePrime)` pairs from the certificate fan. -/
 def residualLcm (old : List (Nat × Nat)) : Nat :=
   old.foldr (fun row acc => Nat.lcm (conditionalModulus row.1 row.2) acc) 1
 
@@ -1458,7 +1458,7 @@ theorem congruenceLcm_satEventResidualHitRowsFinset_toList_eq
           Finset.mem_image.mpr ⟨event, by simpa using hevent, rfl⟩
         simpa using hrowFin)
 
-/-- Adding one saturated event adjoins its residual modulus to the lcm,
+/-- Adding one certificate event adjoins its residual modulus to the lcm,
 independently of the ordering chosen by `Finset.toList`. -/
 theorem congruenceLcm_satEventResidualHitRows_insert_eq_lcm
     (old : Finset SatEvent) (event : SatEvent) :
@@ -2148,11 +2148,11 @@ theorem satEvent_largePrime_ne_of_common_hit_ne
     he hotherE hmedium hmediumOther hcop hprog hprogOther hdMinusPos
     hdMinusDvd hdMinusOtherDvd hdPlusCop hdPlusOtherCop
 
-theorem appendageCommonDivisor_dvd_medium
+theorem incrementCommonDivisor_dvd_medium
     (dPlus p L : Nat)
     (hcop : Nat.Coprime p L) :
-    appendageG dPlus p L ∣ dPlus := by
-  let g := appendageG dPlus p L
+    incrementG dPlus p L ∣ dPlus := by
+  let g := incrementG dPlus p L
   have hgDvdQ : g ∣ conditionalModulus dPlus p :=
     Nat.gcd_dvd_left (conditionalModulus dPlus p) L
   have hgDvdL : g ∣ L :=
@@ -2395,26 +2395,26 @@ theorem prime_coprime_residualLcm
         prime_coprime_lcm p (conditionalModulus row.1 row.2) (residualLcm rest)
           hp hrowCop hrestCop
 
-theorem appendageCommonDivisor_dvd_medium_of_oldList
+theorem incrementCommonDivisor_dvd_medium_of_oldList
     (dPlus p : Nat) (old : List (Nat × Nat))
     (hp : Nat.Prime p)
     (holdPrime : ∀ row ∈ old, Nat.Prime row.2)
     (holdDPlusPos : ∀ row ∈ old, 0 < row.1)
     (holdDPlusLt : ∀ row ∈ old, row.1 < p)
     (holdLargePrimeNe : ∀ row ∈ old, p ≠ row.2) :
-    appendageG dPlus p (residualLcm old) ∣ dPlus := by
+    incrementG dPlus p (residualLcm old) ∣ dPlus := by
   have hcop : Nat.Coprime p (residualLcm old) :=
     prime_coprime_residualLcm p old hp holdPrime holdDPlusPos holdDPlusLt
       holdLargePrimeNe
-  exact appendageCommonDivisor_dvd_medium dPlus p (residualLcm old) hcop
+  exact incrementCommonDivisor_dvd_medium dPlus p (residualLcm old) hcop
 
-/-- If a new saturated event is compatible with each old event and is distinct
+/-- If a new certificate event is compatible with each old event and is distinct
 from each of them, large-prime uniqueness rules out sharing the new large prime
 with any old row.  The remaining hypotheses are the small/rough split,
 progression, positivity, and size conditions needed to invoke that uniqueness
 theorem for each old event and then prove coprimality with the old residual lcm.
 -/
-theorem appendageCommonDivisor_dvd_medium_of_compatible_events
+theorem incrementCommonDivisor_dvd_medium_of_compatible_events
     (Pz rho : Nat) (event : SatEvent) (old : List SatEvent)
     (hp : Nat.Prime event.p)
     (he : event.e < event.p)
@@ -2436,9 +2436,9 @@ theorem appendageCommonDivisor_dvd_medium_of_compatible_events
     (holdDPlusLt : ∀ other ∈ old, other.dPlus < event.p)
     (hcompat : ∀ other ∈ old, satEventCompatible event other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
-  apply appendageCommonDivisor_dvd_medium_of_oldList
+  apply incrementCommonDivisor_dvd_medium_of_oldList
   · exact hp
   · intro row hrow
     rcases List.mem_map.mp hrow with ⟨other, hother, hrowEq⟩
@@ -2461,10 +2461,10 @@ theorem appendageCommonDivisor_dvd_medium_of_compatible_events
       (holdProg other hother) hdMinusPos hdMinusDvd (holdDMinusDvd other hother)
       hdPlusCop (holdDPlusCop other hother)
 
-/-- Bundled admissibility form of the compatible-event appendage wrapper.  This
+/-- Bundled admissibility form of the compatible-event increment wrapper.  This
 keeps the compatibility hypotheses explicit but projects all event regularity,
 progression, split, and positivity assumptions from `satEventAdmissible`. -/
-theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissible
+theorem incrementCommonDivisor_dvd_medium_of_compatible_events_admissible
     (Pz rho : Nat) (event : SatEvent) (old : List SatEvent)
     (hcop : Nat.gcd (4 * rho) event.p = 1)
     (heventAdm : satEventAdmissible Pz rho event)
@@ -2472,11 +2472,11 @@ theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissible
     (holdDPlusLt : ∀ other ∈ old, other.dPlus < event.p)
     (hcompat : ∀ other ∈ old, satEventCompatible event other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
   rcases heventAdm with
     ⟨hp, he, hmedium, hprog, hdMinusPos, _hdPlusPos, hdMinusDvd, hdPlusCop⟩
-  apply appendageCommonDivisor_dvd_medium_of_compatible_events
+  apply incrementCommonDivisor_dvd_medium_of_compatible_events
   · exact hp
   · exact he
   · exact hmedium
@@ -2503,11 +2503,11 @@ theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissible
   · exact hcompat
   · exact hdistinct
 
-/-- Large-prime-bound version of the admissible compatible-event appendage
+/-- Large-prime-bound version of the admissible compatible-event increment
 wrapper.  The inequality `4 * rho < event.p` supplies both the progression
 coprimality input and the old-row size bound needed for residual-lcm
 coprimality. -/
-theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt
+theorem incrementCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt
     (Pz rho : Nat) (event : SatEvent) (old : List SatEvent)
     (hrhoPos : 0 < rho)
     (hlarge : 4 * rho < event.p)
@@ -2515,13 +2515,13 @@ theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt
     (holdAdm : ∀ other ∈ old, satEventAdmissible Pz rho other)
     (hcompat : ∀ other ∈ old, satEventCompatible event other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
   have hcop : Nat.gcd (4 * rho) event.p = 1 :=
     prime_gcd_four_mul_eq_one_of_gt event.p rho heventAdm.1 hrhoPos hlarge
   have hrho_le_p : rho ≤ event.p :=
     rho_le_of_four_mul_lt rho event.p hlarge
-  apply appendageCommonDivisor_dvd_medium_of_compatible_events_admissible
+  apply incrementCommonDivisor_dvd_medium_of_compatible_events_admissible
   · exact hcop
   · exact heventAdm
   · exact holdAdm
@@ -2533,9 +2533,9 @@ theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt
   · exact hdistinct
 
 /-- If a new event and each old event have a common shifted residual hit at the
-same integer `n`, then the compatibility hypotheses needed for the appendage
+same integer `n`, then the compatibility hypotheses needed for the increment
 divisibility wrapper follow from those hits. -/
-theorem appendageCommonDivisor_dvd_medium_of_common_hits
+theorem incrementCommonDivisor_dvd_medium_of_common_hits
     (Pz rho n : Nat) (event : SatEvent) (old : List SatEvent)
     (hp : Nat.Prime event.p)
     (he : event.e < event.p)
@@ -2558,9 +2558,9 @@ theorem appendageCommonDivisor_dvd_medium_of_common_hits
     (heventHit : satEventHit n event)
     (holdHit : ∀ other ∈ old, satEventHit n other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
-  apply appendageCommonDivisor_dvd_medium_of_compatible_events
+  apply incrementCommonDivisor_dvd_medium_of_compatible_events
   · exact hp
   · exact he
   · exact hmedium
@@ -2583,10 +2583,10 @@ theorem appendageCommonDivisor_dvd_medium_of_common_hits
   · exact hdistinct
 
 /-- A large-prime lower bound supplies the coprimality and old-row size inputs
-for the common-hit appendage wrapper.  The remaining assumptions are the
+for the common-hit increment wrapper.  The remaining assumptions are the
 event-level regularity, progression, split, and common-hit hypotheses used by
 large-prime uniqueness. -/
-theorem appendageCommonDivisor_dvd_medium_of_common_hits_largePrime
+theorem incrementCommonDivisor_dvd_medium_of_common_hits_largePrime
     (Pz rho n : Nat) (event : SatEvent) (old : List SatEvent)
     (hp : Nat.Prime event.p)
     (he : event.e < event.p)
@@ -2610,13 +2610,13 @@ theorem appendageCommonDivisor_dvd_medium_of_common_hits_largePrime
     (heventHit : satEventHit n event)
     (holdHit : ∀ other ∈ old, satEventHit n other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
   have hcop : Nat.gcd (4 * rho) event.p = 1 :=
     prime_gcd_four_mul_eq_one_of_gt event.p rho hp hrhoPos hlarge
   have hrho_le_p : rho ≤ event.p :=
     rho_le_of_four_mul_lt rho event.p hlarge
-  apply appendageCommonDivisor_dvd_medium_of_common_hits
+  apply incrementCommonDivisor_dvd_medium_of_common_hits
   · exact hp
   · exact he
   · exact hmedium
@@ -2639,11 +2639,11 @@ theorem appendageCommonDivisor_dvd_medium_of_common_hits_largePrime
   · exact holdHit
   · exact hdistinct
 
-/-- Bundled admissibility form of the common-hit appendage wrapper.  The
+/-- Bundled admissibility form of the common-hit increment wrapper.  The
 separate row regularity, progression, split, and positivity hypotheses are
 projected from `satEventAdmissible`; the only extra global input is the
 large-prime bound for the new event. -/
-theorem appendageCommonDivisor_dvd_medium_of_common_hits_admissible
+theorem incrementCommonDivisor_dvd_medium_of_common_hits_admissible
     (Pz rho n : Nat) (event : SatEvent) (old : List SatEvent)
     (hrhoPos : 0 < rho)
     (hlarge : 4 * rho < event.p)
@@ -2652,11 +2652,11 @@ theorem appendageCommonDivisor_dvd_medium_of_common_hits_admissible
     (heventHit : satEventHit n event)
     (holdHit : ∀ other ∈ old, satEventHit n other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
   rcases heventAdm with
     ⟨hp, he, hmedium, hprog, hdMinusPos, _hdPlusPos, hdMinusDvd, hdPlusCop⟩
-  apply appendageCommonDivisor_dvd_medium_of_common_hits_largePrime
+  apply incrementCommonDivisor_dvd_medium_of_common_hits_largePrime
   · exact hp
   · exact he
   · exact hmedium
@@ -2690,12 +2690,12 @@ theorem totient_divisor_identity (g : Nat) :
     (Nat.divisors g).sum Nat.totient = g := by
   exact Nat.sum_totient g
 
-theorem appendageG_totient_expansion (dPlus p L : Nat) :
-    (Nat.divisors (appendageG dPlus p L)).sum Nat.totient =
-      appendageG dPlus p L := by
-  exact totient_divisor_identity (appendageG dPlus p L)
+theorem incrementG_totient_expansion (dPlus p L : Nat) :
+    (Nat.divisors (incrementG dPlus p L)).sum Nat.totient =
+      incrementG dPlus p L := by
+  exact totient_divisor_identity (incrementG dPlus p L)
 
-/-- Finite weighted divisor switch used in the appendage argument.  If every
+/-- Finite weighted divisor switch used in the increment argument.  If every
 positive integer `g i` lies in `[1,B]`, expanding `g i` by
 `sum_{D | g i} phi(D)` and reversing the two finite sums gives the displayed
 divisor-restricted masses. -/
@@ -2969,23 +2969,23 @@ theorem residualLcm_cons_lcm_weight_identity
     (1 : ℚ) / (residualLcm ((dPlus, p) :: old) : ℚ) =
       (1 / (residualLcm old : ℚ)) *
         (1 / (conditionalModulus dPlus p : ℚ)) *
-          (appendageG dPlus p (residualLcm old) : ℚ) := by
+          (incrementG dPlus p (residualLcm old) : ℚ) := by
   have hq : 0 < conditionalModulus dPlus p := by
     simpa [conditionalModulus] using Nat.mul_pos hdPlus hp
   have h := brun_lcm_weight_identity
     (residualLcm old) (conditionalModulus dPlus p) hL hq
-  simpa [residualLcm, appendageG, Nat.lcm_comm, Nat.gcd_comm, mul_assoc] using h
+  simpa [residualLcm, incrementG, Nat.lcm_comm, Nat.gcd_comm, mul_assoc] using h
 
-theorem residualLcm_cons_recip_le_recip_largePrime_of_appendage_dvd
+theorem residualLcm_cons_recip_le_recip_largePrime_of_increment_dvd
     (old : List (Nat × Nat)) (dPlus p : Nat)
     (hL : 0 < residualLcm old)
     (hdPlus : 0 < dPlus) (hp : 0 < p)
-    (happend : appendageG dPlus p (residualLcm old) ∣ dPlus) :
+    (happend : incrementG dPlus p (residualLcm old) ∣ dPlus) :
     (1 : ℚ) / (residualLcm ((dPlus, p) :: old) : ℚ) ≤
       (1 / (residualLcm old : ℚ)) * (1 / (p : ℚ)) := by
   have hidentity := residualLcm_cons_lcm_weight_identity old dPlus p hL hdPlus hp
   rw [hidentity]
-  let g := appendageG dPlus p (residualLcm old)
+  let g := incrementG dPlus p (residualLcm old)
   have hgLeNat : g ≤ dPlus :=
     Nat.le_of_dvd hdPlus (by simpa [g] using happend)
   have hgLe : (g : ℚ) ≤ (dPlus : ℚ) := by exact_mod_cast hgLeNat
@@ -3142,35 +3142,35 @@ theorem satEvent_largePrime_ne_of_common_hit_ne_admissibleFor_autoCoprime
     (satEventCompatible_of_common_hit n event other heventHit hotherHit)
     hne heventAdm hotherAdm
 
-theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissible_autoCoprime
+theorem incrementCommonDivisor_dvd_medium_of_compatible_events_admissible_autoCoprime
     (Pz rho : Nat) (event : SatEvent) (old : List SatEvent)
     (heventAdm : satEventAdmissible Pz rho event)
     (holdAdm : ∀ other ∈ old, satEventAdmissible Pz rho other)
     (holdDPlusLt : ∀ other ∈ old, other.dPlus < event.p)
     (hcompat : ∀ other ∈ old, satEventCompatible event other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
-  exact appendageCommonDivisor_dvd_medium_of_compatible_events_admissible
+  exact incrementCommonDivisor_dvd_medium_of_compatible_events_admissible
     Pz rho event old
     (satEvent_gcd_four_mul_prime_eq_one_of_admissible Pz rho event heventAdm)
     heventAdm holdAdm holdDPlusLt hcompat hdistinct
 
-theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt_autoRho
+theorem incrementCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt_autoRho
     (Pz rho : Nat) (event : SatEvent) (old : List SatEvent)
     (hlarge : 4 * rho < event.p)
     (heventAdm : satEventAdmissible Pz rho event)
     (holdAdm : ∀ other ∈ old, satEventAdmissible Pz rho other)
     (hcompat : ∀ other ∈ old, satEventCompatible event other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
-  exact appendageCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt
+  exact incrementCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt
     Pz rho event old
     (rho_pos_of_satEventAdmissible Pz rho event heventAdm)
     hlarge heventAdm holdAdm hcompat hdistinct
 
-theorem appendageCommonDivisor_dvd_medium_of_common_hits_admissible_autoRho
+theorem incrementCommonDivisor_dvd_medium_of_common_hits_admissible_autoRho
     (Pz rho n : Nat) (event : SatEvent) (old : List SatEvent)
     (hlarge : 4 * rho < event.p)
     (heventAdm : satEventAdmissible Pz rho event)
@@ -3178,25 +3178,25 @@ theorem appendageCommonDivisor_dvd_medium_of_common_hits_admissible_autoRho
     (heventHit : satEventHit n event)
     (holdHit : ∀ other ∈ old, satEventHit n other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
-  exact appendageCommonDivisor_dvd_medium_of_common_hits_admissible
+  exact incrementCommonDivisor_dvd_medium_of_common_hits_admissible
     Pz rho n event old
     (rho_pos_of_satEventAdmissible Pz rho event heventAdm)
     hlarge heventAdm holdAdm heventHit holdHit hdistinct
 
-theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissibleFor_autoCoprime
+theorem incrementCommonDivisor_dvd_medium_of_compatible_events_admissibleFor_autoCoprime
     (Pz : Nat) (rhoOf : Nat → Nat) (event : SatEvent) (old : List SatEvent)
     (heventAdm : satEventAdmissibleFor Pz rhoOf event)
     (holdAdm : ∀ other ∈ old, satEventAdmissibleFor Pz rhoOf other)
     (holdDPlusLt : ∀ other ∈ old, other.dPlus < event.p)
     (hcompat : ∀ other ∈ old, satEventCompatible event other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
   have heventAdm' : satEventAdmissible Pz (rhoOf event.e) event := by
     simpa [satEventAdmissibleFor] using heventAdm
-  apply appendageCommonDivisor_dvd_medium_of_oldList
+  apply incrementCommonDivisor_dvd_medium_of_oldList
   · exact heventAdm'.1
   · intro row hrow
     rcases List.mem_map.mp hrow with ⟨other, hother, hrowEq⟩
@@ -3221,7 +3221,7 @@ theorem appendageCommonDivisor_dvd_medium_of_compatible_events_admissibleFor_aut
       Pz rhoOf event other (hcompat other hother) (hdistinct other hother)
       heventAdm (holdAdm other hother)
 
-theorem appendageCommonDivisor_dvd_medium_of_common_hits_admissibleFor_autoCoprime
+theorem incrementCommonDivisor_dvd_medium_of_common_hits_admissibleFor_autoCoprime
     (Pz : Nat) (rhoOf : Nat → Nat) (n : Nat) (event : SatEvent)
     (old : List SatEvent)
     (heventAdm : satEventAdmissibleFor Pz rhoOf event)
@@ -3230,9 +3230,9 @@ theorem appendageCommonDivisor_dvd_medium_of_common_hits_admissibleFor_autoCopri
     (heventHit : satEventHit n event)
     (holdHit : ∀ other ∈ old, satEventHit n other)
     (hdistinct : ∀ other ∈ old, event ≠ other) :
-    appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+    incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
       event.dPlus := by
-  apply appendageCommonDivisor_dvd_medium_of_compatible_events_admissibleFor_autoCoprime
+  apply incrementCommonDivisor_dvd_medium_of_compatible_events_admissibleFor_autoCoprime
   · exact heventAdm
   · exact holdAdm
   · exact holdDPlusLt
@@ -3280,16 +3280,16 @@ theorem residualLcm_satEventRows_cons_recip_le_recip_largePrime_of_compatible_ad
   have hrhoPos : 0 < rho :=
     rho_pos_of_satEventAdmissible Pz rho event heventAdm
   have happend :
-      appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+      incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
         event.dPlus :=
-    appendageCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt
+    incrementCommonDivisor_dvd_medium_of_compatible_events_admissible_of_gt
       Pz rho event old hrhoPos hlarge heventAdm holdAdm hcompat hdistinct
   have hL : 0 < residualLcm (satEventRows old) :=
     residualLcm_satEventRows_pos_of_admissible Pz rho old holdAdm
   have hdPlusPos : 0 < event.dPlus := heventAdm.2.2.2.2.2.1
   have hpPos : 0 < event.p := heventAdm.1.pos
   simpa [satEventRows, satEventRow] using
-    residualLcm_cons_recip_le_recip_largePrime_of_appendage_dvd
+    residualLcm_cons_recip_le_recip_largePrime_of_increment_dvd
       (satEventRows old) event.dPlus event.p hL hdPlusPos hpPos happend
 
 theorem residualLcm_satEventRows_cons_recip_le_recip_largePrime_of_compatible_admissibleFor
@@ -3304,16 +3304,16 @@ theorem residualLcm_satEventRows_cons_recip_le_recip_largePrime_of_compatible_ad
   have heventAdm' : satEventAdmissible Pz (rhoOf event.e) event := by
     simpa [satEventAdmissibleFor] using heventAdm
   have happend :
-      appendageG event.dPlus event.p (residualLcm (satEventRows old)) ∣
+      incrementG event.dPlus event.p (residualLcm (satEventRows old)) ∣
         event.dPlus :=
-    appendageCommonDivisor_dvd_medium_of_compatible_events_admissibleFor_autoCoprime
+    incrementCommonDivisor_dvd_medium_of_compatible_events_admissibleFor_autoCoprime
       Pz rhoOf event old heventAdm holdAdm holdDPlusLt hcompat hdistinct
   have hL : 0 < residualLcm (satEventRows old) :=
     residualLcm_satEventRows_pos_of_admissibleFor Pz rhoOf old holdAdm
   have hdPlusPos : 0 < event.dPlus := heventAdm'.2.2.2.2.2.1
   have hpPos : 0 < event.p := heventAdm'.1.pos
   simpa [satEventRows, satEventRow] using
-    residualLcm_cons_recip_le_recip_largePrime_of_appendage_dvd
+    residualLcm_cons_recip_le_recip_largePrime_of_increment_dvd
       (satEventRows old) event.dPlus event.p hL hdPlusPos hpPos happend
 
 theorem residualLcm_satEventRows_cons_recip_le_recip_largePrime_of_common_hits_admissible
@@ -9814,7 +9814,7 @@ theorem fixedFan_positive_unit_fractions
     ⟨hx, hy, hz, hident⟩
   exact ⟨fixedFanX n a, fixedFanY m n a e, fixedFanZ m n a e, hx, hy, hz, hident⟩
 
-theorem fixedFan_nat_certificate_of_saturated_progression
+theorem fixedFan_nat_certificate_of_certificate_progression
     (m n Q r s : Nat)
     (hm : 2 ≤ m) (hn : 0 < n) (hr : 0 < r) (hs : 0 < s)
     (hprogression : m * (r * s) ∣ Q + 1)
@@ -9860,7 +9860,7 @@ theorem fixedFan_nat_certificate_of_saturated_progression
     ⟨hx, hy, hz, hident⟩
   exact ⟨a, ha, hma, hQ, hcond, hedvd, hx, hy, hz, hident⟩
 
-theorem fixedFan_positive_unit_fractions_of_saturated_progression
+theorem fixedFan_positive_unit_fractions_of_certificate_progression
     (m n Q r s : Nat)
     (hm : 2 ≤ m) (hn : 0 < n) (hr : 0 < r) (hs : 0 < s)
     (hprogression : m * (r * s) ∣ Q + 1)
@@ -9870,7 +9870,7 @@ theorem fixedFan_positive_unit_fractions_of_saturated_progression
       0 < x ∧ 0 < y ∧ 0 < z ∧
       (m : ℚ) / (n : ℚ) =
         1 / (x : ℚ) + 1 / (y : ℚ) + 1 / (z : ℚ) := by
-  rcases fixedFan_nat_certificate_of_saturated_progression
+  rcases fixedFan_nat_certificate_of_certificate_progression
       m n Q r s hm hn hr hs hprogression hcong with
     ⟨a, ha, hma, _hQ, _hcond, _hedvd, hx, hy, hz, hident⟩
   exact ⟨a, fixedFanX n a, fixedFanY m n a (r * s ^ 2),
@@ -9891,7 +9891,7 @@ theorem fixedFan_positive_unit_fractions_of_base_residual_progression
   have hfull : dMinus * (dPlus * p) ∣ n + m * (r * s ^ 2) :=
     fullCongruence_of_base_and_residual
       m n (r * s ^ 2) dMinus (dPlus * p) hcop hbase hresidual
-  exact fixedFan_positive_unit_fractions_of_saturated_progression
+  exact fixedFan_positive_unit_fractions_of_certificate_progression
     m n (dMinus * (dPlus * p)) r s hm hn hr hs hprogression hfull
 
 theorem fixedFan_positive_unit_fractions_of_conditioned_base_residual_hit
@@ -9932,7 +9932,7 @@ theorem divisorFan_positive_unit_fractions_of_conditioned_base_residual_hit
     4 n Pz b dMinus dPlus p r s (by norm_num) hn hr hs hcop
     hdMinusDvdPz hnbase hsmall hprogression hresidual
 
-theorem esRepresentable_of_conditioned_saturated_hit
+theorem esRepresentable_of_conditioned_certificate_hit
     (n Pz b dMinus dPlus p r s : Nat)
     (hn : 0 < n) (hr : 0 < r) (hs : 0 < s)
     (hcop : Nat.Coprime dMinus (dPlus * p))
@@ -9959,7 +9959,7 @@ theorem esRepresentable_of_conditioned_satEvent_hit
     (hprogression : 4 * (r * s) ∣ event.dMinus * (event.dPlus * event.p) + 1)
     (hresidual : event.dPlus * event.p ∣ n + 4 * event.e) :
     esRepresentable n := by
-  exact esRepresentable_of_conditioned_saturated_hit
+  exact esRepresentable_of_conditioned_certificate_hit
     n Pz b event.dMinus event.dPlus event.p r s hn hr hs hcop
     hdMinusDvdPz hnbase (by simpa [hevent] using hsmall) hprogression
     (by simpa [hevent] using hresidual)
@@ -12774,7 +12774,7 @@ theorem forall_esRepresentable_up_to_of_baseSatEvent_signed_rank_budget_lt_one_l
         hadm hrho hevent hlargeBase hbase)
       hbudget
 
-theorem divisorFan_positive_unit_fractions_of_saturated_progression
+theorem divisorFan_positive_unit_fractions_of_certificate_progression
     (n Q r s : Nat)
     (hn : 0 < n) (hr : 0 < r) (hs : 0 < s)
     (hprogression : 4 * (r * s) ∣ Q + 1)
@@ -12784,7 +12784,7 @@ theorem divisorFan_positive_unit_fractions_of_saturated_progression
       0 < x ∧ 0 < y ∧ 0 < z ∧
       (4 : ℚ) / (n : ℚ) =
         1 / (x : ℚ) + 1 / (y : ℚ) + 1 / (z : ℚ) := by
-  exact fixedFan_positive_unit_fractions_of_saturated_progression
+  exact fixedFan_positive_unit_fractions_of_certificate_progression
     4 n Q r s (by norm_num) hn hr hs hprogression hcong
 
 theorem divisorFan_nat_certificate
