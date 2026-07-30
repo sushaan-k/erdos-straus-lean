@@ -1,0 +1,15 @@
+# Lean / Lake build artifacts
+/.lake/
+**/.lake/
+*.olean
+*.olean.hash
+*.olean.trace
+*.ilean
+*.ilean.hash
+*.trace
+
+# Worktrees
+/.worktrees/
+
+# OS
+.DS_Store
