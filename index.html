@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="An improved exceptional-set bound for the Erdős–Straus equation via saturated divisor fans." />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="An improved exceptional-set bound for the Erdős–Straus equation" />
+    <meta property="og:description" content="Via saturated divisor fans." />
+    <meta name="twitter:card" content="summary" />
+    <title>An improved exceptional-set bound for the Erdős–Straus equation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] },
+        chtml: { scale: 0.98 },
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <div class="hero-inner">
+          <h1>An improved exceptional-set bound for the <span>Erdős–Straus equation</span></h1>
+          <p class="subtitle">via saturated divisor fans</p>
+          <p class="authors">Sushaan Kandukoori, Shrikrishna Ramesh, Pranava Kumar</p>
+          <p class="date">July 29, 2026</p>
+          <div class="hero-actions">
+            <a class="action" href="paper.pdf" target="_blank" rel="noreferrer"><i data-lucide="file-text" aria-hidden="true"></i>Paper</a>
+            <a class="action" href="#citation"><i data-lucide="quote" aria-hidden="true"></i>BibTeX</a>
+            <a class="action" href="https://github.com/sushaan-k/erdos-straus-lean" target="_blank" rel="noreferrer"><i data-lucide="github" aria-hidden="true"></i>GitHub</a>
+          </div>
+        </div>
+      </header>
+
+      <section class="paper-section abstract-section" id="abstract">
+        <div class="narrow-shell">
+          <h2>Abstract</h2>
+          <div class="abstract-copy">
+            <p>
+              Let \(E(N)\) be the number of integers \(2\le n\le N\) for which
+              \(4/n=1/x+1/y+1/z\) has no solution in positive integers. Vaughan
+              proved \(E(N)\ll N\exp\{-c(\log N)^{2/3}\}\). We prove
+            </p>
+            <div class="display-math">\[E(N)\ll N\exp\left\{-c(\log N)^{3/4}\right\}.\]</div>
+            <p>
+              The improvement comes from the Type II divisor fan: for each
+              \(a\ge1\), every divisor of \(a^2\) supplies a congruence class
+              modulo \(4a-1\) of representable \(n\), and the classical
+              representing congruences are the boundary cases of this family. A
+              conductor-separated subfan keeps a mass of order \((\log X)^3\),
+              and a finite-interval sieve turns this mass into the stated saving
+              at the scale \(\log X\asymp(\log N)^{1/4}\).
+            </p>
+            <p>
+              We also record consequences for prime denominators, for propagation
+              along large prime factors, and for the Erdős–Straus–Schinzel problem
+              with fixed numerator \(m\ge2\), together with a geometric
+              interpretation on the associated log K3 surfaces. Variants with
+              growing numerator or at Elliott–Halberstam strength are stated under
+              explicit additional hypotheses.
+            </p>
+          </div>
+          <div class="paper-meta">
+            <p><strong>2020 Mathematics Subject Classification.</strong> 11D68, 11N36, 11N37.</p>
+            <p><strong>Keywords.</strong> Erdős–Straus conjecture, Egyptian fractions, divisor fans, exceptional sets, sieve methods, Bombieri–Vinogradov theorem.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="paper-section" id="theorem">
+        <div class="narrow-shell">
+          <p class="section-label">Theorem 1.1</p>
+          <h2>Main theorem</h2>
+          <div class="theorem-box">
+            <p>There is an absolute constant \(c&gt;0\) such that, for all \(N\ge3\),</p>
+            <div class="display-math">\[E(N)\ll N\exp\left\{-c(\log N)^{3/4}\right\}.\]</div>
+          </div>
+          <p>
+            The proof covers residue classes by congruence certificates. Each selected
+            certificate gives a residue class modulo some \(q\), and every integer in
+            that class has an explicit representation. The difficulty is to keep cubic
+            total weight while making the residual intersections sparse enough for
+            Brun–Suen: small-prime factors are absorbed into the base class, while
+            conductor separation keeps a cubic mass of residual events.
+          </p>
+          <p>We estimate the number of integers missed by all selected classes.</p>
+        </div>
+      </section>
+
+      <section class="paper-section concept-section" id="fan">
+        <div class="wide-shell">
+          <div class="concept-copy">
+            <p class="section-label">Section 2</p>
+            <h2>The Type II divisor fan</h2>
+            <p>The structural starting point is the complete Type II divisor fan</p>
+            <div class="display-math">\[4a-1\mid n+4h,\qquad h\mid a^2.\]</div>
+            <p>
+              The three traditional boundary rays \(h=1,a,a^2\) recover the
+              classical shifts appearing in the work of Mordell, Yamamoto, and
+              Webb, but the interior divisors carry cubic logarithmic mass.
+            </p>
+          </div>
+          <div class="fan-panel">
+            <svg id="divisor-fan" role="img" aria-label="Divisors of a squared arranged around a central value of a"></svg>
+            <div class="fan-controls">
+              <div class="slider-row"><label for="a-slider">\(a\)</label><input id="a-slider" type="range" min="2" max="36" value="12" step="1" /><output id="a-output" for="a-slider">12</output></div>
+              <dl>
+                <div><dt>\(4a-1\)</dt><dd id="q-output">47</dd></div>
+                <div><dt>\(h\mid a^2\)</dt><dd id="divisor-count">15 divisors</dd></div>
+                <div><dt>\(h\)</dt><dd id="h-output">1</dd></div>
+              </dl>
+              <p id="fan-congruence">n ≡ 43 (mod 47)</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="paper-section" id="certificate">
+        <div class="wide-shell certificate-layout">
+          <div class="certificate-copy">
+            <p class="section-label">Lemma 2.3</p>
+            <h2>Divisor-fan certificate</h2>
+            <p>
+              Let \(n\ge1\), let \(a\ge1\), let \(q=4a-1\), and let \(e\) be a
+              positive divisor of \(a^2\). If
+            </p>
+            <div class="display-math">\[n\equiv-4e\pmod q,\]</div>
+            <p>then \(4/n\) is a sum of three positive unit fractions.</p>
+          </div>
+          <div class="certificate-tool">
+            <div class="input-row">
+              <label><span>n</span><input id="n-input" inputmode="numeric" type="number" min="1" step="1" value="11" /></label>
+              <label><span>a</span><input id="cert-a-input" inputmode="numeric" type="number" min="1" step="1" value="4" /></label>
+              <label><span>e</span><input id="e-input" inputmode="numeric" type="number" min="1" step="1" value="1" /></label>
+            </div>
+            <div class="certificate-status" id="certificate-status" aria-live="polite"></div>
+            <div class="certificate-equation" id="certificate-equation" aria-live="polite"></div>
+            <div class="certificate-details" id="certificate-details"></div>
+            <button class="example-button" id="next-example" type="button"><i data-lucide="shuffle" aria-hidden="true"></i>Example</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="paper-section formalization-section" id="formalization">
+        <div class="narrow-shell">
+          <p class="section-label">Formalization</p>
+          <h2>Lean 4</h2>
+          <p>
+            A companion Lean 4 development formalizes the deduction of Theorem 1.1
+            from nine named theorems, either cited here or proved in the manuscript.
+            It verifies the certificate identities, parameter inequalities, mass and
+            tensorisation estimates, dependency bounds, finite transfer, optimization,
+            and smooth lifting. The weighted reciprocal Bombieri–Vinogradov estimate
+            and the long squarefree progression estimates are stated in the exact
+            forms used here rather than derived from more primitive versions inside
+            Lean; the repository records this boundary explicitly.
+          </p>
+          <pre class="lean-line"><code><span>theorem</span> erdos_straus_exceptional_set_bound : IsMainBound exceptionalCount</code></pre>
+          <div class="text-links">
+            <a href="https://github.com/sushaan-k/erdos-straus-lean/blob/main/FORMALIZATION.md" target="_blank" rel="noreferrer">FORMALIZATION.md</a>
+            <a href="https://github.com/sushaan-k/erdos-straus-lean/blob/main/EscAnalytic/Paper.lean" target="_blank" rel="noreferrer">EscAnalytic/Paper.lean</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="paper-section citation-section" id="citation">
+        <div class="narrow-shell">
+          <h2>Citation</h2>
+          <div class="bibtex-wrap">
+            <button class="copy-button" id="copy-bibtex" type="button"><i data-lucide="copy" aria-hidden="true"></i><span>Copy</span></button>
+            <pre id="bibtex"><code>@misc{kandukoori2026erdosstraus,
+  title  = {An improved exceptional-set bound for the
+            Erdős--Straus equation via saturated divisor fans},
+  author = {Sushaan Kandukoori and Shrikrishna Ramesh
+            and Pranava Kumar},
+  year   = {2026},
+  url    = {https://github.com/sushaan-k/erdos-straus-lean}
+}</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
