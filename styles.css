@@ -141,6 +141,19 @@ button, input { font: inherit; }
 
 .theorem-box p { margin: 0; }
 .theorem-box .display-math { margin-bottom: 0; }
+.theorem-name { margin: 42px 0 12px !important; color: var(--blue); font-family: var(--mono); font-size: 12px !important; text-transform: uppercase; }
+
+.paper-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 500;
+  text-underline-offset: 4px;
+}
+
+.paper-link svg { width: 15px; height: 15px; stroke-width: 1.8; }
 
 .concept-section { background: #fff; }
 
@@ -207,13 +220,35 @@ button, input { font: inherit; }
 .example-button:hover,
 .example-button:focus-visible { border-color: var(--blue); color: var(--blue); }
 
-.formalization-section { background: var(--soft); }
+.section-intro { width: min(860px, 100%); margin-bottom: 58px; }
+.proof-outline { border-bottom: 1px solid var(--line); }
+.proof-row {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr);
+  gap: 64px;
+  padding: 38px 0 42px;
+  border-top: 1px solid var(--line);
+}
+
+.proof-row > div { min-width: 0; }
+.proof-row > div:first-child span { color: var(--blue); font-family: var(--mono); font-size: 11px; text-transform: uppercase; }
+.proof-row h3,
+.result-list h3 { margin: 10px 0 0; font-size: 24px; font-weight: 500; line-height: 1.35; }
+.proof-row p { font-size: 16px; }
+.proof-row .display-math { margin: 20px 0; font-size: 16px; }
+
+.result-list { margin: 48px 0 30px; border-bottom: 1px solid var(--line); }
+.result-list article { padding: 31px 0 34px; border-top: 1px solid var(--line); }
+.result-list h3 { margin: 0 0 16px; }
+.result-list article p { font-size: 16px; }
+.result-list .display-math { font-size: 17px; }
+
+.formalization-section { background: var(--soft); border-bottom: 0; }
 .lean-line { margin: 34px 0 20px; padding: 22px 24px; overflow-x: auto; color: #282828; background: #fff; border: 1px solid var(--line); font-family: var(--mono); font-size: 13px; line-height: 1.7; }
 .lean-line span { color: #8a459c; }
 .text-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
 .text-links a { color: var(--blue); font-family: var(--mono); font-size: 12px; text-underline-offset: 4px; }
 
-.citation-section { border-bottom: 0; }
 .bibtex-wrap { position: relative; }
 .bibtex-wrap pre { margin: 0; padding: 32px; overflow-x: auto; color: #efefef; background: #343434; border-radius: 6px; font-family: var(--mono); font-size: 12px; line-height: 1.75; }
 .copy-button { position: absolute; top: 12px; right: 12px; min-height: 34px; padding: 0 11px; color: #fff; background: #454545; border-color: #666; font-size: 11px; }
@@ -221,7 +256,8 @@ button, input { font: inherit; }
 @media (max-width: 900px) {
   .hero { min-height: 700px; }
   .concept-section .wide-shell,
-  .certificate-layout { grid-template-columns: 1fr; gap: 48px; }
+  .certificate-layout,
+  .proof-row { grid-template-columns: 1fr; gap: 28px; }
 }
 
 @media (max-width: 620px) {
@@ -241,6 +277,8 @@ button, input { font: inherit; }
   .certificate-tool { padding: 22px 18px; }
   .certificate-equation { justify-content: flex-start; font-size: 22px; }
   .certificate-details { grid-template-columns: 1fr; }
+  .section-intro { margin-bottom: 42px; }
+  .proof-row { padding: 31px 0 35px; }
   .lean-line { padding: 18px; font-size: 11px; }
   .bibtex-wrap pre { padding: 58px 18px 22px; font-size: 10px; }
 }

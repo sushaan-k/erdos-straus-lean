@@ -78,8 +78,22 @@
 
       <section class="paper-section" id="theorem">
         <div class="narrow-shell">
-          <p class="section-label">Theorem 1.1</p>
-          <h2>Main theorem</h2>
+          <p class="section-label">Section 1</p>
+          <h2>Introduction and main theorem</h2>
+          <p>
+            The Erdős–Straus conjecture asserts that for every integer \(n\ge2\)
+            the equation
+          </p>
+          <div class="display-math">\[\frac4n=\frac1x+\frac1y+\frac1z\]</div>
+          <p>
+            has a solution in positive integers. Let \(E(N)\) count the exceptions
+            \(2\le n\le N\). Vaughan proved the classical estimate
+            \(E(N)\ll N\exp\{-c(\log N)^{2/3}\}\) for some absolute \(c&gt;0\).
+            Our main result improves the exponent. The same construction also
+            recovers a logarithmic factor that a one-rough-coordinate sieve loses,
+            through the small-prime saturation device described in Remark 12.1.
+          </p>
+          <p class="theorem-name">Theorem 1.1 (main theorem)</p>
           <div class="theorem-box">
             <p>There is an absolute constant \(c&gt;0\) such that, for all \(N\ge3\),</p>
             <div class="display-math">\[E(N)\ll N\exp\left\{-c(\log N)^{3/4}\right\}.\]</div>
@@ -93,6 +107,7 @@
             conductor separation keeps a cubic mass of residual events.
           </p>
           <p>We estimate the number of integers missed by all selected classes.</p>
+          <a class="paper-link" href="paper.pdf#page=1" target="_blank" rel="noreferrer">Read the introduction and theorem in the paper <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
         </div>
       </section>
 
@@ -108,6 +123,19 @@
               classical shifts appearing in the work of Mordell, Yamamoto, and
               Webb, but the interior divisors carry cubic logarithmic mass.
             </p>
+            <p>
+              We also prove the fixed-modulus no-obstruction statement for this
+              full cubic fan: for every fixed odd modulus \(M\) and every reduced
+              class \(c\pmod M\), the interior fan supplies cubic mass in the class
+              compatible with \(c\). Thus the local congruences singled out by the
+              boundary tests are not local obstructions to the full fan.
+            </p>
+            <p>
+              Fixed slices are already classical in the sense of Elsholtz–Tao.
+              Here many interior divisors are used simultaneously, with conductor
+              separation controlling the dependency graph.
+            </p>
+            <a class="paper-link" href="paper.pdf#page=2" target="_blank" rel="noreferrer">Read Section 2 and the certificate proofs <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
           </div>
           <div class="fan-panel">
             <svg id="divisor-fan" role="img" aria-label="Divisors of a squared arranged around a central value of a"></svg>
@@ -150,6 +178,157 @@
         </div>
       </section>
 
+      <section class="paper-section proof-section" id="proof">
+        <div class="wide-shell">
+          <div class="section-intro">
+            <p class="section-label">Sections 4–12</p>
+            <h2>Proof structure</h2>
+            <p>
+              The proof here keeps Vaughan's exceptional-set-covering viewpoint,
+              but changes the certificate family. The dense divisor fan is thinned
+              to a conductor-separated subfan, while the small-prime part of the
+              medium coordinate is saturated. This keeps the logarithmic mass that
+              a one-rough-coordinate sieve would lose.
+            </p>
+          </div>
+
+          <div class="proof-outline">
+            <article class="proof-row">
+              <div><span>Section 4</span><h3>Cubic fan mass and the pairwise-coprime barrier</h3></div>
+              <div>
+                <p>The full interior fan has cubic logarithmic mass.</p>
+                <div class="display-math">\[\sum_{a\le L}\frac{|\Lambda_{\rm int}(a)|}{4a-1}\sim\frac{1}{24\zeta(2)}(\log L)^3.\]</div>
+                <a class="paper-link" href="paper.pdf#page=5" target="_blank" rel="noreferrer">Section 4 in the paper <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+              </div>
+            </article>
+
+            <article class="proof-row">
+              <div><span>Section 5</span><h3>The conductor-separated saturated family</h3></div>
+              <div>
+                <p>
+                  The proof of Theorem 1.1 uses a sparse subfamily of this fan.
+                  Write \(e=rs^2\), \(\rho(e)=rs\), with \(r,s\) squarefree but
+                  not sieved at small primes. Split the medium factor as
+                  \(d=d_-d_+\), where \(d_-\) is a small-prime part absorbed into
+                  a base residue class and \(d_+\) is rough.
+                </p>
+                <p>
+                  We then choose moduli of the form \(Q=d_-d_+p\), where \(p\) is
+                  a large prime. The parameter ranges force \(\rho(e)&gt;d\). This
+                  inequality gives the large-prime uniqueness input: two distinct
+                  compatible events cannot share their large prime \(p\).
+                </p>
+                <a class="paper-link" href="paper.pdf#page=9" target="_blank" rel="noreferrer">Section 5 in the paper <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+              </div>
+            </article>
+
+            <article class="proof-row">
+              <div><span>Section 10</span><h3>The base-conditioned CRT no-hit probability</h3></div>
+              <div>
+                <p>
+                  If two events are compatible, the CRT gives
+                  \(\mathbb P(\mathcal A_i^{(b)}\cap\mathcal A_j^{(b)})
+                  =1/\mathop{\rm lcm}(q_i,q_j)=(q_i,q_j)/(q_iq_j)\); if they are
+                  incompatible, the intersection is empty. Events with coprime
+                  moduli depend on disjoint coordinates.
+                </p>
+                <a class="paper-link" href="paper.pdf#page=25" target="_blank" rel="noreferrer">Section 10 in the paper <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+              </div>
+            </article>
+
+            <article class="proof-row">
+              <div><span>Section 11</span><h3>Transfer to finite intervals</h3></div>
+              <div>
+                <p>
+                  Let \(K&gt;0\) be a fixed sufficiently large constant and put
+                  \(R_b=\lfloor K\mu_b\rfloor\). Suppose that
+                </p>
+                <div class="display-math">\[P(z)X^{2R_b}\exp\{2\mu_b\}\le N\exp\{-4\mu_b\}.\]</div>
+                <p>Then, uniformly in \(b\),</p>
+                <div class="display-math">
+                  \[\#\{n\le N:n\equiv b\pmod {P(z)},\ n\notin\mathcal A_i^{(b)}
+                    \text{ for every }i\in\mathcal I_b\}
+                    \le\frac{N}{P(z)}\exp\{-(1-o(1))\mu_b\}.\]
+                </div>
+                <a class="paper-link" href="paper.pdf#page=26" target="_blank" rel="noreferrer">Section 11 in the paper <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+              </div>
+            </article>
+
+            <article class="proof-row">
+              <div><span>Section 12</span><h3>Optimization, saturation lifting, and proof of the main theorem</h3></div>
+              <div>
+                <p>
+                  The saturated mass law is \(\mu_b\asymp(\log X)^3\), uniformly
+                  in \(b\). Choose \(\log X=\alpha(\log N)^{1/4}\), where
+                  \(\alpha&gt;0\) is a sufficiently small fixed constant. Then
+                  \(\mu_b\asymp_\alpha(\log N)^{3/4}\).
+                </p>
+                <a class="paper-link" href="paper.pdf#page=27" target="_blank" rel="noreferrer">Complete proof of Theorem 1.1 <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="paper-section applications-section" id="applications">
+        <div class="narrow-shell">
+          <p class="section-label">Section 13</p>
+          <h2>Applications of the saturated fan</h2>
+          <p>
+            The unconditional consequences include the geometric form in
+            Corollary 2.5. We also record an exceptional-prime bound with the same
+            exponential saving, a large-prime-factor propagation theorem, and a
+            fixed-numerator version for the Erdős–Straus–Schinzel equation.
+          </p>
+
+          <div class="result-list">
+            <article>
+              <h3>Prime denominators</h3>
+              <p>There is an absolute constant \(c&gt;0\) such that, for all \(N\ge3\),</p>
+              <div class="display-math">\[\#\mathcal P_{\rm exc}(N)\ll N\exp\{-c(\log N)^{3/4}\}.\]</div>
+            </article>
+            <article>
+              <h3>Fixed numerators</h3>
+              <p>
+                For each fixed integer \(m\ge2\), there are constants
+                \(c_m,C_m&gt;0\) such that, for all \(N\ge3\),
+              </p>
+              <div class="display-math">\[E_m(N)\le C_mN\exp\{-c_m(\log N)^{3/4}\}.\]</div>
+            </article>
+            <article>
+              <h3>Geometric form</h3>
+              <p>
+                There is an absolute constant \(c&gt;0\) such that, for all
+                \(N\ge3\), for all but
+                \(O\!\left(N\exp\{-c(\log N)^{3/4}\}\right)\) integers \(n\le N\),
+                the log K3 surface \(U_n\) has an integral point in the positive
+                chamber. Moreover, one may choose such a point on one of the
+                rational fan curves \(C_{n,a}\).
+              </p>
+            </article>
+          </div>
+
+          <a class="paper-link" href="paper.pdf#page=28" target="_blank" rel="noreferrer">Read the applications and proofs <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+        </div>
+      </section>
+
+      <section class="paper-section citation-section" id="citation">
+        <div class="narrow-shell">
+          <h2>Citation</h2>
+          <div class="bibtex-wrap">
+            <button class="copy-button" id="copy-bibtex" type="button"><i data-lucide="copy" aria-hidden="true"></i><span>Copy</span></button>
+            <pre id="bibtex"><code>@misc{kandukoori2026erdosstraus,
+  title  = {An improved exceptional-set bound for the
+            Erdős--Straus equation via saturated divisor fans},
+  author = {Sushaan Kandukoori and Shrikrishna Ramesh
+            and Pranava Kumar},
+  year   = {2026},
+  url    = {https://github.com/sushaan-k/erdos-straus-lean}
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
       <section class="paper-section formalization-section" id="formalization">
         <div class="narrow-shell">
           <p class="section-label">Formalization</p>
@@ -168,23 +347,6 @@
           <div class="text-links">
             <a href="https://github.com/sushaan-k/erdos-straus-lean/blob/main/FORMALIZATION.md" target="_blank" rel="noreferrer">FORMALIZATION.md</a>
             <a href="https://github.com/sushaan-k/erdos-straus-lean/blob/main/EscAnalytic/Paper.lean" target="_blank" rel="noreferrer">EscAnalytic/Paper.lean</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="paper-section citation-section" id="citation">
-        <div class="narrow-shell">
-          <h2>Citation</h2>
-          <div class="bibtex-wrap">
-            <button class="copy-button" id="copy-bibtex" type="button"><i data-lucide="copy" aria-hidden="true"></i><span>Copy</span></button>
-            <pre id="bibtex"><code>@misc{kandukoori2026erdosstraus,
-  title  = {An improved exceptional-set bound for the
-            Erdős--Straus equation via saturated divisor fans},
-  author = {Sushaan Kandukoori and Shrikrishna Ramesh
-            and Pranava Kumar},
-  year   = {2026},
-  url    = {https://github.com/sushaan-k/erdos-straus-lean}
-}</code></pre>
           </div>
         </div>
       </section>
