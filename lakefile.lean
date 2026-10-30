@@ -1,12 +1,11 @@
 import Lake
 open Lake DSL
 
-package esc_formalization
+package erdos_straus
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git" @ "v4.14.0"
+  "https://github.com/leanprover-community/mathlib4.git" @ "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
 
-lean_lib EscLeanChecks
-
-lean_lib EscAnalytic where
-  globs := #[Glob.submodules `EscAnalytic]
+@[default_target]
+lean_lib ErdosStraus where
+  globs := #[Glob.submodules `ErdosStraus]

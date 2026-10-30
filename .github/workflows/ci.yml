@@ -13,5 +13,19 @@ jobs:
       - uses: leanprover/lean-action@v1
         with:
           build: false
-      - name: Build the formalization and verify the trust boundary
+      - name: Build
         run: lake build
+      - name: Check axioms
+        run: |
+          cat > Axioms.lean <<'LEAN'
+          import ErdosStraus.Paper
+          #print axioms ErdosStraus.erdos_straus_exceptional_set_bound
+          #print axioms ErdosStraus.erdos_straus_fixed_numerator_exceptional_set_bound
+          #print axioms ErdosStraus.erdos_straus_prime_exceptional_pi_bound
+          #print axioms ErdosStraus.example_2521
+          #print axioms BombieriVinogradov.standard_form
+          LEAN
+          lake env lean Axioms.lean | tee axioms.txt
+          flat=$(tr -s ' \n' ' ' < axioms.txt)
+          test "$(echo "$flat" | grep -o 'depends on axioms' | wc -l)" -eq 5
+          test "$(echo "$flat" | grep -o 'depends on axioms: \[propext, Classical.choice, Quot.sound\]' | wc -l)" -eq 5
